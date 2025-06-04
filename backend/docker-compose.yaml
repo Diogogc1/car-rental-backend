@@ -1,0 +1,18 @@
+# Removi a linha de versão que está obsoleta
+
+services:
+  postgres_db: # Nome do nosso serviço (pode ser qualquer nome)
+    image: postgres:16 # Imagem Docker que será usada (PostgreSQL versão 16)
+    container_name: car-rental-container # Nome do container que será criado
+    restart: always # Política de reinício: sempre reiniciar o container se ele parar
+    environment:
+      POSTGRES_USER: postgres      # Nome de usuário para o banco de dados
+      POSTGRES_PASSWORD: postgres123 # Senha para o usuário do banco de dados
+      POSTGRES_DB: car-rental     # Nome do banco de dados que será criado
+    ports:
+      - "5432:5432" # Mapeia a porta 5432 do host para a porta 5432 do container
+    volumes:
+      - car_rental_postgres_data:/var/lib/postgresql/data # Volume para persistir os dados do banco
+
+volumes:
+  car_rental_postgres_data: # Define o volume nomeado 'car_rental_postgres_data'
