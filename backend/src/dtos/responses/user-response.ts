@@ -1,4 +1,4 @@
-import { ReservationResponse } from './reservation-response.dto';
+import { ReservationResponse } from './reservation-response';
 
 export interface IUserResponse {
   id: number;

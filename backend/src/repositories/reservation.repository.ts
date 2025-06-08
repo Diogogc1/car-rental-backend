@@ -1,7 +1,7 @@
 import { Reservation } from 'src/entities';
 import { prisma } from './prisma';
-import { ReservationMapper } from 'src/mappers/reservation.mapper';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { ReservationMapper } from 'src/mappers';
 
 export class ReservationRepository {
   async create(reservation: Reservation): Promise<Reservation> {

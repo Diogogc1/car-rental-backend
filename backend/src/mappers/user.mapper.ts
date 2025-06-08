@@ -31,9 +31,7 @@ export class UserMapper {
     };
   }
 
-  static toResponseDto(
-    user: User & { reservations?: ReservationPrisma[] },
-  ): UserResponse {
+  static toResponseDto(user: User): UserResponse {
     const userResponseProps: IUserResponse = {
       id: user.id!,
       name: user.name,
