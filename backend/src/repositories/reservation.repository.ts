@@ -30,6 +30,16 @@ export class ReservationRepository {
     return ReservationMapper.toEntity(reservationPrisma);
   }
 
+  async findAll(): Promise<Reservation[]> {
+    const reservationsPrisma = await prisma.reservationPrisma.findMany({
+      where: { deletedAt: null },
+    });
+
+    return reservationsPrisma.map((reservationPrisma) =>
+      ReservationMapper.toEntity(reservationPrisma),
+    );
+  }
+
   async update(
     id: number,
     reservation: Reservation,

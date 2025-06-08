@@ -34,6 +34,17 @@ export class CarRepository {
     return CarMapper.toEntity(carPrisma);
   }
 
+  async findAll(): Promise<Car[]> {
+    const carsPrisma = await prisma.carPrisma.findMany({
+      where: { deletedAt: null },
+      include: {
+        reservations: true,
+      },
+    });
+
+    return carsPrisma.map((carPrisma) => CarMapper.toEntity(carPrisma));
+  }
+
   async update(id: number, car: Car): Promise<Car | null> {
     try {
       const carPrisma = await prisma.carPrisma.update({
@@ -71,5 +82,26 @@ export class CarRepository {
       }
       throw error;
     }
+  }
+
+  async verifyIfReserved(
+    id: number,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<boolean> {
+    const carPrisma = await prisma.carPrisma.findFirst({
+      where: {
+        id,
+        deletedAt: null,
+        reservations: {
+          some: {
+            endDate: { gte: startDate },
+            startDate: { lte: endDate },
+          },
+        },
+      },
+    });
+
+    return !!carPrisma;
   }
 }
