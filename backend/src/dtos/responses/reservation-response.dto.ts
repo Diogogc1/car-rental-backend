@@ -5,17 +5,11 @@ export class ReservationResponseDto {
   startDate: Date;
   endDate: Date;
 
-  constructor(
-    id: number,
-    userId: number,
-    carId: number,
-    startDate: Date,
-    endDate: Date,
-  ) {
-    this.id = id;
-    this.userId = userId;
-    this.carId = carId;
-    this.startDate = startDate;
-    this.endDate = endDate;
+  constructor(reservation: ReservationResponseDto) {
+    this.id = reservation.id;
+    this.userId = reservation.userId;
+    this.carId = reservation.carId;
+    this.startDate = reservation.startDate;
+    this.endDate = reservation.endDate;
   }
 }

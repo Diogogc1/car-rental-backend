@@ -11,16 +11,16 @@ export class CarMapper {
   static toEntity(
     carPrisma: CarPrisma & { reservations?: ReservationPrisma[] },
   ): Car {
-    return new Car(
-      carPrisma.id,
-      carPrisma.mark,
-      carPrisma.year,
-      carPrisma.price,
-      carPrisma.status,
-      carPrisma.reservations?.map((reservation) =>
+    return new Car({
+      id: carPrisma.id,
+      mark: carPrisma.mark,
+      year: carPrisma.year,
+      price: carPrisma.price,
+      status: carPrisma.status,
+      reservations: carPrisma.reservations?.map((reservation) =>
         ReservationMapper.toEntity(reservation),
       ),
-    );
+    });
   }
 
   static toPrismaModel(car: Car): {
@@ -38,15 +38,15 @@ export class CarMapper {
   }
 
   static toResponseDto(car: Car): CarResponseDto {
-    return new CarResponseDto(
-      car.id,
-      car.mark,
-      car.year,
-      car.price,
-      car.status,
-      car.reservations?.map((reservation) =>
+    return new CarResponseDto({
+      id: car.id!,
+      mark: car.mark,
+      year: car.year,
+      price: car.price,
+      status: car.status,
+      reservations: car.reservations?.map((reservation) =>
         ReservationMapper.toResponseDto(reservation),
       ),
-    );
+    });
   }
 }

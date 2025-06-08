@@ -2,26 +2,19 @@ import { CarStatusPrisma } from 'generated/prisma';
 import { Reservation } from './reservation.entity';
 
 export class Car {
-  id: number;
+  id?: number;
   mark: string;
   year: number;
   price: number;
   status: CarStatusPrisma;
   reservations?: Reservation[];
 
-  constructor(
-    id: number,
-    mark: string,
-    year: number,
-    price: number,
-    status: CarStatusPrisma,
-    reservations?: Reservation[],
-  ) {
-    this.id = id;
-    this.mark = mark;
-    this.year = year;
-    this.price = price;
-    this.status = status;
-    this.reservations = reservations;
+  constructor(car: Car) {
+    this.id = car.id;
+    this.mark = car.mark;
+    this.year = car.year;
+    this.price = car.price;
+    this.status = car.status;
+    this.reservations = car.reservations;
   }
 }

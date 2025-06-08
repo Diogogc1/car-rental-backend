@@ -7,15 +7,15 @@ export class UserMapper {
   static toEntity(
     userPrisma: UserPrisma & { reservations?: ReservationPrisma[] },
   ): User {
-    return new User(
-      userPrisma.id,
-      userPrisma.name,
-      userPrisma.email,
-      userPrisma.password,
-      userPrisma.reservations?.map((reservation) =>
+    return new User({
+      id: userPrisma.id,
+      name: userPrisma.name,
+      email: userPrisma.email,
+      password: userPrisma.password,
+      reservations: userPrisma.reservations?.map((reservation) =>
         ReservationMapper.toEntity(reservation),
       ),
-    );
+    });
   }
 
   static toPrismaModel(user: User): {
@@ -33,13 +33,13 @@ export class UserMapper {
   static toResponseDto(
     user: User & { reservations?: ReservationPrisma[] },
   ): UserResponseDto {
-    return new UserResponseDto(
-      user.id,
-      user.name,
-      user.email,
-      user.reservations?.map((reservation) =>
+    return new UserResponseDto({
+      id: user.id!,
+      name: user.name,
+      email: user.email,
+      reservations: user.reservations?.map((reservation) =>
         ReservationMapper.toResponseDto(reservation),
       ),
-    );
+    });
   }
 }

@@ -1,6 +1,7 @@
 import { User } from 'src/entities';
 import { prisma } from './prisma';
 import { UserMapper } from 'src/mappers/user.mapper';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export class UserRepository {
   async create(User: User): Promise<User> {
@@ -34,25 +35,41 @@ export class UserRepository {
   }
 
   async update(id: number, user: User): Promise<User | null> {
-    const userPrisma = await prisma.userPrisma.update({
-      where: { id },
-      data: UserMapper.toPrismaModel(user),
-      include: {
-        reservations: true,
-      },
-    });
+    try {
+      const userPrisma = await prisma.userPrisma.update({
+        where: { id },
+        data: UserMapper.toPrismaModel(user),
+        include: {
+          reservations: true,
+        },
+      });
 
-    if (!userPrisma) {
-      return null;
+      return UserMapper.toEntity(userPrisma);
+    } catch (error: unknown) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        return null;
+      }
+      throw error;
     }
-
-    return UserMapper.toEntity(userPrisma);
   }
 
   async delete(id: number): Promise<void> {
-    await prisma.userPrisma.update({
-      where: { id },
-      data: { deletedAt: new Date() },
-    });
+    try {
+      await prisma.userPrisma.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+      });
+    } catch (error: unknown) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        return;
+      }
+      throw error;
+    }
   }
 }

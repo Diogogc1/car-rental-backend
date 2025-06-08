@@ -4,14 +4,14 @@ import { Reservation } from 'src/entities';
 
 export class ReservationMapper {
   static toEntity(reservationPrisma: ReservationPrisma): Reservation {
-    return new Reservation(
-      reservationPrisma.id,
-      reservationPrisma.startDate,
-      reservationPrisma.endDate,
-      reservationPrisma.carId,
-      reservationPrisma.userId,
-      reservationPrisma.totalPrice,
-    );
+    return new Reservation({
+      id: reservationPrisma.id,
+      startDate: reservationPrisma.startDate,
+      endDate: reservationPrisma.endDate,
+      carId: reservationPrisma.carId,
+      userId: reservationPrisma.userId,
+      totalPrice: reservationPrisma.totalPrice,
+    });
   }
 
   static toPrismaModel(reservation: Reservation): {
@@ -31,12 +31,12 @@ export class ReservationMapper {
   }
 
   static toResponseDto(reservation: Reservation): ReservationResponseDto {
-    return new ReservationResponseDto(
-      reservation.id,
-      reservation.userId,
-      reservation.carId,
-      reservation.startDate,
-      reservation.endDate,
-    );
+    return new ReservationResponseDto({
+      id: reservation.id!,
+      userId: reservation.userId,
+      carId: reservation.carId,
+      startDate: reservation.startDate,
+      endDate: reservation.endDate,
+    });
   }
 }

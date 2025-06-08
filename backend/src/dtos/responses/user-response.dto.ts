@@ -6,15 +6,10 @@ export class UserResponseDto {
   email: string;
   reservations?: ReservationResponseDto[];
 
-  constructor(
-    id: number,
-    name: string,
-    email: string,
-    reservations?: ReservationResponseDto[],
-  ) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.reservations = reservations;
+  constructor(userResponseDto: UserResponseDto) {
+    this.id = userResponseDto.id;
+    this.name = userResponseDto.name;
+    this.email = userResponseDto.email;
+    this.reservations = userResponseDto.reservations;
   }
 }

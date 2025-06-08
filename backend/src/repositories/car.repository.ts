@@ -1,9 +1,10 @@
 import { Car } from 'src/entities';
 import { prisma } from './prisma';
 import { CarMapper } from 'src/mappers/car.mapper';
+import { PrismaClientKnownRequestError } from 'generated/prisma/runtime/library';
 
 export class CarRepository {
-  async create(car: Car): Promise<any> {
+  async create(car: Car): Promise<Car> {
     const carPrisma = await prisma.carPrisma.create({
       data: {
         mark: car.mark,
@@ -34,25 +35,41 @@ export class CarRepository {
   }
 
   async update(id: number, car: Car): Promise<Car | null> {
-    const carPrisma = await prisma.carPrisma.update({
-      where: { id },
-      data: CarMapper.toPrismaModel(car),
-      include: {
-        reservations: true,
-      },
-    });
+    try {
+      const carPrisma = await prisma.carPrisma.update({
+        where: { id },
+        data: CarMapper.toPrismaModel(car),
+        include: {
+          reservations: true,
+        },
+      });
 
-    if (!carPrisma) {
-      return null;
+      return CarMapper.toEntity(carPrisma);
+    } catch (error: unknown) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        return null;
+      }
+      throw error;
     }
-
-    return CarMapper.toEntity(carPrisma);
   }
 
   async delete(id: number): Promise<void> {
-    await prisma.carPrisma.update({
-      where: { id },
-      data: { deletedAt: new Date() },
-    });
+    try {
+      await prisma.carPrisma.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+      });
+    } catch (error: unknown) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        return;
+      }
+      throw error;
+    }
   }
 }

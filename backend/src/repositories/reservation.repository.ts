@@ -1,6 +1,7 @@
 import { Reservation } from 'src/entities';
 import { prisma } from './prisma';
 import { ReservationMapper } from 'src/mappers/reservation.mapper';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export class ReservationRepository {
   async create(reservation: Reservation): Promise<Reservation> {
@@ -33,28 +34,44 @@ export class ReservationRepository {
     id: number,
     reservation: Reservation,
   ): Promise<Reservation | null> {
-    const reservationPrisma = await prisma.reservationPrisma.update({
-      where: { id },
-      data: {
-        startDate: reservation.startDate,
-        endDate: reservation.endDate,
-        carId: reservation.carId,
-        userId: reservation.userId,
-        totalPrice: reservation.totalPrice,
-      },
-    });
+    try {
+      const reservationPrisma = await prisma.reservationPrisma.update({
+        where: { id },
+        data: {
+          startDate: reservation.startDate,
+          endDate: reservation.endDate,
+          carId: reservation.carId,
+          userId: reservation.userId,
+          totalPrice: reservation.totalPrice,
+        },
+      });
 
-    if (!reservationPrisma) {
-      return null;
+      return ReservationMapper.toEntity(reservationPrisma);
+    } catch (error: unknown) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        return null;
+      }
+      throw error;
     }
-
-    return ReservationMapper.toEntity(reservationPrisma);
   }
 
   async delete(id: number): Promise<void> {
-    await prisma.reservationPrisma.update({
-      where: { id },
-      data: { deletedAt: new Date() },
-    });
+    try {
+      await prisma.reservationPrisma.update({
+        where: { id },
+        data: { deletedAt: new Date() },
+      });
+    } catch (error: unknown) {
+      if (
+        error instanceof PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        return;
+      }
+      throw error;
+    }
   }
 }
