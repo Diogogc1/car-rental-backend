@@ -1,7 +1,7 @@
 import { Car } from 'src/entities';
 import { prisma } from './prisma';
 import { CarMapper } from 'src/mappers/car.mapper';
-import { PrismaClientKnownRequestError } from 'generated/prisma/runtime/library';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export class CarRepository {
   async create(car: Car): Promise<Car> {
