@@ -11,7 +11,7 @@ interface IUpdateReservationUseCaseProps {
   totalPrice?: number;
 }
 
-export class UpdateReservationUseCase {
+export class UpdateReservationByIdUseCase {
   constructor(private readonly reservationRepository: ReservationRepository) {}
 
   async execute({

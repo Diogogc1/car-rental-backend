@@ -1,7 +1,7 @@
 import { UserRepository } from 'src/repositories';
 import { NotFoundException } from '@nestjs/common';
 
-export class DeleteUserUseCase {
+export class DeleteUserByIdUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
   async execute(id: number): Promise<void> {

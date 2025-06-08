@@ -1,7 +1,7 @@
 import { IUser, User } from 'src/entities';
 import { prisma } from './prisma';
-import { UserMapper } from 'src/mappers/user.mapper';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { UserMapper } from 'src/mappers';
 
 export class UserRepository {
   async create(User: User): Promise<User> {
