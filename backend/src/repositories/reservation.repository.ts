@@ -19,7 +19,7 @@ export class ReservationRepository {
   }
 
   async findById(id: number): Promise<Reservation | null> {
-    const reservationPrisma = await prisma.reservationPrisma.findUnique({
+    const reservationPrisma = await prisma.reservationPrisma.findFirst({
       where: { id, deletedAt: null },
     });
 
@@ -58,7 +58,7 @@ export class ReservationRepository {
     }
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number): Promise<void | null> {
     try {
       await prisma.reservationPrisma.update({
         where: { id },
@@ -69,7 +69,7 @@ export class ReservationRepository {
         error instanceof PrismaClientKnownRequestError &&
         error.code === 'P2025'
       ) {
-        return;
+        return null;
       }
       throw error;
     }

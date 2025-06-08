@@ -20,7 +20,7 @@ export class CarRepository {
   }
 
   async findById(id: number): Promise<Car | null> {
-    const carPrisma = await prisma.carPrisma.findUnique({
+    const carPrisma = await prisma.carPrisma.findFirst({
       where: { id, deletedAt: null },
       include: {
         reservations: true,
@@ -56,7 +56,7 @@ export class CarRepository {
     }
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number): Promise<void | null> {
     try {
       await prisma.carPrisma.update({
         where: { id },
@@ -67,7 +67,7 @@ export class CarRepository {
         error instanceof PrismaClientKnownRequestError &&
         error.code === 'P2025'
       ) {
-        return;
+        return null;
       }
       throw error;
     }
