@@ -1,7 +1,7 @@
 import { CarStatus } from 'generated/prisma';
 
 export class Car {
-  make: string;
+  mark: string;
   year: number;
   price: number;
   status: CarStatus;
