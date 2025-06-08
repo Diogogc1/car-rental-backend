@@ -17,12 +17,12 @@ export class CarResponse implements ICarResponse {
   status: string;
   reservations?: ReservationResponse[];
 
-  constructor(carReponse: ICarResponse) {
-    this.id = carReponse.id;
-    this.mark = carReponse.mark;
-    this.year = carReponse.year;
-    this.price = carReponse.price;
-    this.status = carReponse.status;
-    this.reservations = carReponse.reservations;
+  constructor(carResponse: ICarResponse) {
+    this.id = carResponse.id;
+    this.mark = carResponse.mark;
+    this.year = carResponse.year;
+    this.price = carResponse.price;
+    this.status = carResponse.status;
+    this.reservations = carResponse.reservations;
   }
 }
