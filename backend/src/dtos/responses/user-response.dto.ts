@@ -13,7 +13,7 @@ export class UserResponse implements IUserResponse {
   email: string;
   reservations?: ReservationResponse[];
 
-  constructor(userResponse: UserResponse) {
+  constructor(userResponse: IUserResponse) {
     this.id = userResponse.id;
     this.name = userResponse.name;
     this.email = userResponse.email;
