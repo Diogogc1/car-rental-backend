@@ -21,7 +21,7 @@ export class UserRepository {
 
   async findById(id: number): Promise<User | null> {
     const userPrisma = await prisma.userPrisma.findUnique({
-      where: { id },
+      where: { id, deletedAt: null },
       include: {
         reservations: true,
       },

@@ -20,7 +20,7 @@ export class ReservationRepository {
 
   async findById(id: number): Promise<Reservation | null> {
     const reservationPrisma = await prisma.reservationPrisma.findUnique({
-      where: { id },
+      where: { id, deletedAt: null },
     });
 
     if (!reservationPrisma) {

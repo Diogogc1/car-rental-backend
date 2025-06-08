@@ -21,7 +21,7 @@ export class CarRepository {
 
   async findById(id: number): Promise<Car | null> {
     const carPrisma = await prisma.carPrisma.findUnique({
-      where: { id },
+      where: { id, deletedAt: null },
       include: {
         reservations: true,
       },
