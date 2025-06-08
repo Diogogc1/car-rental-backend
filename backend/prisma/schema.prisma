@@ -15,13 +15,14 @@ datasource db {
 }
 
 model user {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  name      String
-  password  String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  id          Int           @id @default(autoincrement())
+  email       String        @unique
+  name        String
+  password    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+  reservation reservation[]
 }
 
 enum CarStatus {
@@ -30,13 +31,27 @@ enum CarStatus {
 }
 
 model car {
-  id              Int       @id @default(autoincrement())
-  fabricationDate DateTime
-  mark            String
-  year            Int
-  price           Float
-  status          CarStatus @default(AVAILABLE)
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
-  deletedAt       DateTime?
+  id          Int           @id @default(autoincrement())
+  mark        String
+  year        Int
+  price       Float
+  status      CarStatus     @default(AVAILABLE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
+  reservation reservation[]
+}
+
+model reservation {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  carId     Int
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user user @relation(fields: [userId], references: [id])
+  car  car  @relation(fields: [carId], references: [id])
 }
