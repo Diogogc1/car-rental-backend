@@ -1,21 +1,20 @@
-import { CarStatusPrisma } from 'generated/prisma';
-import { Reservation } from './reservation.entity';
+import { ReservationResponseDto } from './reservation-response.dto';
 
-export class Car {
+export class CarResponseDto {
   id: number;
   mark: string;
   year: number;
   price: number;
-  status: CarStatusPrisma;
-  reservations?: Reservation[];
+  status: string;
+  reservations?: ReservationResponseDto[];
 
   constructor(
     id: number,
     mark: string,
     year: number,
     price: number,
-    status: CarStatusPrisma,
-    reservations?: Reservation[],
+    status: string,
+    reservations?: ReservationResponseDto[],
   ) {
     this.id = id;
     this.mark = mark;

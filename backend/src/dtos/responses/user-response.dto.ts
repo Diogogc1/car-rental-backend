@@ -1,23 +1,20 @@
-import { Reservation } from './reservation.entity';
+import { ReservationResponseDto } from './reservation-response.dto';
 
-export class User {
+export class UserResponseDto {
   id: number;
   name: string;
   email: string;
-  password: string;
-  reservations?: Reservation[];
+  reservations?: ReservationResponseDto[];
 
   constructor(
     id: number,
     name: string,
     email: string,
-    password: string,
-    reservations?: Reservation[],
+    reservations?: ReservationResponseDto[],
   ) {
     this.id = id;
     this.name = name;
     this.email = email;
-    this.password = password;
     this.reservations = reservations;
   }
 }
