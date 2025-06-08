@@ -1,19 +1,28 @@
-import { ReservationResponseDto } from './reservation-response.dto';
+import { ReservationResponse } from './reservation-response.dto';
 
-export class CarResponseDto {
+export interface ICarResponse {
   id: number;
   mark: string;
   year: number;
   price: number;
   status: string;
-  reservations?: ReservationResponseDto[];
+  reservations?: ReservationResponse[];
+}
 
-  constructor(car: CarResponseDto) {
-    this.id = car.id;
-    this.mark = car.mark;
-    this.year = car.year;
-    this.price = car.price;
-    this.status = car.status;
-    this.reservations = car.reservations;
+export class CarResponse implements ICarResponse {
+  id: number;
+  mark: string;
+  year: number;
+  price: number;
+  status: string;
+  reservations?: ReservationResponse[];
+
+  constructor(carReponse: ICarResponse) {
+    this.id = carReponse.id;
+    this.mark = carReponse.mark;
+    this.year = carReponse.year;
+    this.price = carReponse.price;
+    this.status = carReponse.status;
+    this.reservations = carReponse.reservations;
   }
 }

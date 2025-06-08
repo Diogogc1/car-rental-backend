@@ -3,15 +3,15 @@ import {
   CarStatusPrisma,
   ReservationPrisma,
 } from 'generated/prisma';
-import { CarResponseDto } from 'src/dtos';
-import { Car } from 'src/entities';
+import { CarResponse, ICarResponse } from 'src/dtos';
+import { Car, ICar } from 'src/entities';
 import { ReservationMapper } from './reservation.mapper';
 
 export class CarMapper {
   static toEntity(
     carPrisma: CarPrisma & { reservations?: ReservationPrisma[] },
   ): Car {
-    return new Car({
+    const carProps: ICar = {
       id: carPrisma.id,
       mark: carPrisma.mark,
       year: carPrisma.year,
@@ -20,7 +20,8 @@ export class CarMapper {
       reservations: carPrisma.reservations?.map((reservation) =>
         ReservationMapper.toEntity(reservation),
       ),
-    });
+    };
+    return new Car(carProps);
   }
 
   static toPrismaModel(car: Car): {
@@ -37,8 +38,8 @@ export class CarMapper {
     };
   }
 
-  static toResponseDto(car: Car): CarResponseDto {
-    return new CarResponseDto({
+  static toResponseDto(car: Car): CarResponse {
+    const carProps: ICarResponse = {
       id: car.id!,
       mark: car.mark,
       year: car.year,
@@ -47,6 +48,7 @@ export class CarMapper {
       reservations: car.reservations?.map((reservation) =>
         ReservationMapper.toResponseDto(reservation),
       ),
-    });
+    };
+    return new CarResponse(carProps);
   }
 }

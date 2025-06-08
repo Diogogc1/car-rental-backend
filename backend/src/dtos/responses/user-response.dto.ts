@@ -1,15 +1,22 @@
-import { ReservationResponseDto } from './reservation-response.dto';
+import { ReservationResponse } from './reservation-response.dto';
 
-export class UserResponseDto {
+export interface IUserResponse {
   id: number;
   name: string;
   email: string;
-  reservations?: ReservationResponseDto[];
+  reservations?: ReservationResponse[];
+}
 
-  constructor(userResponseDto: UserResponseDto) {
-    this.id = userResponseDto.id;
-    this.name = userResponseDto.name;
-    this.email = userResponseDto.email;
-    this.reservations = userResponseDto.reservations;
+export class UserResponse implements IUserResponse {
+  id: number;
+  name: string;
+  email: string;
+  reservations?: ReservationResponse[];
+
+  constructor(userResponse: UserResponse) {
+    this.id = userResponse.id;
+    this.name = userResponse.name;
+    this.email = userResponse.email;
+    this.reservations = userResponse.reservations;
   }
 }

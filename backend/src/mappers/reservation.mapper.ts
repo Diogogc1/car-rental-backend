@@ -1,17 +1,18 @@
 import { ReservationPrisma } from 'generated/prisma';
-import { ReservationResponseDto } from 'src/dtos';
-import { Reservation } from 'src/entities';
+import { IReservationResponse, ReservationResponse } from 'src/dtos';
+import { IReservation, Reservation } from 'src/entities';
 
 export class ReservationMapper {
   static toEntity(reservationPrisma: ReservationPrisma): Reservation {
-    return new Reservation({
+    const reservationProps: IReservation = {
       id: reservationPrisma.id,
       startDate: reservationPrisma.startDate,
       endDate: reservationPrisma.endDate,
       carId: reservationPrisma.carId,
       userId: reservationPrisma.userId,
       totalPrice: reservationPrisma.totalPrice,
-    });
+    };
+    return new Reservation(reservationProps);
   }
 
   static toPrismaModel(reservation: Reservation): {
@@ -30,13 +31,15 @@ export class ReservationMapper {
     };
   }
 
-  static toResponseDto(reservation: Reservation): ReservationResponseDto {
-    return new ReservationResponseDto({
+  static toResponseDto(reservation: Reservation): ReservationResponse {
+    const reservationResponseProps: IReservationResponse = {
       id: reservation.id!,
       userId: reservation.userId,
       carId: reservation.carId,
       startDate: reservation.startDate,
       endDate: reservation.endDate,
-    });
+      totalPrice: reservation.totalPrice,
+    };
+    return new ReservationResponse(reservationResponseProps);
   }
 }
