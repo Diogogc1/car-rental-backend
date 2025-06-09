@@ -90,7 +90,7 @@ export class CarController {
     description: 'Nenhum carro encontrado.',
   })
   async getAll(@Query() getAllCarPayload: GetAllCarPayload) {
-    const { page = 1, pageSize = 10 } = getAllCarPayload;
+    const { page, pageSize } = getAllCarPayload;
     const cars = await this.getAllCarsUseCase.execute(page, pageSize);
     return cars.map((car) => CarMapper.toResponseDto(car));
   }
