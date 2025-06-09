@@ -68,8 +68,18 @@ export class ReservationController {
   @Get()
   @ApiOperation({ summary: 'Buscar todas as reservas' })
   @ApiQuery({
-    type: GetAllReservationPayload,
-    description: 'Parâmetros de paginação para busca de reservas',
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Número da página (padrão: 1)',
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    type: Number,
+    description: 'Tamanho da página (padrão: 10)',
+    example: 10,
   })
   @ApiResponse({
     status: 200,

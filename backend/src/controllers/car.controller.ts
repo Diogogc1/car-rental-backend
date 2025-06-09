@@ -67,8 +67,18 @@ export class CarController {
   @Get()
   @ApiOperation({ summary: 'Buscar todos os carros' })
   @ApiQuery({
-    type: GetAllCarPayload,
-    description: 'Parâmetros de paginação para busca de carros',
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Número da página (padrão: 1)',
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    type: Number,
+    description: 'Tamanho da página (padrão: 10)',
+    example: 10,
   })
   @ApiResponse({
     status: 200,
