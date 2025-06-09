@@ -91,7 +91,7 @@ export class ReservationController {
     description: 'Nenhuma reserva encontrada.',
   })
   async getAll(@Query() getAllReservationPayload: GetAllReservationPayload) {
-    const { page, pageSize } = getAllReservationPayload;
+    const { page = 1, pageSize = 10 } = getAllReservationPayload;
     const reservations = await this.getAllReservationsUseCase.execute(
       page,
       pageSize,
