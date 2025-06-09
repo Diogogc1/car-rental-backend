@@ -67,8 +67,18 @@ export class CarController {
   @Get()
   @ApiOperation({ summary: 'Buscar todos os carros' })
   @ApiQuery({
-    type: GetAllCarPayload,
-    description: 'Parâmetros de paginação para busca de carros',
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Número da página (padrão: 1)',
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    type: Number,
+    description: 'Tamanho da página (padrão: 10)',
+    example: 10,
   })
   @ApiResponse({
     status: 200,
@@ -79,10 +89,8 @@ export class CarController {
     status: 404,
     description: 'Nenhum carro encontrado.',
   })
-  async getAll(
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
-  ) {
+  async getAll(@Query() getAllCarPayload: GetAllCarPayload) {
+    const { page = 1, pageSize = 10 } = getAllCarPayload;
     const cars = await this.getAllCarsUseCase.execute(page, pageSize);
     return cars.map((car) => CarMapper.toResponseDto(car));
   }

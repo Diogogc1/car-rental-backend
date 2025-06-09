@@ -68,8 +68,18 @@ export class ReservationController {
   @Get()
   @ApiOperation({ summary: 'Buscar todas as reservas' })
   @ApiQuery({
-    type: GetAllReservationPayload,
-    description: 'Parâmetros de paginação para busca de reservas',
+    name: 'page',
+    required: false,
+    type: Number,
+    description: 'Número da página (padrão: 1)',
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'pageSize',
+    required: false,
+    type: Number,
+    description: 'Tamanho da página (padrão: 10)',
+    example: 10,
   })
   @ApiResponse({
     status: 200,
@@ -80,10 +90,8 @@ export class ReservationController {
     status: 404,
     description: 'Nenhuma reserva encontrada.',
   })
-  async getAll(
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
-  ) {
+  async getAll(@Query() getAllReservationPayload: GetAllReservationPayload) {
+    const { page = 1, pageSize = 10 } = getAllReservationPayload;
     const reservations = await this.getAllReservationsUseCase.execute(
       page,
       pageSize,
