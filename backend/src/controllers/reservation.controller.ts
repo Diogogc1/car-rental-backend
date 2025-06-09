@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Body,
+  Query,
 } from '@nestjs/common';
 
 import {
@@ -20,6 +21,7 @@ import {
   ApiResponse,
   ApiTags,
   ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
 import {
   CreateReservationUseCase,
@@ -65,7 +67,7 @@ export class ReservationController {
 
   @Get()
   @ApiOperation({ summary: 'Buscar todas as reservas' })
-  @ApiBody({
+  @ApiQuery({
     type: GetAllReservationPayload,
     description: 'Parâmetros de paginação para busca de reservas',
   })
@@ -78,8 +80,10 @@ export class ReservationController {
     status: 404,
     description: 'Nenhuma reserva encontrada.',
   })
-  async getAll(@Body() body: GetAllReservationPayload) {
-    const { page, pageSize } = body;
+  async getAll(
+    @Query('page') page?: number,
+    @Query('pageSize') pageSize?: number,
+  ) {
     const reservations = await this.getAllReservationsUseCase.execute(
       page,
       pageSize,

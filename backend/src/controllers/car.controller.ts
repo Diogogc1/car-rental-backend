@@ -6,6 +6,7 @@ import {
   Delete,
   Param,
   Body,
+  Query,
 } from '@nestjs/common';
 
 import {
@@ -21,6 +22,7 @@ import {
   ApiResponse,
   ApiTags,
   ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
 import {
   CreateCarUseCase,
@@ -64,7 +66,7 @@ export class CarController {
 
   @Get()
   @ApiOperation({ summary: 'Buscar todos os carros' })
-  @ApiBody({
+  @ApiQuery({
     type: GetAllCarPayload,
     description: 'Parâmetros de paginação para busca de carros',
   })
@@ -77,8 +79,10 @@ export class CarController {
     status: 404,
     description: 'Nenhum carro encontrado.',
   })
-  async getAll(@Body() body: GetAllCarPayload) {
-    const { page, pageSize } = body;
+  async getAll(
+    @Query('page') page?: number,
+    @Query('pageSize') pageSize?: number,
+  ) {
     const cars = await this.getAllCarsUseCase.execute(page, pageSize);
     return cars.map((car) => CarMapper.toResponseDto(car));
   }
