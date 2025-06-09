@@ -29,7 +29,7 @@ import {
   DeleteCarUseCase,
   GetAllCarUseCase,
   GetCarByIdUseCase,
-  UpdateCarUseCase,
+  UpdateCarByIdUseCase,
   SearchCarUseCase,
 } from 'src/use-cases';
 import { CarMapper } from 'src/mappers';
@@ -41,7 +41,7 @@ export class CarController {
     private readonly createCarUseCase: CreateCarUseCase,
     private readonly getCarByIdUseCase: GetCarByIdUseCase,
     private readonly getAllCarsUseCase: GetAllCarUseCase,
-    private readonly updateCarUseCase: UpdateCarUseCase,
+    private readonly updateCarUseCase: UpdateCarByIdUseCase,
     private readonly deleteCarUseCase: DeleteCarUseCase,
     private readonly searchCarUseCase: SearchCarUseCase,
   ) {}

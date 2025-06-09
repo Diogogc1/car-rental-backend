@@ -1,3 +1,5 @@
+export * from './app.service';
+
 export * from './user/create-user.use-case';
 export * from './user/get-user-by-id.use-case';
 export * from './user/delete-user-by-id.use-case';

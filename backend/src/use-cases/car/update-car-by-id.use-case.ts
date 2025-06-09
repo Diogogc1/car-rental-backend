@@ -11,7 +11,7 @@ interface IUpdateCarUseCaseProps {
   status?: string;
 }
 
-export class UpdateCarUseCase {
+export class UpdateCarByIdUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
   async execute({ id, ...dataUpdate }: IUpdateCarUseCaseProps): Promise<Car> {
