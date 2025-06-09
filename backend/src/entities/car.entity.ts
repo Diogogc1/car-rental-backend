@@ -3,6 +3,7 @@ import { Reservation } from './reservation.entity';
 
 export interface ICar {
   id?: number;
+  name: string;
   mark: string;
   year: number;
   price: number;
@@ -12,6 +13,7 @@ export interface ICar {
 
 export class Car implements ICar {
   id?: number;
+  name: string;
   mark: string;
   year: number;
   price: number;
@@ -20,6 +22,7 @@ export class Car implements ICar {
 
   constructor(car: ICar) {
     this.id = car.id;
+    this.name = car.name;
     this.mark = car.mark;
     this.year = car.year;
     this.price = car.price;

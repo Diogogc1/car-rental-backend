@@ -2,6 +2,7 @@ import { ReservationResponse } from './reservation-response';
 
 export interface ICarResponse {
   id: number;
+  name: string;
   mark: string;
   year: number;
   price: number;
@@ -11,6 +12,7 @@ export interface ICarResponse {
 
 export class CarResponse implements ICarResponse {
   id: number;
+  name: string;
   mark: string;
   year: number;
   price: number;
@@ -19,6 +21,7 @@ export class CarResponse implements ICarResponse {
 
   constructor(carResponse: ICarResponse) {
     this.id = carResponse.id;
+    this.name = carResponse.name;
     this.mark = carResponse.mark;
     this.year = carResponse.year;
     this.price = carResponse.price;

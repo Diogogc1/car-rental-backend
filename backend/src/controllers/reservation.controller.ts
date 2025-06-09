@@ -12,6 +12,7 @@ import {
   CreateReservationPayload,
   UpdateReservationPayload,
   ReservationResponse,
+  GetAllReservationPayload,
 } from 'src/dtos';
 import {
   ApiBody,
@@ -23,7 +24,7 @@ import {
 import {
   CreateReservationUseCase,
   DeleteReservationUseCase,
-  GetAllReservationsUseCase,
+  GetAllReservationUseCase,
   GetReservationByIdUseCase,
   UpdateReservationByIdUseCase,
 } from 'src/use-cases';
@@ -35,7 +36,7 @@ export class ReservationController {
   constructor(
     private readonly createReservationUseCase: CreateReservationUseCase,
     private readonly getReservationByIdUseCase: GetReservationByIdUseCase,
-    private readonly getAllReservationsUseCase: GetAllReservationsUseCase,
+    private readonly getAllReservationsUseCase: GetAllReservationUseCase,
     private readonly updateReservationByIdUseCase: UpdateReservationByIdUseCase,
     private readonly deleteReservationUseCase: DeleteReservationUseCase,
   ) {}
@@ -64,6 +65,10 @@ export class ReservationController {
 
   @Get()
   @ApiOperation({ summary: 'Buscar todas as reservas' })
+  @ApiBody({
+    type: GetAllReservationPayload,
+    description: 'Parâmetros de paginação para busca de reservas',
+  })
   @ApiResponse({
     status: 200,
     description: 'Lista de reservas encontrada com sucesso.',
@@ -73,8 +78,12 @@ export class ReservationController {
     status: 404,
     description: 'Nenhuma reserva encontrada.',
   })
-  async getAll() {
-    const reservations = await this.getAllReservationsUseCase.execute();
+  async getAll(@Body() body: GetAllReservationPayload) {
+    const { page, pageSize } = body;
+    const reservations = await this.getAllReservationsUseCase.execute(
+      page,
+      pageSize,
+    );
     return reservations.map((reservation) =>
       ReservationMapper.toResponseDto(reservation),
     );

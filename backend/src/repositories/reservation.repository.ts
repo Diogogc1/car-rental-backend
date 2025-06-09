@@ -30,9 +30,14 @@ export class ReservationRepository {
     return ReservationMapper.toEntity(reservationPrisma);
   }
 
-  async findAll(): Promise<Reservation[]> {
+  async findAll(page?: number, pageSize?: number): Promise<Reservation[]> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
+    const take = pageSize;
+
     const reservationsPrisma = await prisma.reservationPrisma.findMany({
       where: { deletedAt: null },
+      skip,
+      take,
     });
 
     return reservationsPrisma.map((reservationPrisma) =>
