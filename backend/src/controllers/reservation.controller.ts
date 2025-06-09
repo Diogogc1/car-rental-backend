@@ -80,10 +80,8 @@ export class ReservationController {
     status: 404,
     description: 'Nenhuma reserva encontrada.',
   })
-  async getAll(
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
-  ) {
+  async getAll(@Query() getAllReservationPayload: GetAllReservationPayload) {
+    const { page, pageSize } = getAllReservationPayload;
     const reservations = await this.getAllReservationsUseCase.execute(
       page,
       pageSize,

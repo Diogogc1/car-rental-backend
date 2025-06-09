@@ -79,10 +79,8 @@ export class CarController {
     status: 404,
     description: 'Nenhum carro encontrado.',
   })
-  async getAll(
-    @Query('page') page?: number,
-    @Query('pageSize') pageSize?: number,
-  ) {
+  async getAll(@Query() getAllCarPayload: GetAllCarPayload) {
+    const { page, pageSize } = getAllCarPayload;
     const cars = await this.getAllCarsUseCase.execute(page, pageSize);
     return cars.map((car) => CarMapper.toResponseDto(car));
   }
