@@ -3,6 +3,7 @@ import { Car } from 'src/entities';
 import { CarRepository } from 'src/repositories';
 
 interface ICreateCarUseCaseProps {
+  name: string;
   mark: string;
   year: number;
   price: number;
@@ -13,9 +14,10 @@ export class CreateCarUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
   async execute(createCarUseCaseProps: ICreateCarUseCaseProps) {
-    const { mark, year, price, status } = createCarUseCaseProps;
+    const { name, mark, year, price, status } = createCarUseCaseProps;
 
     const car = new Car({
+      name,
       mark,
       year,
       price,

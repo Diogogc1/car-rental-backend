@@ -36,6 +36,7 @@ enum CarStatusPrisma {
 
 model CarPrisma {
   id           Int                 @id @default(autoincrement())
+  name         String
   mark         String
   year         Int
   price        Float

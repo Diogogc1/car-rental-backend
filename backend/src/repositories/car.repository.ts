@@ -1,15 +1,27 @@
 import { Car } from 'src/entities';
 import { prisma } from './prisma';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { CarMapper } from 'src/mappers';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Prisma } from 'generated/prisma';
+
+interface CarSearchProps {
+  name?: string;
+  mark?: string;
+  year?: number;
+  price?: number;
+  page?: number;
+  pageSize?: number;
+}
 
 export class CarRepository {
   async create(car: Car): Promise<Car> {
     const carPrisma = await prisma.carPrisma.create({
       data: {
+        name: car.name,
         mark: car.mark,
         year: car.year,
         price: car.price,
+        status: car.status,
       },
       include: {
         reservations: true,
@@ -34,12 +46,17 @@ export class CarRepository {
     return CarMapper.toEntity(carPrisma);
   }
 
-  async findAll(): Promise<Car[]> {
+  async findAll(page?: number, pageSize?: number): Promise<Car[]> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
+    const take = pageSize;
     const carsPrisma = await prisma.carPrisma.findMany({
       where: { deletedAt: null },
       include: {
         reservations: true,
       },
+      take: take,
+      skip: skip,
+      orderBy: { createdAt: 'desc' },
     });
 
     return carsPrisma.map((carPrisma) => CarMapper.toEntity(carPrisma));
@@ -103,5 +120,51 @@ export class CarRepository {
     });
 
     return !!carPrisma;
+  }
+
+  async search(props: CarSearchProps): Promise<{ data: Car[]; total: number }> {
+    const { name, mark, year, price, page = 1, pageSize = 10 } = props;
+
+    const where: Prisma.CarPrismaWhereInput = {
+      deletedAt: null,
+    };
+
+    if (name) {
+      where.name = {
+        contains: name,
+        mode: 'insensitive',
+      };
+    }
+
+    if (mark) {
+      where.mark = {
+        contains: mark,
+        mode: 'insensitive',
+      };
+    }
+
+    if (year) {
+      where.year = year;
+    }
+
+    if (price) {
+      where.price = price;
+    }
+
+    const [total, carsPrisma] = await prisma.$transaction([
+      prisma.carPrisma.count({ where }),
+      prisma.carPrisma.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+    ]);
+
+    const cars = carsPrisma.map((carPrisma) => CarMapper.toEntity(carPrisma));
+
+    return { data: cars, total };
   }
 }

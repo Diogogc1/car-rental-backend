@@ -4,6 +4,14 @@ import { CarStatusPrisma } from 'generated/prisma';
 
 export class UpdateCarPayload {
   @ApiPropertyOptional({
+    description: 'O nome do carro.',
+    example: 'Civic EXL 1.5 Turbo',
+  })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({
     description: 'A marca do carro.',
     example: 'Honda',
   })

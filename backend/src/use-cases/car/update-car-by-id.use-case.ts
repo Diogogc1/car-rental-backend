@@ -4,13 +4,14 @@ import { NotFoundException } from '@nestjs/common';
 
 interface IUpdateCarUseCaseProps {
   id: number;
+  name?: string;
   mark?: string;
   year?: number;
   price?: number;
   status?: string;
 }
 
-export class UpdateCarUseCase {
+export class UpdateCarByIdUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
   async execute({ id, ...dataUpdate }: IUpdateCarUseCaseProps): Promise<Car> {

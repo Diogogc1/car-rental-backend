@@ -6,22 +6,31 @@ import {
   Delete,
   Param,
   Body,
+  Query,
 } from '@nestjs/common';
 
-import { CreateCarPayload, UpdateCarPayload, CarResponse } from 'src/dtos';
+import {
+  CreateCarPayload,
+  UpdateCarPayload,
+  CarResponse,
+  GetAllCarPayload,
+  SearchCarPayload,
+} from 'src/dtos';
 import {
   ApiBody,
   ApiOperation,
   ApiResponse,
   ApiTags,
   ApiParam,
+  ApiQuery,
 } from '@nestjs/swagger';
 import {
   CreateCarUseCase,
   DeleteCarUseCase,
-  GetAllCarsUseCase,
+  GetAllCarUseCase,
   GetCarByIdUseCase,
-  UpdateCarUseCase,
+  UpdateCarByIdUseCase,
+  SearchCarUseCase,
 } from 'src/use-cases';
 import { CarMapper } from 'src/mappers';
 
@@ -31,9 +40,10 @@ export class CarController {
   constructor(
     private readonly createCarUseCase: CreateCarUseCase,
     private readonly getCarByIdUseCase: GetCarByIdUseCase,
-    private readonly getAllCarsUseCase: GetAllCarsUseCase,
-    private readonly updateCarUseCase: UpdateCarUseCase,
+    private readonly getAllCarsUseCase: GetAllCarUseCase,
+    private readonly updateCarUseCase: UpdateCarByIdUseCase,
     private readonly deleteCarUseCase: DeleteCarUseCase,
+    private readonly searchCarUseCase: SearchCarUseCase,
   ) {}
 
   @Post()
@@ -56,6 +66,10 @@ export class CarController {
 
   @Get()
   @ApiOperation({ summary: 'Buscar todos os carros' })
+  @ApiQuery({
+    type: GetAllCarPayload,
+    description: 'Parâmetros de paginação para busca de carros',
+  })
   @ApiResponse({
     status: 200,
     description: 'Lista de carros encontrada com sucesso.',
@@ -65,8 +79,11 @@ export class CarController {
     status: 404,
     description: 'Nenhum carro encontrado.',
   })
-  async getAll() {
-    const cars = await this.getAllCarsUseCase.execute();
+  async getAll(
+    @Query('page') page?: number,
+    @Query('pageSize') pageSize?: number,
+  ) {
+    const cars = await this.getAllCarsUseCase.execute(page, pageSize);
     return cars.map((car) => CarMapper.toResponseDto(car));
   }
 
@@ -126,5 +143,40 @@ export class CarController {
   async deleteById(@Param('id') id: string) {
     await this.deleteCarUseCase.execute(Number(id));
     return { message: 'Car deleted successfully' };
+  }
+
+  @Post('search')
+  @ApiOperation({ summary: 'Buscar carros com filtros' })
+  @ApiBody({
+    type: SearchCarPayload,
+    description: 'Parâmetros de busca e paginação para carros',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Carros encontrados com sucesso.',
+    schema: {
+      type: 'object',
+      properties: {
+        data: {
+          type: 'array',
+          items: { $ref: '#/components/schemas/CarResponse' },
+        },
+        total: {
+          type: 'number',
+          description: 'Total de carros encontrados',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Nenhum carro encontrado com os critérios informados.',
+  })
+  async search(@Body() body: SearchCarPayload) {
+    const result = await this.searchCarUseCase.execute(body);
+    return {
+      data: result.data.map((car) => CarMapper.toResponseDto(car)),
+      total: result.total,
+    };
   }
 }
