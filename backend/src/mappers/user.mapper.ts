@@ -19,7 +19,7 @@ export class UserMapper {
     return new User(userProps);
   }
 
-  static toPrismaModel(user: User): {
+  static toPrismaModel(user: IUser): {
     name: string;
     email: string;
     password: string;
