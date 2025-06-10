@@ -18,7 +18,6 @@ import {
   GetAllCarUseCase,
   UpdateCarByIdUseCase,
   DeleteCarUseCase,
-  SearchCarUseCase,
   // Reservation use cases
   CreateReservationUseCase,
   GetReservationByIdUseCase,
@@ -48,7 +47,6 @@ import {
     GetAllCarUseCase,
     UpdateCarByIdUseCase,
     DeleteCarUseCase,
-    SearchCarUseCase,
     // Reservation use cases
     CreateReservationUseCase,
     GetReservationByIdUseCase,

@@ -10,7 +10,6 @@ export * from './car/get-car-by-id.use-case';
 export * from './car/get-all-car.use-case';
 export * from './car/update-car-by-id.use-case';
 export * from './car/delete-car.use-case';
-export * from './car/search-car.use-case';
 
 export * from './reservation/create-reservation.use-case';
 export * from './reservation/get-reservation-by-id.use-case';

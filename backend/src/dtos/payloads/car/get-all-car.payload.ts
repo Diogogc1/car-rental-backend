@@ -1,27 +1,40 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsNumber, Min } from 'class-validator';
+import { IsOptional, IsNumber, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
+import { PaginationPayload } from '../pagination.payload';
 
-export class GetAllCarPayload {
+export class GetAllCarPayload extends PaginationPayload {
   @ApiPropertyOptional({
-    description: 'Número da página (começando em 1).',
-    example: 1,
-    minimum: 1,
+    description: 'Nome do carro para busca (busca parcial).',
+    example: 'Corolla',
+  })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({
+    description: 'Marca do carro para busca (busca parcial).',
+    example: 'Toyota',
+  })
+  @IsOptional()
+  @IsString()
+  brand?: string;
+
+  @ApiPropertyOptional({
+    description: 'Ano de fabricação do carro (busca exata).',
+    example: 2022,
   })
   @IsOptional()
   @Type(() => Number)
   @IsNumber()
-  @Min(1)
-  page?: number = 1;
+  year?: number;
 
   @ApiPropertyOptional({
-    description: 'Quantidade de itens por página.',
-    example: 10,
-    minimum: 1,
+    description: 'Preço do carro (busca exata).',
+    example: 150,
   })
   @IsOptional()
   @Type(() => Number)
   @IsNumber()
-  @Min(1)
-  pageSize?: number = 10;
+  price?: number;
 }

@@ -14,7 +14,6 @@ import {
   UpdateCarPayload,
   CarResponse,
   GetAllCarPayload,
-  SearchCarPayload,
 } from 'src/dtos';
 import {
   ApiBody,
@@ -30,7 +29,6 @@ import {
   GetAllCarUseCase,
   GetCarByIdUseCase,
   UpdateCarByIdUseCase,
-  SearchCarUseCase,
 } from 'src/use-cases';
 import { CarMapper } from 'src/mappers';
 
@@ -43,7 +41,6 @@ export class CarController {
     private readonly getAllCarsUseCase: GetAllCarUseCase,
     private readonly updateCarUseCase: UpdateCarByIdUseCase,
     private readonly deleteCarUseCase: DeleteCarUseCase,
-    private readonly searchCarUseCase: SearchCarUseCase,
   ) {}
 
   @Post()
@@ -90,9 +87,19 @@ export class CarController {
     description: 'Nenhum carro encontrado.',
   })
   async getAll(@Query() getAllCarPayload: GetAllCarPayload) {
-    const { page, pageSize } = getAllCarPayload;
-    const cars = await this.getAllCarsUseCase.execute(page, pageSize);
-    return cars.map((car) => CarMapper.toResponseDto(car));
+    const { page, pageSize, brand, name, price, year } = getAllCarPayload;
+    const cars = await this.getAllCarsUseCase.execute({
+      page: page || 1,
+      pageSize: pageSize || 10,
+      brand,
+      name,
+      price,
+      year,
+    });
+    return {
+      total: cars.total,
+      cars: cars.data.map((car) => CarMapper.toResponseDto(car)),
+    };
   }
 
   @Get(':id')
@@ -151,40 +158,5 @@ export class CarController {
   async deleteById(@Param('id') id: string) {
     await this.deleteCarUseCase.execute(Number(id));
     return { message: 'Car deleted successfully' };
-  }
-
-  @Post('search')
-  @ApiOperation({ summary: 'Buscar carros com filtros' })
-  @ApiBody({
-    type: SearchCarPayload,
-    description: 'Parâmetros de busca e paginação para carros',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Carros encontrados com sucesso.',
-    schema: {
-      type: 'object',
-      properties: {
-        data: {
-          type: 'array',
-          items: { $ref: '#/components/schemas/CarResponse' },
-        },
-        total: {
-          type: 'number',
-          description: 'Total de carros encontrados',
-        },
-      },
-    },
-  })
-  @ApiResponse({
-    status: 404,
-    description: 'Nenhum carro encontrado com os critérios informados.',
-  })
-  async search(@Body() body: SearchCarPayload) {
-    const result = await this.searchCarUseCase.execute(body);
-    return {
-      data: result.data.map((car) => CarMapper.toResponseDto(car)),
-      total: result.total,
-    };
   }
 }
