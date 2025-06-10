@@ -5,7 +5,7 @@ import { NotFoundException } from '@nestjs/common';
 interface IUpdateCarUseCaseProps {
   id: number;
   name?: string;
-  mark?: string;
+  brand?: string;
   year?: number;
   price?: number;
   status?: string;
