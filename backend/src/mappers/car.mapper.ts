@@ -14,7 +14,7 @@ export class CarMapper {
     const carProps: ICar = {
       id: carPrisma.id,
       name: carPrisma.name,
-      mark: carPrisma.mark,
+      brand: carPrisma.brand,
       year: carPrisma.year,
       price: carPrisma.price,
       status: carPrisma.status,
@@ -27,14 +27,14 @@ export class CarMapper {
 
   static toPrismaModel(car: Car): {
     name: string;
-    mark: string;
+    brand: string;
     year: number;
     price: number;
     status: CarStatusPrisma;
   } {
     return {
       name: car.name,
-      mark: car.mark,
+      brand: car.brand,
       year: car.year,
       price: car.price,
       status: car.status,
@@ -45,7 +45,7 @@ export class CarMapper {
     const carProps: ICarResponse = {
       id: car.id!,
       name: car.name,
-      mark: car.mark,
+      brand: car.brand,
       year: car.year,
       price: car.price,
       status: car.status,

@@ -17,7 +17,7 @@ export class UpdateCarPayload {
   })
   @IsOptional()
   @IsString()
-  mark?: string;
+  brand?: string;
 
   @ApiPropertyOptional({
     description: 'O ano de fabricação do carro.',
