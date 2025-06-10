@@ -20,7 +20,7 @@ export class CreateReservationPayload {
   @IsDateString()
   @IsNotEmpty()
   @MinDate(new Date(), {
-    message: 'A data de início deve ser maior que a data atual',
+    message: 'A data final deve ser maior que a data atual',
   })
   endDate: Date;
 

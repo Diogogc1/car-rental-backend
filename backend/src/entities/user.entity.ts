@@ -15,7 +15,7 @@ export class User implements IUser {
   password: string;
   reservations?: Reservation[];
 
-  private constructor(user: IUser) {
+  constructor(user: IUser) {
     this.id = user.id;
     this.name = user.name;
     this.email = user.email;
@@ -30,7 +30,7 @@ export class User implements IUser {
     this.password = hashedPassword;
   }
 
-  public static async create(props: IUser): Promise<User> {
+  public static async createWithHashedPassword(props: IUser): Promise<User> {
     if (!props.password || props.password.length < 6) {
       throw new Error('A senha deve ter pelo menos 6 caracteres.');
     }

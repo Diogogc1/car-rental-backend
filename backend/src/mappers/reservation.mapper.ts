@@ -15,7 +15,7 @@ export class ReservationMapper {
     return new Reservation(reservationProps);
   }
 
-  static toPrismaModel(reservation: Reservation): {
+  static toPrismaModel(reservation: IReservation): {
     startDate: Date;
     endDate: Date;
     carId: number;

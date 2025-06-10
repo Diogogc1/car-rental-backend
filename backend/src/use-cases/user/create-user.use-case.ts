@@ -19,7 +19,7 @@ export class CreateUserUseCase {
       throw new ConflictException('User already exists with this email');
     }
 
-    const user = await User.create({
+    const user = await User.createWithHashedPassword({
       name: name,
       email: email,
       password: password,
