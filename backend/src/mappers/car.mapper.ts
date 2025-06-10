@@ -25,7 +25,7 @@ export class CarMapper {
     return new Car(carProps);
   }
 
-  static toPrismaModel(car: Car): {
+  static toPrismaModel(car: ICar): {
     name: string;
     brand: string;
     year: number;
