@@ -2,7 +2,7 @@ import { Reservation } from 'src/entities';
 import { ReservationRepository } from 'src/repositories';
 import { NotFoundException } from '@nestjs/common';
 
-interface IUpdateReservationUseCaseParams {
+interface IUpdateReservationUseCaseProps {
   id: number;
   startDate?: Date;
   endDate?: Date;
@@ -17,7 +17,7 @@ export class UpdateReservationByIdUseCase {
   async execute({
     id,
     ...dataUpdate
-  }: IUpdateReservationUseCaseParams): Promise<Reservation> {
+  }: IUpdateReservationUseCaseProps): Promise<Reservation> {
     const reservation = await this.reservationRepository.findById(id);
     if (!reservation) {
       throw new NotFoundException('Reservation not found');

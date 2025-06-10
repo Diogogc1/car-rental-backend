@@ -1,8 +1,9 @@
 import { User } from 'src/entities';
 import { UserRepository } from 'src/repositories';
+import * as bcrypt from 'bcrypt';
 import { ConflictException } from '@nestjs/common';
 
-interface ICreateUserUseCaseParams {
+interface ICreateUserUseCaseProps {
   name: string;
   email: string;
   password: string;
@@ -10,8 +11,8 @@ interface ICreateUserUseCaseParams {
 export class CreateUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute(params: ICreateUserUseCaseParams) {
-    const { email, name, password } = params;
+  async execute(createUserUseCaseProps: ICreateUserUseCaseProps) {
+    const { email, name, password } = createUserUseCaseProps;
 
     const existingUser = await this.userRepository.findByEmail(email);
 
@@ -19,10 +20,13 @@ export class CreateUserUseCase {
       throw new ConflictException('User already exists with this email');
     }
 
-    const user = await User.create({
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const user = new User({
       name: name,
       email: email,
-      password: password,
+      password: hashedPassword,
     });
 
     const newUser = await this.userRepository.create(user);

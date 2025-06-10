@@ -8,6 +8,7 @@ export * from './payloads/user/update-user-by-id.payload';
 export * from './payloads/car/create-car.payload';
 export * from './payloads/car/update-car.payload';
 export * from './payloads/car/get-all-car.payload';
+export * from './payloads/car/search-car.payload';
 
 export * from './payloads/reservation/create-reservation.payload';
 export * from './payloads/reservation/update-reservation.payload';

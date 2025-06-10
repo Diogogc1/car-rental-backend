@@ -1,8 +1,8 @@
 import { Reservation } from 'src/entities';
 import { CarRepository, ReservationRepository } from 'src/repositories';
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 
-interface ICreateReservationUseCaseParams {
+interface ICreateReservationUseCaseProps {
   startDate: Date;
   endDate: Date;
   carId: number;
@@ -16,25 +16,20 @@ export class CreateReservationUseCase {
     private readonly carRepository: CarRepository,
   ) {}
 
-  async execute(params: ICreateReservationUseCaseParams) {
-    const car = await this.carRepository.findById(params.carId);
+  async execute(createReservationUseCaseProps: ICreateReservationUseCaseProps) {
+    const carIsReserved = await this.carRepository.verifyIfReserved(
+      createReservationUseCaseProps.carId,
+      createReservationUseCaseProps.startDate,
+      createReservationUseCaseProps.endDate,
+    );
 
-    if (!car) {
-      throw new NotFoundException('Car not found');
-    }
-
-    if (car.isAvailable(params.startDate, params.endDate)) {
+    if (carIsReserved) {
       throw new ConflictException(
         'Car is not available for the selected dates',
       );
     }
 
-    const reservation = new Reservation(params);
-
-    if (reservation.getDurationInDays() > 30) {
-      throw new ConflictException('Reservation cannot exceed 30 days');
-    }
-
+    const reservation = new Reservation(createReservationUseCaseProps);
     const newReservation = await this.reservationRepository.create(reservation);
     return newReservation;
   }

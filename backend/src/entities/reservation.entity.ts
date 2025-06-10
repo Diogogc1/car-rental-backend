@@ -23,18 +23,4 @@ export class Reservation implements IReservation {
     this.userId = reservation.userId;
     this.totalPrice = reservation.totalPrice;
   }
-
-  getDurationInDays(): number {
-    const start = new Date(this.startDate);
-    const end = new Date(this.endDate);
-    const duration = Math.ceil(
-      (end.getTime() - start.getTime()) / (1000 * 3600 * 24),
-    );
-    return duration > 0 ? duration : 0;
-  }
-
-  hasFinished(): boolean {
-    const now = new Date();
-    return this.endDate < now;
-  }
 }

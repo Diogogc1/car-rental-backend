@@ -37,7 +37,7 @@ enum CarStatusPrisma {
 model CarPrisma {
   id           Int                 @id @default(autoincrement())
   name         String
-  brand        String              @map("mark")
+  mark         String
   year         Int
   price        Float
   status       CarStatusPrisma     @default(AVAILABLE)

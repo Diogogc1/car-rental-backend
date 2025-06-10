@@ -2,9 +2,9 @@ import { CarStatusPrisma } from 'generated/prisma';
 import { Car } from 'src/entities';
 import { CarRepository } from 'src/repositories';
 
-interface ICreateCarUseCaseParams {
+interface ICreateCarUseCaseProps {
   name: string;
-  brand: string;
+  mark: string;
   year: number;
   price: number;
   status: CarStatusPrisma;
@@ -13,12 +13,12 @@ interface ICreateCarUseCaseParams {
 export class CreateCarUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
-  async execute(params: ICreateCarUseCaseParams) {
-    const { name, brand, year, price, status } = params;
+  async execute(createCarUseCaseProps: ICreateCarUseCaseProps) {
+    const { name, mark, year, price, status } = createCarUseCaseProps;
 
     const car = new Car({
       name,
-      brand,
+      mark,
       year,
       price,
       status,

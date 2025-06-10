@@ -17,7 +17,7 @@ export class CreateCarPayload {
   })
   @IsString()
   @IsNotEmpty()
-  brand: string;
+  mark: string;
 
   @ApiProperty({
     description: 'O ano de fabricação do carro.',

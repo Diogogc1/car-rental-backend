@@ -4,13 +4,13 @@ import { CarMapper } from 'src/mappers';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Prisma } from 'generated/prisma';
 
-interface getAllCarParams {
+interface CarSearchProps {
   name?: string;
-  brand?: string;
+  mark?: string;
   year?: number;
   price?: number;
-  page: number;
-  pageSize: number;
+  page?: number;
+  pageSize?: number;
 }
 
 export class CarRepository {
@@ -18,7 +18,7 @@ export class CarRepository {
     const carPrisma = await prisma.carPrisma.create({
       data: {
         name: car.name,
-        brand: car.brand,
+        mark: car.mark,
         year: car.year,
         price: car.price,
         status: car.status,
@@ -46,55 +46,20 @@ export class CarRepository {
     return CarMapper.toEntity(carPrisma);
   }
 
-  async findAll(
-    params: getAllCarParams,
-  ): Promise<{ data: Car[]; total: number }> {
-    const { name, brand, year, price, page, pageSize } = params;
+  async findAll(page?: number, pageSize?: number): Promise<Car[]> {
+    const skip = page && pageSize ? (page - 1) * pageSize : undefined;
+    const take = pageSize;
+    const carsPrisma = await prisma.carPrisma.findMany({
+      where: { deletedAt: null },
+      include: {
+        reservations: true,
+      },
+      take: take,
+      skip: skip,
+      orderBy: { createdAt: 'desc' },
+    });
 
-    const where: Prisma.CarPrismaWhereInput = {
-      deletedAt: null,
-    };
-
-    if (name) {
-      where.name = {
-        contains: name,
-        mode: 'insensitive',
-      };
-    }
-
-    if (brand) {
-      where.brand = {
-        contains: brand,
-        mode: 'insensitive',
-      };
-    }
-
-    if (year) {
-      where.year = year;
-    }
-
-    if (price) {
-      where.price = price;
-    }
-
-    const [total, carsPrisma] = await prisma.$transaction([
-      prisma.carPrisma.count({ where }),
-      prisma.carPrisma.findMany({
-        where,
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        orderBy: {
-          createdAt: 'desc',
-        },
-        include: {
-          reservations: true,
-        },
-      }),
-    ]);
-
-    const cars = carsPrisma.map((carPrisma) => CarMapper.toEntity(carPrisma));
-
-    return { data: cars, total };
+    return carsPrisma.map((carPrisma) => CarMapper.toEntity(carPrisma));
   }
 
   async update(id: number, car: Car): Promise<Car | null> {
@@ -134,5 +99,72 @@ export class CarRepository {
       }
       throw error;
     }
+  }
+
+  async verifyIfReserved(
+    id: number,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<boolean> {
+    const carPrisma = await prisma.carPrisma.findFirst({
+      where: {
+        id,
+        deletedAt: null,
+        reservations: {
+          some: {
+            endDate: { gte: startDate },
+            startDate: { lte: endDate },
+          },
+        },
+      },
+    });
+
+    return !!carPrisma;
+  }
+
+  async search(props: CarSearchProps): Promise<{ data: Car[]; total: number }> {
+    const { name, mark, year, price, page = 1, pageSize = 10 } = props;
+
+    const where: Prisma.CarPrismaWhereInput = {
+      deletedAt: null,
+    };
+
+    if (name) {
+      where.name = {
+        contains: name,
+        mode: 'insensitive',
+      };
+    }
+
+    if (mark) {
+      where.mark = {
+        contains: mark,
+        mode: 'insensitive',
+      };
+    }
+
+    if (year) {
+      where.year = year;
+    }
+
+    if (price) {
+      where.price = price;
+    }
+
+    const [total, carsPrisma] = await prisma.$transaction([
+      prisma.carPrisma.count({ where }),
+      prisma.carPrisma.findMany({
+        where,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+    ]);
+
+    const cars = carsPrisma.map((carPrisma) => CarMapper.toEntity(carPrisma));
+
+    return { data: cars, total };
   }
 }
