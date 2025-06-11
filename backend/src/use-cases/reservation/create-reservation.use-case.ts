@@ -34,7 +34,9 @@ export class CreateReservationUseCase {
     try {
       Reservation.create(reservation);
     } catch (error) {
-      throw new ConflictException(error);
+      const message =
+        error instanceof Error ? error.message : 'Erro desconhecido';
+      throw new ConflictException(message);
     }
 
     const newReservation = await this.reservationRepository.create(reservation);
