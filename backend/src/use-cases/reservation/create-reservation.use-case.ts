@@ -31,8 +31,12 @@ export class CreateReservationUseCase {
 
     const reservation = new Reservation(params);
 
-    if (reservation.getDurationInDays() > 30) {
-      throw new ConflictException('Reservation cannot exceed 30 days');
+    try {
+      Reservation.create(reservation);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Erro desconhecido';
+      throw new ConflictException(message);
     }
 
     const newReservation = await this.reservationRepository.create(reservation);
