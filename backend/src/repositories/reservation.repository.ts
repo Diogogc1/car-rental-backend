@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { Reservation } from 'src/entities';
 import { ReservationMapper } from 'src/mappers';
 import { prisma } from './prisma';
 
+@Injectable()
 export class ReservationRepository {
   async create(reservation: Reservation): Promise<Reservation> {
     const reservationPrisma = await prisma.reservationPrisma.create({

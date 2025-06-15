@@ -1,7 +1,8 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DeleteReservationResponse } from 'src/dtos';
 import { ReservationRepository } from 'src/repositories';
-import { NotFoundException } from '@nestjs/common';
 
+@Injectable()
 export class DeleteReservationUseCase {
   constructor(private readonly reservationRepository: ReservationRepository) {}
 

@@ -1,7 +1,8 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DeleteUserResponse } from 'src/dtos';
 import { UserRepository } from 'src/repositories';
-import { NotFoundException } from '@nestjs/common';
 
+@Injectable()
 export class DeleteUserByIdUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 

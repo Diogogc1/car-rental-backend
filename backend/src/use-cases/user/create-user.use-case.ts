@@ -1,8 +1,9 @@
+import { ConflictException, Injectable } from '@nestjs/common';
 import { CreateUserResponse, ICreateUserPayload } from 'src/dtos';
 import { User } from 'src/entities';
 import { UserRepository } from 'src/repositories';
-import { ConflictException } from '@nestjs/common';
 
+@Injectable()
 export class CreateUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
@@ -15,7 +16,7 @@ export class CreateUserUseCase {
       throw new ConflictException('User already exists with this email');
     }
 
-    const user = await User.createWithHashedPassword({
+    const user = await User.createWithEncryptedPassword({
       name: name,
       email: email,
       password: password,

@@ -1,7 +1,8 @@
-import { NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { GetUserByIdResponse } from 'src/dtos';
 import { UserRepository } from 'src/repositories';
 
+@Injectable()
 export class GetUserByIdUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 

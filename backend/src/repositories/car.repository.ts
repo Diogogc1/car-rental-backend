@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { Prisma } from 'generated/prisma';
 import { Car } from 'src/entities';
 import { CarMapper } from 'src/mappers';
@@ -12,6 +13,7 @@ interface getAllCarParams {
   pageSize: number;
 }
 
+@Injectable()
 export class CarRepository {
   async create(car: Car): Promise<Car> {
     const carPrisma = await prisma.carPrisma.create({

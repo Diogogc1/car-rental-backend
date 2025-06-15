@@ -1,7 +1,8 @@
-import { UnauthorizedException } from '@nestjs/common';
-import { UserRepository } from 'src/repositories';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { UserRepository } from 'src/repositories';
 
+@Injectable()
 export class SignInUseCase {
   constructor(
     private readonly userRepository: UserRepository,
@@ -23,7 +24,6 @@ export class SignInUseCase {
     if (!user || !passwordIsValid) {
       throw new UnauthorizedException('Invalid email or password');
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const payload = { sub: user.id, username: user.name };
     return {
       access_token: await this.jwtService.signAsync(payload),

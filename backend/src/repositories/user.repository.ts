@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { IUser, User } from 'src/entities';
 import { UserMapper } from 'src/mappers';
 import { prisma } from './prisma';
 
+@Injectable()
 export class UserRepository {
   async create(User: User): Promise<User> {
     const userPrisma = await prisma.userPrisma.create({

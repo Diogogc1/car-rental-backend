@@ -8,8 +8,8 @@ import { UserModule } from './user.module';
   imports: [
     JwtModule.register({
       global: true,
-      secret: 'sua_chave_secreta',
-      signOptions: { expiresIn: '60s' },
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '300s' },
     }),
     UserModule,
   ],

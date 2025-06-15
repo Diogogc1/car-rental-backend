@@ -1,5 +1,5 @@
-import { Reservation } from './reservation.entity';
 import * as bcrypt from 'bcrypt';
+import { Reservation } from './reservation.entity';
 export interface IUser {
   id?: number;
   name: string;
@@ -39,7 +39,7 @@ export class User implements IUser {
     this.password = hashedPassword;
   }
 
-  public static async createWithHashedPassword(props: IUser): Promise<User> {
+  public static async createWithEncryptedPassword(props: IUser): Promise<User> {
     if (!props.password || props.password.length < 6) {
       throw new Error('A senha deve ter pelo menos 6 caracteres.');
     }

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, IsEmail, MinLength } from 'class-validator';
+import { Transform } from 'class-transformer';
+import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { ICreateUserPayload } from '../interfaces';
 
 export class CreateUserPayload implements ICreateUserPayload {
@@ -18,12 +19,12 @@ export class CreateUserPayload implements ICreateUserPayload {
   @IsString()
   @IsNotEmpty()
   @IsEmail()
+  @Transform(({ value }) => String(value).toLowerCase().trim())
   email: string;
 
   @ApiProperty({
     description:
       'A senha de acesso do usuário. Deve conter no mínimo 6 caracteres.',
-    example: 'S3nh@F0rt3!',
     minLength: 6,
   })
   @IsString()

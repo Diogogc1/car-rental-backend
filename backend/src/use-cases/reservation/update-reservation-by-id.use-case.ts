@@ -1,10 +1,11 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
 import {
   IUpdateReservationByIdPayload,
   UpdateReservationByIdResponse,
 } from 'src/dtos';
 import { ReservationRepository } from 'src/repositories';
-import { NotFoundException } from '@nestjs/common';
 
+@Injectable()
 export class UpdateReservationByIdUseCase {
   constructor(private readonly reservationRepository: ReservationRepository) {}
 

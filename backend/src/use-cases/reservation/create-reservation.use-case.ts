@@ -1,8 +1,13 @@
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateReservationResponse, ICreateReservationPayload } from 'src/dtos';
 import { Reservation } from 'src/entities';
 import { CarRepository, ReservationRepository } from 'src/repositories';
-import { ConflictException, NotFoundException } from '@nestjs/common';
 
+@Injectable()
 export class CreateReservationUseCase {
   constructor(
     private readonly reservationRepository: ReservationRepository,
@@ -26,8 +31,7 @@ export class CreateReservationUseCase {
     try {
       reservation = Reservation.create(params);
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Erro desconhecido';
+      const message = error instanceof Error ? error.message : 'Unknown error';
       throw new ConflictException(message);
     }
 

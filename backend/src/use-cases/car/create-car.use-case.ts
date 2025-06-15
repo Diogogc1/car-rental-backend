@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { CreateCarResponse, ICreateCarPayload } from 'src/dtos';
 import { Car } from 'src/entities';
 import { CarRepository } from 'src/repositories';
 
+@Injectable()
 export class CreateCarUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 

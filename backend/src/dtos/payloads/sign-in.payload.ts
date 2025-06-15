@@ -1,21 +1,19 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { ISignInPayload } from './interfaces/sign-in.interface';
 import { ApiProperty } from '@nestjs/swagger';
+import { IsEmail, IsNotEmpty } from 'class-validator';
+import { ISignInPayload } from './interfaces/sign-in.interface';
 
 export class SignInPayload implements ISignInPayload {
   @ApiProperty({
     description: 'O email do usuário.',
     example: 'joaodasilva@gmail.com',
   })
-  @IsString()
+  @IsEmail()
   @IsNotEmpty()
   email: string;
 
   @ApiProperty({
-    description: 'O email do usuário.',
-    example: 'joaodasilva@gmail.com',
+    description: 'A senha do usuário.',
   })
-  @IsString()
   @IsNotEmpty()
   password: string;
 }

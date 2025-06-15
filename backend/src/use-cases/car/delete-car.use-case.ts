@@ -1,7 +1,8 @@
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { DeleteCarResponse } from 'src/dtos';
 import { CarRepository } from 'src/repositories';
-import { NotFoundException } from '@nestjs/common';
 
+@Injectable()
 export class DeleteCarUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
