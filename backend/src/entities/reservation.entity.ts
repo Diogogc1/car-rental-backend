@@ -26,7 +26,10 @@ export class Reservation implements IReservation {
 
   static create(reservation: IReservation) {
     const newReservation = new Reservation(reservation);
-    if (newReservation.getDurationInDays() > 30) {
+
+    const durationIsValid = newReservation.getDurationInDays() <= 30;
+
+    if (!durationIsValid) {
       throw new Error('Reservation cannot exceed 30 days');
     }
     return newReservation;

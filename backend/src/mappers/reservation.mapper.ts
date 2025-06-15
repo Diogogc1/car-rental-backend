@@ -1,5 +1,4 @@
 import { ReservationPrisma } from 'generated/prisma';
-import { IReservationResponse, ReservationResponse } from 'src/dtos';
 import { IReservation, Reservation } from 'src/entities';
 
 export class ReservationMapper {
@@ -29,17 +28,5 @@ export class ReservationMapper {
       userId: reservation.userId,
       totalPrice: reservation.totalPrice,
     };
-  }
-
-  static toResponseDto(reservation: Reservation): ReservationResponse {
-    const reservationResponseProps: IReservationResponse = {
-      id: reservation.id!,
-      userId: reservation.userId,
-      carId: reservation.carId,
-      startDate: reservation.startDate,
-      endDate: reservation.endDate,
-      totalPrice: reservation.totalPrice,
-    };
-    return new ReservationResponse(reservationResponseProps);
   }
 }
