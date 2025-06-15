@@ -1,58 +1,13 @@
 import { Module } from '@nestjs/common';
-import {
-  AppController,
-  CarController,
-  ReservationController,
-  UserController,
-} from './controllers';
-import {
-  AppService,
-  // User use cases
-  CreateUserUseCase,
-  GetUserByIdUseCase,
-  DeleteUserByIdUseCase,
-  UpdateUserByIdUseCase,
-  // Car use cases
-  CreateCarUseCase,
-  GetCarByIdUseCase,
-  GetAllCarUseCase,
-  UpdateCarByIdUseCase,
-  DeleteCarUseCase,
-  // Reservation use cases
-  CreateReservationUseCase,
-  GetReservationByIdUseCase,
-  GetAllReservationUseCase,
-  UpdateReservationByIdUseCase,
-  DeleteReservationUseCase,
-} from './use-cases';
+import { CarModule } from './car.module';
+import { AppController } from './controllers';
+import { ReservationModule } from './reservation.module';
+import { AppService } from './use-cases';
+import { UserModule } from './user.module';
 
 @Module({
-  imports: [],
-  controllers: [
-    AppController,
-    UserController,
-    CarController,
-    ReservationController,
-  ],
-  providers: [
-    AppService,
-    // User use cases
-    CreateUserUseCase,
-    GetUserByIdUseCase,
-    DeleteUserByIdUseCase,
-    UpdateUserByIdUseCase,
-    // Car use cases
-    CreateCarUseCase,
-    GetCarByIdUseCase,
-    GetAllCarUseCase,
-    UpdateCarByIdUseCase,
-    DeleteCarUseCase,
-    // Reservation use cases
-    CreateReservationUseCase,
-    GetReservationByIdUseCase,
-    GetAllReservationUseCase,
-    UpdateReservationByIdUseCase,
-    DeleteReservationUseCase,
-  ],
+  imports: [UserModule, CarModule, ReservationModule],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -16,3 +16,5 @@ export * from './reservation/get-reservation-by-id.use-case';
 export * from './reservation/get-all-reservation.use-case';
 export * from './reservation/update-reservation-by-id.use-case';
 export * from './reservation/delete-reservation.use-case';
+
+export * from './sign-in.use-case';
