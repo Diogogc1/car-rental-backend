@@ -7,7 +7,7 @@ export * from './responses/user/delete-user.response';
 export * from './responses/user/update-user-by-id.response';
 
 export * from './payloads/car/create-car.payload';
-export * from './payloads/car/update-car.payload';
+export * from './payloads/car/update-car-by-id.payload';
 export * from './payloads/car/get-all-car.payload';
 export * from './responses/car/create-car.response';
 export * from './responses/car/get-car-by-id.response';
@@ -23,3 +23,6 @@ export * from './responses/reservation/get-reservation-by-id.response';
 export * from './responses/reservation/get-all-reservation.response';
 export * from './responses/reservation/update-reservation-by-id.response';
 export * from './responses/reservation/delete-reservation.response';
+
+// Payload interfaces
+export * from './payloads/interfaces';

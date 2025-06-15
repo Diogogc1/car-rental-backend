@@ -23,14 +23,14 @@ export class GetAllCarResponse implements IGetAllCarResponse {
   status: string;
   reservations?: GetAllReservationResponse[];
 
-  constructor(carResponse: IGetAllCarResponse) {
-    this.id = carResponse.id;
-    this.name = carResponse.name;
-    this.brand = carResponse.brand;
-    this.year = carResponse.year;
-    this.price = carResponse.price;
-    this.status = carResponse.status;
-    this.reservations = carResponse.reservations;
+  constructor(props: IGetAllCarResponse) {
+    this.id = props.id;
+    this.name = props.name;
+    this.brand = props.brand;
+    this.year = props.year;
+    this.price = props.price;
+    this.status = props.status;
+    this.reservations = props.reservations;
   }
 
   static fromEntity(car: Car): GetAllCarResponse {

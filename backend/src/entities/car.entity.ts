@@ -44,4 +44,22 @@ export class Car implements ICar {
 
     return !hasReservations && dataIsValid;
   }
+
+  update({ name, brand, year, price, status }: Partial<ICar>): void {
+    if (name !== undefined) {
+      this.name = name;
+    }
+    if (brand !== undefined) {
+      this.brand = brand;
+    }
+    if (year !== undefined) {
+      this.year = year;
+    }
+    if (price !== undefined) {
+      this.price = price;
+    }
+    if (status !== undefined) {
+      this.status = status;
+    }
+  }
 }

@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsDateString, MinDate } from 'class-validator';
+import { ICreateReservationPayload } from '../interfaces';
 
-export class CreateReservationPayload {
+export class CreateReservationPayload implements ICreateReservationPayload {
   @ApiProperty({
     description: 'Data de início da reserva.',
     example: '2025-06-15T10:00:00.000Z',

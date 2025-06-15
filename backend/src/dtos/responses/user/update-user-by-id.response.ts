@@ -1,18 +1,21 @@
-import { ReservationResponse } from '../reservation-response';
 import { User } from '../../../entities/user.entity';
+import {
+  GetAllReservationResponse,
+  IGetAllReservationResponse,
+} from '../reservation/get-all-reservation.response';
 
 export interface IUpdateUserByIdResponse {
   id: number;
   name: string;
   email: string;
-  reservations?: ReservationResponse[];
+  reservations?: IGetAllReservationResponse[];
 }
 
 export class UpdateUserByIdResponse implements IUpdateUserByIdResponse {
   id: number;
   name: string;
   email: string;
-  reservations?: ReservationResponse[];
+  reservations?: GetAllReservationResponse[];
 
   constructor(props: IUpdateUserByIdResponse) {
     this.id = props.id;
@@ -28,7 +31,7 @@ export class UpdateUserByIdResponse implements IUpdateUserByIdResponse {
       email: user.email,
       reservations: user.reservations?.map(
         (reservation) =>
-          new ReservationResponse({
+          new GetAllReservationResponse({
             id: reservation.id!,
             userId: reservation.userId,
             carId: reservation.carId,

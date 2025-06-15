@@ -48,4 +48,28 @@ export class Reservation implements IReservation {
     const now = new Date();
     return this.endDate < now;
   }
+
+  update({
+    startDate,
+    endDate,
+    carId,
+    userId,
+    totalPrice,
+  }: Partial<IReservation>): void {
+    if (startDate !== undefined) {
+      this.startDate = startDate;
+    }
+    if (endDate !== undefined) {
+      this.endDate = endDate;
+    }
+    if (carId !== undefined) {
+      this.carId = carId;
+    }
+    if (userId !== undefined) {
+      this.userId = userId;
+    }
+    if (totalPrice !== undefined) {
+      this.totalPrice = totalPrice;
+    }
+  }
 }

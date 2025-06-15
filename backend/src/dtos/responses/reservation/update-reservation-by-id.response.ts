@@ -1,5 +1,6 @@
-import { UserResponse } from '../user-response';
 import { Reservation } from '../../../entities';
+import { IGetUserByIdResponse } from '../user/get-user-by-id.response';
+import { IGetCarByIdResponse } from '../car/get-car-by-id.response';
 
 export interface IUpdateReservationByIdResponse {
   id: number;
@@ -8,15 +9,8 @@ export interface IUpdateReservationByIdResponse {
   startDate: Date;
   endDate: Date;
   totalPrice: number;
-  user?: UserResponse;
-  car?: {
-    id: number;
-    name: string;
-    brand: string;
-    year: number;
-    price: number;
-    status: string;
-  };
+  user?: IGetUserByIdResponse;
+  car?: IGetCarByIdResponse;
 }
 
 export class UpdateReservationByIdResponse
@@ -28,15 +22,8 @@ export class UpdateReservationByIdResponse
   startDate: Date;
   endDate: Date;
   totalPrice: number;
-  user?: UserResponse;
-  car?: {
-    id: number;
-    name: string;
-    brand: string;
-    year: number;
-    price: number;
-    status: string;
-  };
+  user?: IGetUserByIdResponse;
+  car?: IGetCarByIdResponse;
 
   constructor(props: IUpdateReservationByIdResponse) {
     this.id = props.id;

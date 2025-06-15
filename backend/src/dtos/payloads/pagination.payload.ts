@@ -1,8 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsOptional, Min } from 'class-validator';
+import { IPaginationPayload } from './interfaces';
 
-export class PaginationPayload {
+export class PaginationPayload implements IPaginationPayload {
   @ApiPropertyOptional({
     description: 'Número da página (começando em 1).',
     example: 1,

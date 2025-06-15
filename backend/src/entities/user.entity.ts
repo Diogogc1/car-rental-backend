@@ -23,6 +23,15 @@ export class User implements IUser {
     this.reservations = user.reservations;
   }
 
+  update({ name, email }: Partial<IUser>): void {
+    if (name) {
+      this.name = name;
+    }
+    if (email) {
+      this.email = email;
+    }
+  }
+
   async encryptPassword(): Promise<void> {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(this.password, saltRounds);

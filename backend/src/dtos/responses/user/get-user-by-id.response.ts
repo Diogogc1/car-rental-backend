@@ -1,18 +1,21 @@
-import { ReservationResponse } from '../reservation-response';
 import { User } from '../../../entities';
+import {
+  GetAllReservationResponse,
+  IGetAllReservationResponse,
+} from '../reservation/get-all-reservation.response';
 
 export interface IGetUserByIdResponse {
   id: number;
   name: string;
   email: string;
-  reservations?: ReservationResponse[];
+  reservations?: IGetAllReservationResponse[];
 }
 
 export class GetUserByIdResponse implements IGetUserByIdResponse {
   id: number;
   name: string;
   email: string;
-  reservations?: ReservationResponse[];
+  reservations?: GetAllReservationResponse[];
 
   constructor(props: IGetUserByIdResponse) {
     this.id = props.id;
@@ -28,7 +31,7 @@ export class GetUserByIdResponse implements IGetUserByIdResponse {
       email: user.email,
       reservations: user.reservations?.map(
         (reservation) =>
-          new ReservationResponse({
+          new GetAllReservationResponse({
             id: reservation.id!,
             userId: reservation.userId,
             carId: reservation.carId,

@@ -1,22 +1,13 @@
 import { NotFoundException } from '@nestjs/common';
-import { Car } from 'src/entities';
+import { GetAllCarResponse, IGetAllCarPayload } from 'src/dtos';
 import { CarRepository } from 'src/repositories';
-
-export interface GetAllCarUseCaseProps {
-  name?: string;
-  brand?: string;
-  year?: number;
-  price?: number;
-  page?: number;
-  pageSize?: number;
-}
 
 export class GetAllCarUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
   async execute(
-    params: GetAllCarUseCaseProps,
-  ): Promise<{ data: Car[]; total: number }> {
+    params: IGetAllCarPayload,
+  ): Promise<{ data: GetAllCarResponse[]; total: number }> {
     const { name, brand, year, price, page = 1, pageSize = 10 } = params;
 
     const cars = await this.carRepository.findAll({
@@ -32,6 +23,9 @@ export class GetAllCarUseCase {
       throw new NotFoundException('No cars found');
     }
 
-    return cars;
+    return {
+      data: cars.data.map((car) => GetAllCarResponse.fromEntity(car)),
+      total: cars.total,
+    };
   }
 }

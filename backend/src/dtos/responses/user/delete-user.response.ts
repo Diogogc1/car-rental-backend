@@ -1,18 +1,21 @@
-import { ReservationResponse } from '../reservation-response';
 import { User } from '../../../entities';
+import {
+  DeleteReservationResponse,
+  IDeleteReservationResponse,
+} from '../reservation/delete-reservation.response';
 
 export interface IDeleteUserResponse {
   id: number;
   name: string;
   email: string;
-  reservations?: ReservationResponse[];
+  reservations?: IDeleteReservationResponse[];
 }
 
 export class DeleteUserResponse implements IDeleteUserResponse {
   id: number;
   name: string;
   email: string;
-  reservations?: ReservationResponse[];
+  reservations?: DeleteReservationResponse[];
 
   constructor(props: IDeleteUserResponse) {
     this.id = props.id;
@@ -28,7 +31,7 @@ export class DeleteUserResponse implements IDeleteUserResponse {
       email: user.email,
       reservations: user.reservations?.map(
         (reservation) =>
-          new ReservationResponse({
+          new DeleteReservationResponse({
             id: reservation.id!,
             userId: reservation.userId,
             carId: reservation.carId,

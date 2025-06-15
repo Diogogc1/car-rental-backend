@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsNumber, IsEnum } from 'class-validator';
 import { CarStatusPrisma } from 'generated/prisma';
+import { ICreateCarPayload } from '../interfaces';
 
-export class CreateCarPayload {
+export class CreateCarPayload implements ICreateCarPayload {
   @ApiProperty({
     description: 'O nome do carro.',
     example: 'Corolla XEi 2.0',

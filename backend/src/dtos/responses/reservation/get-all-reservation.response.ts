@@ -1,5 +1,6 @@
-import { UserResponse } from '../user-response';
 import { Reservation } from '../../../entities';
+import { IGetAllCarResponse } from '../car/get-all-car.response';
+import { IGetAllUserResponse } from '../user/get-all-user.response';
 
 export interface IGetAllReservationResponse {
   id: number;
@@ -8,15 +9,8 @@ export interface IGetAllReservationResponse {
   startDate: Date;
   endDate: Date;
   totalPrice: number;
-  user?: UserResponse;
-  car?: {
-    id: number;
-    name: string;
-    brand: string;
-    year: number;
-    price: number;
-    status: string;
-  };
+  user?: IGetAllUserResponse;
+  car?: IGetAllCarResponse;
 }
 
 export class GetAllReservationResponse implements IGetAllReservationResponse {
@@ -26,15 +20,8 @@ export class GetAllReservationResponse implements IGetAllReservationResponse {
   startDate: Date;
   endDate: Date;
   totalPrice: number;
-  user?: UserResponse;
-  car?: {
-    id: number;
-    name: string;
-    brand: string;
-    year: number;
-    price: number;
-    status: string;
-  };
+  user?: IGetAllUserResponse;
+  car?: IGetAllCarResponse;
 
   constructor(props: IGetAllReservationResponse) {
     this.id = props.id;

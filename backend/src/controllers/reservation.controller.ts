@@ -12,8 +12,11 @@ import {
 import {
   CreateReservationPayload,
   UpdateReservationPayload,
-  ReservationResponse,
   GetAllReservationPayload,
+  CreateReservationResponse,
+  GetAllReservationResponse,
+  GetReservationByIdResponse,
+  UpdateReservationByIdResponse,
 } from 'src/dtos';
 import {
   ApiBody,
@@ -30,7 +33,6 @@ import {
   GetReservationByIdUseCase,
   UpdateReservationByIdUseCase,
 } from 'src/use-cases';
-import { ReservationMapper } from 'src/mappers';
 
 @ApiTags('Reservation')
 @Controller('reservation')
@@ -49,7 +51,7 @@ export class ReservationController {
   @ApiResponse({
     status: 201,
     description: 'A reserva foi criada com sucesso.',
-    type: ReservationResponse,
+    type: CreateReservationResponse,
   })
   @ApiResponse({
     status: 400,
@@ -61,8 +63,7 @@ export class ReservationController {
     description: 'O carro não está disponível para as datas selecionadas.',
   })
   async create(@Body() body: CreateReservationPayload) {
-    const reservation = await this.createReservationUseCase.execute(body);
-    return ReservationMapper.toResponseDto(reservation);
+    return await this.createReservationUseCase.execute(body);
   }
 
   @Get()
@@ -84,20 +85,15 @@ export class ReservationController {
   @ApiResponse({
     status: 200,
     description: 'Lista de reservas encontrada com sucesso.',
-    type: [ReservationResponse],
+    type: [GetAllReservationResponse],
   })
   @ApiResponse({
     status: 404,
     description: 'Nenhuma reserva encontrada.',
   })
   async getAll(@Query() getAllReservationPayload: GetAllReservationPayload) {
-    const { page, pageSize } = getAllReservationPayload;
-    const reservations = await this.getAllReservationsUseCase.execute(
-      page,
-      pageSize,
-    );
-    return reservations.map((reservation) =>
-      ReservationMapper.toResponseDto(reservation),
+    return await this.getAllReservationsUseCase.execute(
+      getAllReservationPayload,
     );
   }
 
@@ -107,17 +103,14 @@ export class ReservationController {
   @ApiResponse({
     status: 200,
     description: 'Reserva encontrada com sucesso.',
-    type: ReservationResponse,
+    type: GetReservationByIdResponse,
   })
   @ApiResponse({
     status: 404,
     description: 'Reserva não encontrada.',
   })
   async getById(@Param('id') id: string) {
-    const reservation = await this.getReservationByIdUseCase.execute(
-      Number(id),
-    );
-    return ReservationMapper.toResponseDto(reservation);
+    return await this.getReservationByIdUseCase.execute(Number(id));
   }
 
   @Put(':id')
@@ -130,21 +123,14 @@ export class ReservationController {
   @ApiResponse({
     status: 200,
     description: 'Reserva atualizada com sucesso.',
-    type: ReservationResponse,
+    type: UpdateReservationByIdResponse,
   })
   @ApiResponse({
     status: 404,
     description: 'Reserva não encontrada.',
   })
-  async updateById(
-    @Param('id') id: string,
-    @Body() body: UpdateReservationPayload,
-  ) {
-    const reservation = await this.updateReservationByIdUseCase.execute({
-      id: Number(id),
-      ...body,
-    });
-    return ReservationMapper.toResponseDto(reservation);
+  async updateById(@Body() body: UpdateReservationPayload) {
+    return await this.updateReservationByIdUseCase.execute(body);
   }
 
   @Delete(':id')
