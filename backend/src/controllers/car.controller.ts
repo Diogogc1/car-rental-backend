@@ -120,7 +120,7 @@ export class CarController {
     return await this.getCarByIdUseCase.execute(Number(id));
   }
 
-  @Put(':id')
+  @Put()
   @ApiOperation({ summary: 'Atualizar dados do carro por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do carro' })
   @ApiBody({

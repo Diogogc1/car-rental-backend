@@ -113,7 +113,7 @@ export class ReservationController {
     return await this.getReservationByIdUseCase.execute(Number(id));
   }
 
-  @Put(':id')
+  @Put()
   @ApiOperation({ summary: 'Atualizar dados da reserva por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID da reserva' })
   @ApiBody({

@@ -77,7 +77,7 @@ export class UserController {
     return await this.getUserByIdUseCase.execute(Number(id));
   }
 
-  @Put(':id')
+  @Put()
   @ApiOperation({ summary: 'Atualizar dados do usuário por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do usuário' })
   @ApiBody({
