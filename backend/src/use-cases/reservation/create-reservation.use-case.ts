@@ -16,16 +16,15 @@ export class CreateReservationUseCase {
       throw new NotFoundException('Car not found');
     }
 
-    if (car.isAvailable(params.startDate, params.endDate)) {
+    if (!car.isAvailable(params.startDate, params.endDate)) {
       throw new ConflictException(
         'Car is not available for the selected dates',
       );
     }
 
-    const reservation = new Reservation(params);
-
+    let reservation: Reservation;
     try {
-      Reservation.create(reservation);
+      reservation = Reservation.create(params);
     } catch (error) {
       const message =
         error instanceof Error ? error.message : 'Erro desconhecido';
