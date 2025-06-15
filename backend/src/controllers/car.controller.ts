@@ -57,7 +57,8 @@ export class CarController {
       'Parâmetros inválidos. O corpo da resposta indicará os campos com erro.',
   })
   async create(@Body() body: CreateCarPayload) {
-    await this.createCarUseCase.execute(body);
+    const car = await this.createCarUseCase.execute(body);
+    return CarMapper.toResponseDto(car);
   }
 
   @Get()
