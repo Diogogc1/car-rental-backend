@@ -1,6 +1,6 @@
 import { IUser, User } from 'src/entities';
-import { prisma } from './prisma';
 import { UserMapper } from 'src/mappers';
+import { prisma } from './prisma';
 
 export class UserRepository {
   async create(User: User): Promise<User> {
@@ -48,7 +48,7 @@ export class UserRepository {
     return UserMapper.toEntity(userPrisma);
   }
 
-  async update(user: IUser): Promise<User | null> {
+  async update(user: IUser): Promise<User> {
     const userPrisma = await prisma.userPrisma.update({
       where: { id: user.id },
       data: UserMapper.toPrismaModel(user),
@@ -60,10 +60,12 @@ export class UserRepository {
     return UserMapper.toEntity(userPrisma);
   }
 
-  async delete(id: number): Promise<void | null> {
-    await prisma.userPrisma.update({
+  async delete(id: number): Promise<User> {
+    const user = await prisma.userPrisma.update({
       where: { id },
       data: { deletedAt: new Date() },
     });
+
+    return UserMapper.toEntity(user);
   }
 }

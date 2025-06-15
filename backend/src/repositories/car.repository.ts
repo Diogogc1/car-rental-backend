@@ -1,8 +1,7 @@
-import { Car } from 'src/entities';
-import { prisma } from './prisma';
-import { CarMapper } from 'src/mappers';
 import { Prisma } from 'generated/prisma';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { Car } from 'src/entities';
+import { CarMapper } from 'src/mappers';
+import { prisma } from './prisma';
 
 interface getAllCarParams {
   name?: string;
@@ -97,32 +96,24 @@ export class CarRepository {
     return { data: cars, total };
   }
 
-  async update(car: Car): Promise<Car | null> {
-    try {
-      const carPrisma = await prisma.carPrisma.update({
-        where: { id: car.id },
-        data: CarMapper.toPrismaModel(car),
-        include: {
-          reservations: true,
-        },
-      });
+  async update(car: Car): Promise<Car> {
+    const carPrisma = await prisma.carPrisma.update({
+      where: { id: car.id },
+      data: CarMapper.toPrismaModel(car),
+      include: {
+        reservations: true,
+      },
+    });
 
-      return CarMapper.toEntity(carPrisma);
-    } catch (error: unknown) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
-      ) {
-        return null;
-      }
-      throw error;
-    }
+    return CarMapper.toEntity(carPrisma);
   }
 
-  async delete(id: number): Promise<void | null> {
-    await prisma.carPrisma.update({
+  async delete(id: number): Promise<Car> {
+    const car = await prisma.carPrisma.update({
       where: { id },
       data: { deletedAt: new Date() },
     });
+
+    return CarMapper.toEntity(car);
   }
 }

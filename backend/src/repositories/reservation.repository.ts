@@ -1,7 +1,6 @@
 import { Reservation } from 'src/entities';
-import { prisma } from './prisma';
 import { ReservationMapper } from 'src/mappers';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { prisma } from './prisma';
 
 export class ReservationRepository {
   async create(reservation: Reservation): Promise<Reservation> {
@@ -45,35 +44,27 @@ export class ReservationRepository {
     );
   }
 
-  async update(reservation: Reservation): Promise<Reservation | null> {
-    try {
-      const reservationPrisma = await prisma.reservationPrisma.update({
-        where: { id: reservation.id },
-        data: {
-          startDate: reservation.startDate,
-          endDate: reservation.endDate,
-          carId: reservation.carId,
-          userId: reservation.userId,
-          totalPrice: reservation.totalPrice,
-        },
-      });
+  async update(reservation: Reservation): Promise<Reservation> {
+    const reservationPrisma = await prisma.reservationPrisma.update({
+      where: { id: reservation.id },
+      data: {
+        startDate: reservation.startDate,
+        endDate: reservation.endDate,
+        carId: reservation.carId,
+        userId: reservation.userId,
+        totalPrice: reservation.totalPrice,
+      },
+    });
 
-      return ReservationMapper.toEntity(reservationPrisma);
-    } catch (error: unknown) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
-      ) {
-        return null;
-      }
-      throw error;
-    }
+    return ReservationMapper.toEntity(reservationPrisma);
   }
 
-  async delete(id: number): Promise<void | null> {
-    await prisma.reservationPrisma.update({
+  async delete(id: number): Promise<Reservation> {
+    const reservation = await prisma.reservationPrisma.update({
       where: { id },
       data: { deletedAt: new Date() },
     });
+
+    return ReservationMapper.toEntity(reservation);
   }
 }
