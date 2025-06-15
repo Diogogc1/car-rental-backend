@@ -1,31 +1,24 @@
-import { Car } from 'src/entities';
+import { IUpdateCarByIdPayload, UpdateCarByIdResponse } from 'src/dtos';
 import { CarRepository } from 'src/repositories';
 import { NotFoundException } from '@nestjs/common';
-
-interface IUpdateCarUseCaseProps {
-  id: number;
-  name?: string;
-  brand?: string;
-  year?: number;
-  price?: number;
-  status?: string;
-}
 
 export class UpdateCarByIdUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
-  async execute({ id, ...dataUpdate }: IUpdateCarUseCaseProps): Promise<Car> {
-    const car = await this.carRepository.findById(id);
+  async execute(params: IUpdateCarByIdPayload) {
+    const { id, ...dataUpdate } = params;
+
+    const car = await this.carRepository.findById(Number(id));
     if (!car) {
       throw new NotFoundException('Car not found');
     }
 
-    Object.assign(car, dataUpdate);
+    car.update(dataUpdate);
 
-    const updatedCar = await this.carRepository.update(id, car);
+    const updatedCar = await this.carRepository.update(car);
     if (!updatedCar) {
       throw new NotFoundException('Car not found');
     }
-    return updatedCar;
+    return UpdateCarByIdResponse.fromEntity(updatedCar);
   }
 }

@@ -1,4 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
+import { GetReservationByIdResponse } from 'src/dtos';
 import { ReservationRepository } from 'src/repositories';
 
 export class GetReservationByIdUseCase {
@@ -12,6 +13,6 @@ export class GetReservationByIdUseCase {
       throw new NotFoundException('Reservation not found');
     }
 
-    return reservation;
+    return GetReservationByIdResponse.fromEntity(reservation);
   }
 }

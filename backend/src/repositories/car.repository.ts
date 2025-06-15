@@ -1,8 +1,8 @@
 import { Car } from 'src/entities';
 import { prisma } from './prisma';
 import { CarMapper } from 'src/mappers';
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { Prisma } from 'generated/prisma';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 interface getAllCarParams {
   name?: string;
@@ -97,10 +97,10 @@ export class CarRepository {
     return { data: cars, total };
   }
 
-  async update(id: number, car: Car): Promise<Car | null> {
+  async update(car: Car): Promise<Car | null> {
     try {
       const carPrisma = await prisma.carPrisma.update({
-        where: { id },
+        where: { id: car.id },
         data: CarMapper.toPrismaModel(car),
         include: {
           reservations: true,
@@ -120,19 +120,9 @@ export class CarRepository {
   }
 
   async delete(id: number): Promise<void | null> {
-    try {
-      await prisma.carPrisma.update({
-        where: { id },
-        data: { deletedAt: new Date() },
-      });
-    } catch (error: unknown) {
-      if (
-        error instanceof PrismaClientKnownRequestError &&
-        error.code === 'P2025'
-      ) {
-        return null;
-      }
-      throw error;
-    }
+    await prisma.carPrisma.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
   }
 }

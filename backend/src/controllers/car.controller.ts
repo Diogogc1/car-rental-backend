@@ -11,9 +11,13 @@ import {
 
 import {
   CreateCarPayload,
-  UpdateCarPayload,
-  CarResponse,
   GetAllCarPayload,
+  CreateCarResponse,
+  GetAllCarResponse,
+  GetCarByIdResponse,
+  UpdateCarByIdResponse,
+  DeleteCarResponse,
+  UpdateCarByIdPayload,
 } from 'src/dtos';
 import {
   ApiBody,
@@ -30,7 +34,6 @@ import {
   GetCarByIdUseCase,
   UpdateCarByIdUseCase,
 } from 'src/use-cases';
-import { CarMapper } from 'src/mappers';
 
 @ApiTags('Car')
 @Controller('car')
@@ -49,7 +52,7 @@ export class CarController {
   @ApiResponse({
     status: 201,
     description: 'O carro foi criado com sucesso.',
-    type: CarResponse,
+    type: CreateCarResponse,
   })
   @ApiResponse({
     status: 400,
@@ -57,8 +60,7 @@ export class CarController {
       'Parâmetros inválidos. O corpo da resposta indicará os campos com erro.',
   })
   async create(@Body() body: CreateCarPayload) {
-    const car = await this.createCarUseCase.execute(body);
-    return CarMapper.toResponseDto(car);
+    return await this.createCarUseCase.execute(body);
   }
 
   @Get()
@@ -80,7 +82,7 @@ export class CarController {
   @ApiResponse({
     status: 200,
     description: 'Lista de carros encontrada com sucesso.',
-    type: [CarResponse],
+    type: [GetAllCarResponse],
   })
   @ApiResponse({
     status: 404,
@@ -88,7 +90,7 @@ export class CarController {
   })
   async getAll(@Query() getAllCarPayload: GetAllCarPayload) {
     const { page, pageSize, brand, name, price, year } = getAllCarPayload;
-    const cars = await this.getAllCarsUseCase.execute({
+    const result = await this.getAllCarsUseCase.execute({
       page: page || 1,
       pageSize: pageSize || 10,
       brand,
@@ -97,8 +99,8 @@ export class CarController {
       year,
     });
     return {
-      total: cars.total,
-      cars: cars.data.map((car) => CarMapper.toResponseDto(car)),
+      total: result.total,
+      cars: result.data,
     };
   }
 
@@ -108,39 +110,34 @@ export class CarController {
   @ApiResponse({
     status: 200,
     description: 'Carro encontrado com sucesso.',
-    type: CarResponse,
+    type: GetCarByIdResponse,
   })
   @ApiResponse({
     status: 404,
     description: 'Carro não encontrado.',
   })
   async getById(@Param('id') id: string) {
-    const car = await this.getCarByIdUseCase.execute(Number(id));
-    return CarMapper.toResponseDto(car);
+    return await this.getCarByIdUseCase.execute(Number(id));
   }
 
-  @Put(':id')
+  @Put()
   @ApiOperation({ summary: 'Atualizar dados do carro por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do carro' })
   @ApiBody({
-    type: UpdateCarPayload,
+    type: UpdateCarByIdResponse,
     description: 'Dados do carro a serem atualizados',
   })
   @ApiResponse({
     status: 200,
     description: 'Carro atualizado com sucesso.',
-    type: CarResponse,
+    type: UpdateCarByIdResponse,
   })
   @ApiResponse({
     status: 404,
     description: 'Carro não encontrado.',
   })
-  async updateById(@Param('id') id: string, @Body() body: UpdateCarPayload) {
-    const car = await this.updateCarUseCase.execute({
-      id: Number(id),
-      ...body,
-    });
-    return CarMapper.toResponseDto(car);
+  async updateById(@Body() body: UpdateCarByIdPayload) {
+    return await this.updateCarUseCase.execute(body);
   }
 
   @Delete(':id')
@@ -149,14 +146,13 @@ export class CarController {
   @ApiResponse({
     status: 200,
     description: 'Carro deletado com sucesso.',
-    schema: { example: { message: 'Car deleted successfully' } },
+    type: DeleteCarResponse,
   })
   @ApiResponse({
     status: 404,
     description: 'Carro não encontrado.',
   })
   async deleteById(@Param('id') id: string) {
-    await this.deleteCarUseCase.execute(Number(id));
-    return { message: 'Car deleted successfully' };
+    return await this.deleteCarUseCase.execute(Number(id));
   }
 }

@@ -1,37 +1,27 @@
-import { Reservation } from 'src/entities';
+import {
+  IUpdateReservationByIdPayload,
+  UpdateReservationByIdResponse,
+} from 'src/dtos';
 import { ReservationRepository } from 'src/repositories';
 import { NotFoundException } from '@nestjs/common';
-
-interface IUpdateReservationUseCaseParams {
-  id: number;
-  startDate?: Date;
-  endDate?: Date;
-  carId?: number;
-  userId?: number;
-  totalPrice?: number;
-}
 
 export class UpdateReservationByIdUseCase {
   constructor(private readonly reservationRepository: ReservationRepository) {}
 
-  async execute({
-    id,
-    ...dataUpdate
-  }: IUpdateReservationUseCaseParams): Promise<Reservation> {
-    const reservation = await this.reservationRepository.findById(id);
+  async execute(params: IUpdateReservationByIdPayload) {
+    const { id, ...dataUpdate } = params;
+    const reservation = await this.reservationRepository.findById(Number(id));
     if (!reservation) {
       throw new NotFoundException('Reservation not found');
     }
 
-    Object.assign(reservation, dataUpdate);
+    reservation.update(dataUpdate);
 
-    const updatedReservation = await this.reservationRepository.update(
-      id,
-      reservation,
-    );
+    const updatedReservation =
+      await this.reservationRepository.update(reservation);
     if (!updatedReservation) {
       throw new NotFoundException('Reservation not found');
     }
-    return updatedReservation;
+    return UpdateReservationByIdResponse.fromEntity(updatedReservation);
   }
 }

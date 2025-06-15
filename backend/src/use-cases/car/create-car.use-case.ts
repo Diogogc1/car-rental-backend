@@ -1,19 +1,11 @@
-import { CarStatusPrisma } from 'generated/prisma';
+import { CreateCarResponse, ICreateCarPayload } from 'src/dtos';
 import { Car } from 'src/entities';
 import { CarRepository } from 'src/repositories';
-
-interface ICreateCarUseCaseParams {
-  name: string;
-  brand: string;
-  year: number;
-  price: number;
-  status: CarStatusPrisma;
-}
 
 export class CreateCarUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
-  async execute(params: ICreateCarUseCaseParams) {
+  async execute(params: ICreateCarPayload) {
     const { name, brand, year, price, status } = params;
 
     const car = new Car({
@@ -25,6 +17,6 @@ export class CreateCarUseCase {
     });
 
     const newCar = await this.carRepository.create(car);
-    return newCar;
+    return CreateCarResponse.fromEntity(newCar);
   }
 }

@@ -2,8 +2,12 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsNumber, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 import { PaginationPayload } from '../pagination.payload';
+import { IGetAllCarPayload } from '../interfaces';
 
-export class GetAllCarPayload extends PaginationPayload {
+export class GetAllCarPayload
+  extends PaginationPayload
+  implements IGetAllCarPayload
+{
   @ApiPropertyOptional({
     description: 'Nome do carro para busca (busca parcial).',
     example: 'Corolla',

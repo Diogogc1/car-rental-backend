@@ -9,7 +9,7 @@ import {
 import { CarStatusPrisma } from 'generated/prisma';
 import { IUpdateCarByIdPayload } from '../interfaces';
 
-export class UpdateCarPayload implements IUpdateCarByIdPayload {
+export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
   @ApiPropertyOptional({
     description: 'O identificador único do carro.',
     example: 'a1b2c3d4-e5f6-7890-abcd-1234567890ef',

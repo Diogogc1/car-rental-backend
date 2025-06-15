@@ -1,33 +1,25 @@
 import { NotFoundException } from '@nestjs/common';
-import { User } from 'src/entities';
+import { IUpdateUserByIdPayload, UpdateUserByIdResponse } from 'src/dtos';
 import { UserRepository } from 'src/repositories';
-
-interface IUpdateUserByIdUseCaseProps {
-  userId: number;
-  name?: string;
-  email?: string;
-}
 
 export class UpdateUserByIdUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute({
-    userId,
-    ...dataUpdate
-  }: IUpdateUserByIdUseCaseProps): Promise<User> {
-    const user = await this.userRepository.findById(userId);
+  async execute(params: IUpdateUserByIdPayload) {
+    const { id, ...dataUpdate } = params;
+    const user = await this.userRepository.findById(Number(id));
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    Object.assign(user, dataUpdate);
+    user.update(dataUpdate);
 
-    const updatedUser = await this.userRepository.update(userId, user);
+    const updatedUser = await this.userRepository.update(user);
 
     if (!updatedUser) {
       throw new NotFoundException('User not found');
     }
 
-    return updatedUser;
+    return UpdateUserByIdResponse.fromEntity(updatedUser);
   }
 }

@@ -10,8 +10,11 @@ import {
 
 import {
   CreateUserPayload,
+  CreateUserResponse,
+  DeleteUserResponse,
+  GetUserByIdResponse,
   UpdateUserByIdPayload,
-  UserResponse,
+  UpdateUserByIdResponse,
 } from 'src/dtos';
 import {
   ApiBody,
@@ -26,7 +29,6 @@ import {
   GetUserByIdUseCase,
   UpdateUserByIdUseCase,
 } from 'src/use-cases';
-import { UserMapper } from 'src/mappers';
 
 @ApiTags('User')
 @Controller('user')
@@ -44,7 +46,7 @@ export class UserController {
   @ApiResponse({
     status: 201,
     description: 'O usuário foi criado com sucesso.',
-    type: UserResponse,
+    type: CreateUserResponse,
   })
   @ApiResponse({
     status: 400,
@@ -56,8 +58,7 @@ export class UserController {
     description: 'O e-mail fornecido já está em uso por outro usuário.',
   })
   async create(@Body() body: CreateUserPayload) {
-    const user = await this.createUserUseCase.execute(body);
-    return UserMapper.toResponseDto(user);
+    return await this.createUserUseCase.execute(body);
   }
 
   @Get(':id')
@@ -66,18 +67,17 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Usuário encontrado com sucesso.',
-    type: UserResponse,
+    type: GetUserByIdResponse,
   })
   @ApiResponse({
     status: 404,
     description: 'Usuário não encontrado.',
   })
   async getById(@Param('id') id: string) {
-    const user = await this.getUserByIdUseCase.execute(Number(id));
-    return UserMapper.toResponseDto(user);
+    return await this.getUserByIdUseCase.execute(Number(id));
   }
 
-  @Put(':id')
+  @Put()
   @ApiOperation({ summary: 'Atualizar dados do usuário por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do usuário' })
   @ApiBody({
@@ -87,21 +87,14 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Usuário atualizado com sucesso.',
-    type: UserResponse,
+    type: UpdateUserByIdResponse,
   })
   @ApiResponse({
     status: 404,
     description: 'Usuário não encontrado.',
   })
-  async updateById(
-    @Param('id') id: string,
-    @Body() body: UpdateUserByIdPayload,
-  ) {
-    const user = await this.updateUserByIdUseCase.execute({
-      userId: Number(id),
-      ...body,
-    });
-    return UserMapper.toResponseDto(user);
+  async updateById(@Body() body: UpdateUserByIdPayload) {
+    return await this.updateUserByIdUseCase.execute(body);
   }
 
   @Delete(':id')
@@ -110,14 +103,13 @@ export class UserController {
   @ApiResponse({
     status: 200,
     description: 'Usuário deletado com sucesso.',
-    schema: { example: { message: 'User deleted successfully' } },
+    type: DeleteUserResponse,
   })
   @ApiResponse({
     status: 404,
     description: 'Usuário não encontrado.',
   })
   async deleteById(@Param('id') id: string) {
-    await this.deleteUserUseCase.execute(Number(id));
-    return { message: 'User deleted successfully' };
+    return await this.deleteUserUseCase.execute(Number(id));
   }
 }

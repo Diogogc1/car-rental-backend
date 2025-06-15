@@ -1,16 +1,12 @@
+import { CreateUserResponse, ICreateUserPayload } from 'src/dtos';
 import { User } from 'src/entities';
 import { UserRepository } from 'src/repositories';
 import { ConflictException } from '@nestjs/common';
 
-interface ICreateUserUseCaseParams {
-  name: string;
-  email: string;
-  password: string;
-}
 export class CreateUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute(params: ICreateUserUseCaseParams) {
+  async execute(params: ICreateUserPayload) {
     const { email, name, password } = params;
 
     const existingUser = await this.userRepository.findByEmail(email);
@@ -26,6 +22,6 @@ export class CreateUserUseCase {
     });
 
     const newUser = await this.userRepository.create(user);
-    return newUser;
+    return CreateUserResponse.fromEntity(newUser);
   }
 }

@@ -1,10 +1,12 @@
 import { NotFoundException } from '@nestjs/common';
+import { GetAllReservationResponse, IGetAllReservationPayload } from 'src/dtos';
 import { ReservationRepository } from 'src/repositories';
 
 export class GetAllReservationUseCase {
   constructor(private readonly reservationRepository: ReservationRepository) {}
 
-  async execute(page?: number, pageSize?: number) {
+  async execute(params: IGetAllReservationPayload) {
+    const { page, pageSize } = params;
     const reservations = await this.reservationRepository.findAll(
       page,
       pageSize,
@@ -14,6 +16,8 @@ export class GetAllReservationUseCase {
       throw new NotFoundException('No reservations found');
     }
 
-    return reservations;
+    return reservations.map((reservation) =>
+      GetAllReservationResponse.fromEntity(reservation),
+    );
   }
 }

@@ -1,14 +1,7 @@
+import { CreateReservationResponse, ICreateReservationPayload } from 'src/dtos';
 import { Reservation } from 'src/entities';
 import { CarRepository, ReservationRepository } from 'src/repositories';
 import { ConflictException, NotFoundException } from '@nestjs/common';
-
-interface ICreateReservationUseCaseParams {
-  startDate: Date;
-  endDate: Date;
-  carId: number;
-  userId: number;
-  totalPrice: number;
-}
 
 export class CreateReservationUseCase {
   constructor(
@@ -16,7 +9,7 @@ export class CreateReservationUseCase {
     private readonly carRepository: CarRepository,
   ) {}
 
-  async execute(params: ICreateReservationUseCaseParams) {
+  async execute(params: ICreateReservationPayload) {
     const car = await this.carRepository.findById(params.carId);
 
     if (!car) {
@@ -40,6 +33,6 @@ export class CreateReservationUseCase {
     }
 
     const newReservation = await this.reservationRepository.create(reservation);
-    return newReservation;
+    return CreateReservationResponse.fromEntity(newReservation);
   }
 }

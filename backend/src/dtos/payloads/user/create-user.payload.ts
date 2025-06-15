@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsEmail, MinLength } from 'class-validator';
+import { ICreateUserPayload } from '../interfaces';
 
-export class CreateUserPayload {
+export class CreateUserPayload implements ICreateUserPayload {
   @ApiProperty({
     description: 'O nome completo do usuário.',
     example: 'João da Silva',

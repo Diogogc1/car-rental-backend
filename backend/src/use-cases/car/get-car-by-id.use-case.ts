@@ -1,4 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
+import { GetCarByIdResponse } from 'src/dtos';
 import { CarRepository } from 'src/repositories';
 
 export class GetCarByIdUseCase {
@@ -11,6 +12,6 @@ export class GetCarByIdUseCase {
       throw new NotFoundException('Car not found');
     }
 
-    return car;
+    return GetCarByIdResponse.fromEntity(car);
   }
 }
