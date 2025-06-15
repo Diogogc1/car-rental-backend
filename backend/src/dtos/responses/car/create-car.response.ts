@@ -24,7 +24,7 @@ export class CreateCarResponse implements ICreateCarResponse {
   reservations?: CreateReservationResponse[];
 
   constructor(props: ICreateCarResponse) {
-    this.id = props.id!;
+    this.id = props.id;
     this.name = props.name;
     this.brand = props.brand;
     this.year = props.year;
