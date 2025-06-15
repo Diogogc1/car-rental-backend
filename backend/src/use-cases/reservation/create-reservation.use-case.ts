@@ -27,7 +27,7 @@ export class CreateReservationUseCase {
       reservation = Reservation.create(params);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : 'Erro desconhecido';
+        error instanceof Error ? error.message : 'Unknown error occurred';
       throw new ConflictException(message);
     }
 
