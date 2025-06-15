@@ -54,4 +54,8 @@ export class User implements IUser {
 
     return new User(userWithHashedPassword);
   }
+
+  public async verifyPassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password);
+  }
 }

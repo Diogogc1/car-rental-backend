@@ -35,3 +35,6 @@ export * from './payloads/reservation/get-all-reservation.payload';
 
 // Payload interfaces
 export * from './payloads/interfaces';
+
+export * from './payloads/sign-in.payload';
+export * from './payloads/interfaces/jwt.interface';
