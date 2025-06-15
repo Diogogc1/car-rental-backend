@@ -31,20 +31,17 @@ export class Car implements ICar {
   }
 
   isAvailable(startDate: Date, endDate: Date): boolean {
-    if (
-      !this.reservations ||
-      this.reservations.length < 0 ||
-      this.status === CarStatusPrisma.RESERVED
-    ) {
-      return false;
+    const hasReservations =
+      this.reservations &&
+      this.reservations.length > 0 &&
+      CarStatusPrisma.RESERVED;
+
+    const dataIsValid = endDate > startDate;
+
+    if (!dataIsValid) {
+      throw new Error('End date must be after start date');
     }
 
-    return !this.reservations.some(
-      (reservation) =>
-        (startDate >= reservation.startDate &&
-          startDate < reservation.endDate) ||
-        (endDate > reservation.startDate && endDate <= reservation.endDate) ||
-        (startDate < reservation.startDate && endDate > reservation.endDate),
-    );
+    return !hasReservations && dataIsValid;
   }
 }
