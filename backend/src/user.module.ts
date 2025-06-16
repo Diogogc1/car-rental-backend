@@ -1,12 +1,10 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './controllers/user.controller';
-import {
-  CreateUserUseCase,
-  GetUserByIdUseCase,
-  UpdateUserByIdUseCase,
-  DeleteUserByIdUseCase,
-} from './use-cases';
-import { UserRepository } from './repositories';
+import { UserController } from './modules/user/controllers/user.controller';
+import { UserRepository } from './modules/user/repositories/user.repository';
+import { CreateUserUseCase } from './modules/user/use-cases/create-user.use-case';
+import { DeleteUserByIdUseCase } from './modules/user/use-cases/delete-user-by-id.use-case';
+import { GetUserByIdUseCase } from './modules/user/use-cases/get-user-by-id.use-case';
+import { UpdateUserByIdUseCase } from './modules/user/use-cases/update-user-by-id.usecase';
 
 @Module({
   controllers: [UserController],
