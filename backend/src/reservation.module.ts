@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
-import { ReservationController } from './controllers/reservation.controller';
-import { ReservationRepository } from './repositories/reservation.repository';
-import { CarRepository } from './repositories/car.repository';
+import { CarRepository } from './modules/car/repositories/car.repository';
+import { ReservationController } from './modules/reservation/controllers/reservation.controller';
+import { ReservationRepository } from './modules/reservation/repositories/reservation.repository';
 import {
   CreateReservationUseCase,
-  GetReservationByIdUseCase,
-  GetAllReservationUseCase,
-  UpdateReservationByIdUseCase,
   DeleteReservationUseCase,
-} from './use-cases';
+  GetAllReservationUseCase,
+  GetReservationByIdUseCase,
+  UpdateReservationByIdUseCase,
+} from './modules/reservation/use-cases';
 
 @Module({
   controllers: [ReservationController],
   providers: [
     ReservationRepository,
-    CarRepository, // Necessário para CreateReservationUseCase
+    CarRepository,
     CreateReservationUseCase,
     GetReservationByIdUseCase,
     GetAllReservationUseCase,

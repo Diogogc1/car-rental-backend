@@ -1,0 +1,11 @@
+import { IGetReservationByIdResponse } from 'src/modules/reservation/interfaces/responses';
+
+export interface IGetCarByIdResponse {
+  id: number;
+  name: string;
+  brand: string;
+  year: number;
+  price: number;
+  status: string;
+  reservations?: IGetReservationByIdResponse[];
+}
