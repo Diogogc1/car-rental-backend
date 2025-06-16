@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsOptional, IsString } from 'class-validator';
 import { PaginationPayload } from 'src/shared/dtos/payloads';
-import { IGetAllCarPayload } from '../../interfaces/dtos';
+import { IGetAllCarPayload } from '../../interfaces/dtos/payloads';
 
 export class GetAllCarPayload
   extends PaginationPayload

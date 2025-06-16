@@ -1,4 +1,4 @@
-import { IGetCarByIdResponse } from 'src/modules/car/interfaces/dtos';
+import { IGetCarByIdResponse } from 'src/modules/car/interfaces/dtos/responses';
 import { IGetUserByIdResponse } from 'src/modules/user/interfaces/dto/responses';
 
 export interface IGetReservationByIdResponse {

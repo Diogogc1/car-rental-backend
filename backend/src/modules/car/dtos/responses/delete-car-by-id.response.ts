@@ -1,6 +1,6 @@
 import { CarStatusPrisma } from 'generated/prisma';
 import { Car } from '../../entities';
-import { IDeleteCarByIdResponse } from '../../interfaces/dtos';
+import { IDeleteCarByIdResponse } from '../../interfaces/dtos/responses';
 
 export class DeleteCarByIdResponse implements IDeleteCarByIdResponse {
   id: number;

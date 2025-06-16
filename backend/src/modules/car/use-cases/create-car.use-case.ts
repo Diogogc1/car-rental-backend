@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { CreateCarResponse } from '../dtos/responses';
 import { Car } from '../entities';
-import { ICreateCarPayload } from '../interfaces/dtos';
+import { ICreateCarPayload } from '../interfaces/dtos/payloads';
 import { CarRepository } from '../repositories';
 
 @Injectable()

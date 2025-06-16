@@ -7,7 +7,7 @@ import {
   IsString,
 } from 'class-validator';
 import { CarStatusPrisma } from 'generated/prisma';
-import { IUpdateCarByIdPayload } from '../../interfaces/dtos';
+import { IUpdateCarByIdPayload } from '../../interfaces/dtos/payloads';
 
 export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
   @ApiPropertyOptional({

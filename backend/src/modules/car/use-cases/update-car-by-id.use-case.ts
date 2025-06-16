@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateCarByIdResponse } from '../dtos/responses';
-import { IUpdateCarByIdPayload } from '../interfaces/dtos';
+import { IUpdateCarByIdPayload } from '../interfaces/dtos/payloads';
 import { CarRepository } from '../repositories';
 
 @Injectable()

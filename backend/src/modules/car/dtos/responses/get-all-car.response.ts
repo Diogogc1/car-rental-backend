@@ -1,6 +1,6 @@
 import { GetAllReservationResponse } from '../../../reservation/dtos/responses/get-all-reservation.response';
 import { Car } from '../../entities';
-import { IGetAllCarResponse } from '../../interfaces/dtos';
+import { IGetAllCarResponse } from '../../interfaces/dtos/responses';
 
 export class GetAllCarResponse implements IGetAllCarResponse {
   id: number;

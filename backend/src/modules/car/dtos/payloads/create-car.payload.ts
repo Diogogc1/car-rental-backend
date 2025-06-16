@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { CarStatusPrisma } from 'generated/prisma';
-import { ICreateCarPayload } from '../../interfaces/dtos';
+import { ICreateCarPayload } from '../../interfaces/dtos/payloads';
 
 export class CreateCarPayload implements ICreateCarPayload {
   @ApiProperty({

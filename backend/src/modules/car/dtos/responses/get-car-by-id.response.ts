@@ -1,6 +1,6 @@
 import { GetReservationByIdResponse } from 'src/modules/reservation/dtos/responses';
 import { Car } from '../../entities';
-import { IGetCarByIdResponse } from '../../interfaces/dtos';
+import { IGetCarByIdResponse } from '../../interfaces/dtos/responses';
 
 export class GetCarByIdResponse implements IGetCarByIdResponse {
   id: number;

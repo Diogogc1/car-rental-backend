@@ -1,6 +1,6 @@
 import { CarStatusPrisma } from 'generated/prisma';
 import { Car } from '../../entities';
-import { ICreateCarResponse } from '../../interfaces/dtos';
+import { ICreateCarResponse } from '../../interfaces/dtos/responses';
 
 export class CreateCarResponse implements ICreateCarResponse {
   id: number;
