@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { prisma } from '../../../shared/utils/prisma';
 import { Reservation } from '../entities';
+import { IReservation } from '../interfaces/entities';
+import { IReservationRepository } from '../interfaces/repositories';
 import { ReservationMapper } from '../mappers';
 
 @Injectable()
-export class ReservationRepository {
-  async create(reservation: Reservation): Promise<Reservation> {
+export class ReservationRepository implements IReservationRepository {
+  async create(reservation: IReservation): Promise<Reservation> {
     const reservationPrisma = await prisma.reservationPrisma.create({
       data: {
         startDate: reservation.startDate,
@@ -46,7 +48,7 @@ export class ReservationRepository {
     );
   }
 
-  async update(reservation: Reservation): Promise<Reservation> {
+  async update(reservation: IReservation): Promise<Reservation> {
     const reservationPrisma = await prisma.reservationPrisma.update({
       where: { id: reservation.id },
       data: {
