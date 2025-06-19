@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { GetReservationByIdResponse } from '../dtos/responses';
 import { ReservationRepository } from '../repositories';
 
@@ -6,14 +7,14 @@ import { ReservationRepository } from '../repositories';
 export class GetReservationByIdUseCase {
   constructor(private readonly reservationRepository: ReservationRepository) {}
 
-  async execute(reservationId: number) {
-    const reservation =
-      await this.reservationRepository.findById(reservationId);
+  async execute(id: number): Promise<Result<GetReservationByIdResponse>> {
+    const reservation = await this.reservationRepository.findById(id);
 
     if (!reservation) {
       throw new NotFoundException('Reservation not found');
     }
 
-    return GetReservationByIdResponse.fromEntity(reservation);
+    const response = GetReservationByIdResponse.fromEntity(reservation);
+    return Result.sucess(response);
   }
 }

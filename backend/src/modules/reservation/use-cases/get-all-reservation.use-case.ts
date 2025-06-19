@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { GetAllReservationResponse } from '../dtos/responses';
 import { IGetAllReservationPayload } from '../interfaces/payloads';
 import { ReservationRepository } from '../repositories';
@@ -7,7 +8,9 @@ import { ReservationRepository } from '../repositories';
 export class GetAllReservationUseCase {
   constructor(private readonly reservationRepository: ReservationRepository) {}
 
-  async execute(params: IGetAllReservationPayload) {
+  async execute(
+    params: IGetAllReservationPayload,
+  ): Promise<Result<GetAllReservationResponse[]>> {
     const { page, pageSize } = params;
     const reservations = await this.reservationRepository.findAll(
       page,
@@ -15,11 +18,15 @@ export class GetAllReservationUseCase {
     );
 
     if (!reservations || reservations.length === 0) {
-      throw new NotFoundException('No reservations found');
+      return Result.fail({
+        message: 'No reservations found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
     }
 
-    return reservations.map((reservation) =>
+    const response = reservations.map((reservation) =>
       GetAllReservationResponse.fromEntity(reservation),
     );
+    return Result.sucess(response);
   }
 }

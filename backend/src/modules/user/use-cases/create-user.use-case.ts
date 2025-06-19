@@ -1,4 +1,5 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { CreateUserResponse } from '../dtos/responses/create-user.response';
 import { User } from '../entities/user.entity';
 import { ICreateUserPayload } from '../interfaces/dto/payloads';
@@ -8,13 +9,18 @@ import { UserRepository } from '../repositories/user.repository';
 export class CreateUserUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute(params: ICreateUserPayload) {
+  async execute(
+    params: ICreateUserPayload,
+  ): Promise<Result<CreateUserResponse>> {
     const { email, name, password } = params;
 
     const existingUser = await this.userRepository.findByEmail(email);
 
     if (existingUser) {
-      throw new ConflictException('User already exists with this email');
+      return Result.fail({
+        message: 'Email already exists',
+        httpStatus: HttpStatus.CONFLICT,
+      });
     }
 
     const user = await User.createWithEncryptedPassword({
@@ -24,6 +30,7 @@ export class CreateUserUseCase {
     });
 
     const newUser = await this.userRepository.create(user);
-    return CreateUserResponse.fromEntity(newUser);
+    const response = CreateUserResponse.fromEntity(newUser);
+    return Result.sucess(response);
   }
 }

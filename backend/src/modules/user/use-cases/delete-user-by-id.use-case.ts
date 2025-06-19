@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { DeleteUserByIdResponse } from '../dtos/responses/delete-user-by-id.response';
 import { UserRepository } from '../repositories/user.repository';
 
@@ -6,18 +7,18 @@ import { UserRepository } from '../repositories/user.repository';
 export class DeleteUserByIdUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute(id: number) {
+  async execute(id: number): Promise<Result<DeleteUserByIdResponse>> {
     const user = await this.userRepository.findById(id);
     if (!user) {
-      throw new NotFoundException('User not found');
+      return Result.fail({
+        message: 'User not found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
     }
 
-    const hasDeleted = await this.userRepository.delete(id);
+    await this.userRepository.delete(id);
 
-    if (!hasDeleted) {
-      throw new NotFoundException('User not found');
-    }
-
-    return DeleteUserByIdResponse.fromEntity(user);
+    const response = DeleteUserByIdResponse.fromEntity(user);
+    return Result.sucess(response);
   }
 }

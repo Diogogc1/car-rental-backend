@@ -40,6 +40,29 @@ export class CarRepository implements ICarRepository {
     return CarMapper.toEntity(carPrisma);
   }
 
+  async verifyIfExistsByParams({
+    name,
+    brand,
+    year,
+    price,
+  }: {
+    name: string;
+    brand: string;
+    year: number;
+    price: number;
+  }): Promise<boolean> {
+    const car = await prisma.carPrisma.findFirst({
+      where: {
+        name,
+        brand,
+        year,
+        price,
+        deletedAt: null,
+      },
+    });
+    return !!car;
+  }
+
   async findAll(
     params: IGetAllCarParams,
   ): Promise<{ data: Car[]; total: number }> {

@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { GetAllCarResponse } from '../dtos/responses';
 import { IGetAllCarPayload } from '../interfaces/dtos/payloads';
 import { CarRepository } from '../repositories';
@@ -9,7 +10,7 @@ export class GetAllCarUseCase {
 
   async execute(
     params: IGetAllCarPayload,
-  ): Promise<{ data: GetAllCarResponse[]; total: number }> {
+  ): Promise<Result<{ data: GetAllCarResponse[]; total: number }>> {
     const { name, brand, year, price, page = 1, pageSize = 10 } = params;
 
     const cars = await this.carRepository.findAll({
@@ -22,12 +23,17 @@ export class GetAllCarUseCase {
     });
 
     if (!cars || cars.data.length === 0) {
-      throw new NotFoundException('No cars found');
+      return Result.fail({
+        message: 'No cars found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
     }
 
-    return {
+    const response = {
       data: cars.data.map((car) => GetAllCarResponse.fromEntity(car)),
       total: cars.total,
     };
+
+    return Result.sucess(response);
   }
 }

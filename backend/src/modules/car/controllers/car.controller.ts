@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -89,19 +90,7 @@ export class CarController {
     description: 'Nenhum carro encontrado.',
   })
   async getAll(@Query() getAllCarPayload: GetAllCarPayload) {
-    const { page, pageSize, brand, name, price, year } = getAllCarPayload;
-    const result = await this.getAllCarsUseCase.execute({
-      page: page || 1,
-      pageSize: pageSize || 10,
-      brand,
-      name,
-      price,
-      year,
-    });
-    return {
-      total: result.total,
-      cars: result.data,
-    };
+    return await this.getAllCarsUseCase.execute(getAllCarPayload);
   }
 
   @Get(':id')
@@ -116,13 +105,13 @@ export class CarController {
     status: 404,
     description: 'Carro não encontrado.',
   })
-  async getById(@Param('id') id: string) {
-    return await this.getCarByIdUseCase.execute(Number(id));
+  async getById(@Param('id', ParseIntPipe) id: number) {
+    return await this.getCarByIdUseCase.execute(id);
   }
 
   @Put()
   @ApiOperation({ summary: 'Atualizar dados do carro por ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'ID do carro' })
+  @ApiParam({ name: 'Camaro', type: Number, description: 'ID do carro' })
   @ApiBody({
     type: UpdateCarByIdResponse,
     description: 'Dados do carro a serem atualizados',
@@ -142,7 +131,7 @@ export class CarController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar carro por ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'ID do carro' })
+  @ApiParam({ name: 'Camaro', type: Number, description: 'ID do carro' })
   @ApiResponse({
     status: 200,
     description: 'Carro deletado com sucesso.',
@@ -152,7 +141,7 @@ export class CarController {
     status: 404,
     description: 'Carro não encontrado.',
   })
-  async deleteById(@Param('id') id: string) {
-    return await this.deleteCarUseCase.execute(Number(id));
+  async deleteById(@Param('id', ParseIntPipe) id: number) {
+    return await this.deleteCarUseCase.execute(id);
   }
 }

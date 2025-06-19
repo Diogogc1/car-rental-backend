@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -107,8 +108,8 @@ export class ReservationController {
     status: 404,
     description: 'Reserva não encontrada.',
   })
-  async getById(@Param('id') id: string) {
-    return await this.getReservationByIdUseCase.execute(Number(id));
+  async getById(@Param('id', ParseIntPipe) id: number) {
+    return await this.getReservationByIdUseCase.execute(id);
   }
 
   @Put()
@@ -143,8 +144,8 @@ export class ReservationController {
     status: 404,
     description: 'Reserva não encontrada.',
   })
-  async deleteById(@Param('id') id: string) {
-    await this.deleteReservationUseCase.execute(Number(id));
+  async deleteById(@Param('id', ParseIntPipe) id: number) {
+    await this.deleteReservationUseCase.execute(id);
     return { message: 'Reservation deleted successfully' };
   }
 }

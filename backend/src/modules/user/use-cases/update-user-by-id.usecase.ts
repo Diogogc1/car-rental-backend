@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { UpdateUserByIdResponse } from '../dtos/responses/update-user-by-id.response';
 import { IUpdateUserByIdPayload } from '../interfaces/dto/payloads';
 import { UserRepository } from '../repositories/user.repository';
@@ -7,7 +8,9 @@ import { UserRepository } from '../repositories/user.repository';
 export class UpdateUserByIdUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute(params: IUpdateUserByIdPayload) {
+  async execute(
+    params: IUpdateUserByIdPayload,
+  ): Promise<Result<UpdateUserByIdResponse>> {
     const { id, ...dataUpdate } = params;
     const user = await this.userRepository.findById(Number(id));
     if (!user) {
@@ -16,12 +19,9 @@ export class UpdateUserByIdUseCase {
 
     user.update(dataUpdate);
 
-    const updatedUser = await this.userRepository.update(user);
+    await this.userRepository.update(user);
 
-    if (!updatedUser) {
-      throw new NotFoundException('User not found');
-    }
-
-    return UpdateUserByIdResponse.fromEntity(updatedUser);
+    const response = UpdateUserByIdResponse.fromEntity(user);
+    return Result.sucess(response);
   }
 }
