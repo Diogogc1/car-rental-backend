@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { prisma } from '../../../shared/utils/prisma';
-import { IUser, User } from '../entities/user.entity';
+import { User } from '../entities/user.entity';
+import { IUser } from '../interfaces/entities';
+import { IUserRepository } from '../interfaces/repositories';
 import { UserMapper } from '../mappers/user.mapper';
 
 @Injectable()
-export class UserRepository {
-  async create(User: User): Promise<User> {
+export class UserRepository implements IUserRepository {
+  async create(user: IUser): Promise<User> {
     const userPrisma = await prisma.userPrisma.create({
       data: {
-        email: User.email,
-        name: User.name,
-        password: User.password,
+        email: user.email,
+        name: user.name,
+        password: user.password,
       },
       include: {
         reservations: true,

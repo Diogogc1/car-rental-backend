@@ -2,20 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from 'generated/prisma';
 import { prisma } from '../../../shared/utils/prisma';
 import { Car } from '../entities';
+import { ICar } from '../interfaces/entities';
+import { ICarRepository, IGetAllCarParams } from '../interfaces/repositories';
 import { CarMapper } from '../mappers';
 
-interface getAllCarParams {
-  name?: string;
-  brand?: string;
-  year?: number;
-  price?: number;
-  page: number;
-  pageSize: number;
-}
-
 @Injectable()
-export class CarRepository {
-  async create(car: Car): Promise<Car> {
+export class CarRepository implements ICarRepository {
+  async create(car: ICar): Promise<Car> {
     const carPrisma = await prisma.carPrisma.create({
       data: {
         name: car.name,
@@ -48,7 +41,7 @@ export class CarRepository {
   }
 
   async findAll(
-    params: getAllCarParams,
+    params: IGetAllCarParams,
   ): Promise<{ data: Car[]; total: number }> {
     const { name, brand, year, price, page, pageSize } = params;
 
@@ -98,7 +91,7 @@ export class CarRepository {
     return { data: cars, total };
   }
 
-  async update(car: Car): Promise<Car> {
+  async update(car: ICar): Promise<Car> {
     const carPrisma = await prisma.carPrisma.update({
       where: { id: car.id },
       data: CarMapper.toPrismaModel(car),

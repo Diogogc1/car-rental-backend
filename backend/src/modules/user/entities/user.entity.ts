@@ -1,12 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { Reservation } from '../../reservation/entities/reservation.entity';
-export interface IUser {
-  id?: number;
-  name: string;
-  email: string;
-  password: string;
-  reservations?: Reservation[];
-}
+import { IUser } from '../interfaces/entities';
 
 export class User implements IUser {
   id?: number;
@@ -20,7 +14,9 @@ export class User implements IUser {
     this.name = user.name;
     this.email = user.email;
     this.password = user.password;
-    this.reservations = user.reservations;
+    this.reservations = user.reservations?.map(
+      (reservation) => new Reservation(reservation),
+    );
   }
 
   update({ name, email }: Partial<IUser>): void {
