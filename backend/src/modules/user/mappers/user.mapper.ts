@@ -1,6 +1,7 @@
 import { ReservationPrisma, UserPrisma } from 'generated/prisma';
 import { ReservationMapper } from '../../reservation/mappers/reservation.mapper';
-import { IUser, User } from '../entities/user.entity';
+import { User } from '../entities/user.entity';
+import { IUser } from '../interfaces/entities';
 
 export class UserMapper {
   static toEntity(
