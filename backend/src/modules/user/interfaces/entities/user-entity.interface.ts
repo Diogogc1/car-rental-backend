@@ -1,4 +1,4 @@
-import { IReservation } from 'src/modules/reservation/interfaces/entities';
+import { IReservation } from '../../../reservation/interfaces/entities';
 
 export interface IUser {
   id?: number;
