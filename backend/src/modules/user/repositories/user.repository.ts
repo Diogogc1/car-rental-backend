@@ -7,12 +7,12 @@ import { UserMapper } from '../mappers/user.mapper';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
-  async create(User: IUser): Promise<User> {
+  async create(user: IUser): Promise<User> {
     const userPrisma = await prisma.userPrisma.create({
       data: {
-        email: User.email,
-        name: User.name,
-        password: User.password,
+        email: user.email,
+        name: user.name,
+        password: user.password,
       },
       include: {
         reservations: true,
