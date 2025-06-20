@@ -111,7 +111,7 @@ export class CarController {
 
   @Put()
   @ApiOperation({ summary: 'Atualizar dados do carro por ID' })
-  @ApiParam({ name: 'Id', type: Number, description: 'ID do carro' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID do carro' })
   @ApiBody({
     type: UpdateCarByIdResponse,
     description: 'Dados do carro a serem atualizados',
