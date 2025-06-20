@@ -29,7 +29,7 @@ export class CreateUserUseCase {
       password: password,
     });
 
-    const newUser = await this.userRepository.create(user);
+    const newUser = await this.userRepository.persist(user);
     const response = CreateUserResponse.fromEntity(newUser);
     return Result.success(response);
   }
