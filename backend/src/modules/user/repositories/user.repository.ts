@@ -39,10 +39,7 @@ export class UserRepository implements IUserRepository {
 
   async findByEmail(email: string): Promise<User | null> {
     const userPrisma = await prisma.userPrisma.findFirst({
-      where: { email, deletedAt: null },
-      include: {
-        reservations: true,
-      },
+      where: { email },
     });
 
     if (!userPrisma) {
