@@ -8,7 +8,7 @@ import { CarMapper } from '../mappers';
 
 @Injectable()
 export class CarRepository implements ICarRepository {
-  async create(car: ICar): Promise<Car> {
+  async persist(car: ICar): Promise<Car> {
     const carPrisma = await prisma.carPrisma.create({
       data: {
         name: car.name,

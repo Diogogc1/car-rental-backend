@@ -7,7 +7,7 @@ import { ReservationMapper } from '../mappers';
 
 @Injectable()
 export class ReservationRepository implements IReservationRepository {
-  async create(reservation: IReservation): Promise<Reservation> {
+  async persist(reservation: IReservation): Promise<Reservation> {
     const reservationPrisma = await prisma.reservationPrisma.create({
       data: {
         startDate: reservation.startDate,
