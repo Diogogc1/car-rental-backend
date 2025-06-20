@@ -15,6 +15,7 @@ export class Car implements ICar {
   constructor(car: ICar) {
     this.id = car.id;
     this.name = car.name;
+    this.plate = car.plate;
     this.brand = car.brand;
     this.year = car.year;
     this.price = car.price;

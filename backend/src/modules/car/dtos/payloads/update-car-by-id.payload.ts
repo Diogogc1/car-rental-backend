@@ -17,7 +17,7 @@ export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
   })
   @IsNotEmpty()
   @IsString()
-  id: string;
+  id: number;
 
   @ApiPropertyOptional({
     description: 'O nome do carro.',
