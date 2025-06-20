@@ -18,6 +18,6 @@ export class GetUserByIdUseCase {
     }
 
     const response = GetUserByIdResponse.fromEntity(user);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

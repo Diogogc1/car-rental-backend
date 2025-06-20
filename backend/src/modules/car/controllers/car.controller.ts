@@ -111,7 +111,7 @@ export class CarController {
 
   @Put()
   @ApiOperation({ summary: 'Atualizar dados do carro por ID' })
-  @ApiParam({ name: 'Camaro', type: Number, description: 'ID do carro' })
+  @ApiParam({ name: 'Id', type: Number, description: 'ID do carro' })
   @ApiBody({
     type: UpdateCarByIdResponse,
     description: 'Dados do carro a serem atualizados',
@@ -131,7 +131,7 @@ export class CarController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar carro por ID' })
-  @ApiParam({ name: 'Camaro', type: Number, description: 'ID do carro' })
+  @ApiParam({ name: 'Id', type: Number, description: 'ID do carro' })
   @ApiResponse({
     status: 200,
     description: 'Carro deletado com sucesso.',

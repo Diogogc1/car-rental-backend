@@ -15,6 +15,6 @@ export class GetReservationByIdUseCase {
     }
 
     const response = GetReservationByIdResponse.fromEntity(reservation);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

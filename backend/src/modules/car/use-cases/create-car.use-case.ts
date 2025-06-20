@@ -37,6 +37,6 @@ export class CreateCarUseCase {
 
     const newCar = await this.carRepository.create(car);
     const response = CreateCarResponse.fromEntity(newCar);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

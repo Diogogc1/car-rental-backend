@@ -25,6 +25,6 @@ export class UpdateReservationByIdUseCase {
     await this.reservationRepository.update(reservation);
 
     const response = UpdateReservationByIdResponse.fromEntity(reservation);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

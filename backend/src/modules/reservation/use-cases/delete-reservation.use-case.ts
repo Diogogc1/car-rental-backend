@@ -19,6 +19,6 @@ export class DeleteReservationUseCase {
     await this.reservationRepository.delete(id);
 
     const response = DeleteReservationResponse.fromEntity(reservation);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

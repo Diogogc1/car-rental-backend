@@ -31,6 +31,6 @@ export class CreateUserUseCase {
 
     const newUser = await this.userRepository.create(user);
     const response = CreateUserResponse.fromEntity(newUser);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

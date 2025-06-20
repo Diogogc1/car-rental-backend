@@ -27,6 +27,6 @@ export class GetAllReservationUseCase {
     const response = reservations.map((reservation) =>
       GetAllReservationResponse.fromEntity(reservation),
     );
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

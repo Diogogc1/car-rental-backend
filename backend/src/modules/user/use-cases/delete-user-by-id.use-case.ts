@@ -19,6 +19,6 @@ export class DeleteUserByIdUseCase {
     await this.userRepository.delete(id);
 
     const response = DeleteUserByIdResponse.fromEntity(user);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

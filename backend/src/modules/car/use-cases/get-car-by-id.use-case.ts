@@ -19,6 +19,6 @@ export class GetCarByIdUseCase {
 
     const response = GetCarByIdResponse.fromEntity(car);
 
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

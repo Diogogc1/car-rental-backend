@@ -34,6 +34,6 @@ export class GetAllCarUseCase {
       total: cars.total,
     };
 
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

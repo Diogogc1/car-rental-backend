@@ -26,6 +26,6 @@ export class UpdateCarByIdUseCase {
     await this.carRepository.update(car);
 
     const response = UpdateCarByIdResponse.fromEntity(car);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

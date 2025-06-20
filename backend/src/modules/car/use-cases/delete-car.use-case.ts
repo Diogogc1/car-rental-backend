@@ -19,6 +19,6 @@ export class DeleteCarUseCase {
     await this.carRepository.delete(id);
 
     const response = DeleteCarByIdResponse.fromEntity(car);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }

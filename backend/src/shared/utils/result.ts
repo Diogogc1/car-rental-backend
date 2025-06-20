@@ -11,7 +11,7 @@ export class Result<T> {
     private readonly _error?: ResultError,
   ) {}
 
-  static sucess<T>(data: T): Result<T> {
+  static success<T>(data: T): Result<T> {
     return new Result(data);
   }
 

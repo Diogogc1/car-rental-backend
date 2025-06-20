@@ -22,6 +22,6 @@ export class UpdateUserByIdUseCase {
     await this.userRepository.update(user);
 
     const response = UpdateUserByIdResponse.fromEntity(user);
-    return Result.sucess(response);
+    return Result.success(response);
   }
 }
