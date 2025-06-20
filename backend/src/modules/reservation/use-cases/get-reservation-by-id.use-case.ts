@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { Result } from 'src/shared/utils';
 import { GetReservationByIdResponse } from '../dtos/responses';
 import { ReservationRepository } from '../repositories';
@@ -11,7 +11,10 @@ export class GetReservationByIdUseCase {
     const reservation = await this.reservationRepository.findById(id);
 
     if (!reservation) {
-      throw new NotFoundException('Reservation not found');
+      return Result.fail({
+        message: 'Reservation not found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
     }
 
     const response = GetReservationByIdResponse.fromEntity(reservation);

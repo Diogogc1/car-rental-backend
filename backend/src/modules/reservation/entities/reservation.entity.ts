@@ -1,3 +1,5 @@
+import { HttpStatus } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { IReservation } from '../interfaces/entities';
 
 export class Reservation implements IReservation {
@@ -17,12 +19,15 @@ export class Reservation implements IReservation {
     this.totalPrice = reservation.totalPrice;
   }
 
-  static create(reservation: IReservation) {
+  static create(reservation: IReservation): Result<Reservation> {
     const newReservation = new Reservation(reservation);
     if (newReservation.getDurationInDays() > 30) {
-      throw new Error('Reservation cannot exceed 30 days');
+      return Result.fail({
+        message: 'Reservation cannot exceed 30 days',
+        httpStatus: HttpStatus.CONFLICT,
+      });
     }
-    return newReservation;
+    return Result.success(newReservation);
   }
 
   getDurationInDays(): number {
