@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  Matches,
+} from 'class-validator';
 import { CarStatusPrisma } from 'generated/prisma';
 import { ICreateCarPayload } from '../../interfaces/dtos/payloads';
 
@@ -11,6 +17,17 @@ export class CreateCarPayload implements ICreateCarPayload {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @ApiProperty({
+    description: 'A placa do carro.',
+    example: 'ABC-1234',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @Matches(/^[A-Z]{3}\d[A-Z]\d{2}$/, {
+    message: 'Plate must follow the Brazilian format ABC1D23',
+  })
+  plate: string;
 
   @ApiProperty({
     description: 'A marca do carro.',

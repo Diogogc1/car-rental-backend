@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 import { PaginationPayload } from 'src/shared/dtos/payloads';
 import { IGetAllCarPayload } from '../../interfaces/dtos/payloads';
 
@@ -31,6 +31,10 @@ export class GetAllCarPayload
   @IsOptional()
   @Type(() => Number)
   @IsNumber()
+  @Min(1950, { message: 'Year must be at least 1950' })
+  @Max(new Date().getFullYear() + 1, {
+    message: `Year cannot be greater than ${new Date().getFullYear() + 1}`,
+  })
   year?: number;
 
   @ApiPropertyOptional({

@@ -4,6 +4,7 @@ import { ICar } from '../interfaces/entities';
 
 export class Car implements ICar {
   id?: number;
+  plate: string;
   name: string;
   brand: string;
   year: number;
@@ -38,9 +39,12 @@ export class Car implements ICar {
     return !hasReservations && dataIsValid;
   }
 
-  update({ name, brand, year, price, status }: Partial<ICar>): void {
+  update({ name, plate, brand, year, price, status }: Partial<ICar>): void {
     if (name !== undefined) {
       this.name = name;
+    }
+    if (plate !== undefined) {
+      this.plate = plate;
     }
     if (brand !== undefined) {
       this.brand = brand;

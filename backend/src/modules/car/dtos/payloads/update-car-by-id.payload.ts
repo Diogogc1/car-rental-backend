@@ -5,6 +5,7 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  Matches,
 } from 'class-validator';
 import { CarStatusPrisma } from 'generated/prisma';
 import { IUpdateCarByIdPayload } from '../../interfaces/dtos/payloads';
@@ -12,7 +13,7 @@ import { IUpdateCarByIdPayload } from '../../interfaces/dtos/payloads';
 export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
   @ApiPropertyOptional({
     description: 'O identificador único do carro.',
-    example: 'a1b2c3d4-e5f6-7890-abcd-1234567890ef',
+    example: '1',
   })
   @IsNotEmpty()
   @IsString()
@@ -25,6 +26,17 @@ export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
   @IsOptional()
   @IsString()
   name?: string;
+
+  @ApiPropertyOptional({
+    description: 'A placa do carro.',
+    example: 'XYZ-9876',
+  })
+  @IsOptional()
+  @IsString()
+  @Matches(/^[A-Z]{3}\d[A-Z]\d{2}$/, {
+    message: 'Plate must follow the Brazilian format ABC1D23',
+  })
+  plate?: string;
 
   @ApiPropertyOptional({
     description: 'A marca do carro.',
