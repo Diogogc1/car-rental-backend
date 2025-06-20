@@ -1,15 +1,21 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { IUpdateUserByIdPayload } from '../../interfaces/dto/payloads';
 
 export class UpdateUserByIdPayload implements IUpdateUserByIdPayload {
   @ApiPropertyOptional({
     description: 'O identificador único do user.',
-    example: 'a1b2c3d4-e5f6-7890-abcd-1234567890ef',
+    example: '1',
   })
   @IsNotEmpty()
-  @IsString()
-  id: string;
+  @IsNumber()
+  id: number;
 
   @ApiPropertyOptional({
     description: 'O nome completo do usuário.',

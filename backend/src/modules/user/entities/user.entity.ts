@@ -28,7 +28,7 @@ export class User implements IUser {
     }
   }
 
-  async encryptPassword(): Promise<void> {
+  private async encryptPassword(): Promise<void> {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(this.password, saltRounds);
 
@@ -36,19 +36,10 @@ export class User implements IUser {
   }
 
   public static async createWithEncryptedPassword(props: IUser): Promise<User> {
-    if (!props.password || props.password.length < 6) {
-      throw new Error('A senha deve ter pelo menos 6 caracteres.');
-    }
+    const newUser = new User(props);
+    await newUser.encryptPassword();
 
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(props.password, saltRounds);
-
-    const userWithHashedPassword = {
-      ...props,
-      password: hashedPassword,
-    };
-
-    return new User(userWithHashedPassword);
+    return newUser;
   }
 
   public async verifyPassword(password: string): Promise<boolean> {

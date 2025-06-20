@@ -1,4 +1,4 @@
-import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CarRepository } from 'src/modules/car/repositories';
 import { Result } from 'src/shared/utils';
 import { CreateReservationResponse } from '../dtos/responses';
@@ -26,21 +26,29 @@ export class CreateReservationUseCase {
     }
 
     if (!car.isAvailable(params.startDate, params.endDate)) {
-      throw new ConflictException(
-        'Car is not available for the selected dates',
-      );
+      return Result.fail({
+        message: 'Car is not available for the selected dates',
+        httpStatus: HttpStatus.CONFLICT,
+      });
     }
 
-    let reservation: Reservation;
-    try {
-      reservation = Reservation.create(params);
-    } catch (error) {
-      const message =
-        error instanceof Error ? error.message : 'Unknown error occurred';
-      throw new ConflictException(message);
+    const result = Reservation.create(params);
+
+    if (result.isFail() && result.error) {
+      return Result.fail({
+        message: result.error.message,
+        httpStatus: result.error.httpStatus,
+      });
     }
 
-    const newReservation = await this.reservationRepository.create(reservation);
+    if (!result.data) {
+      return Result.fail({
+        message: 'Failed to create reservation',
+        httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
+      });
+    }
+
+    const newReservation = await this.reservationRepository.create(result.data);
     const response = CreateReservationResponse.fromEntity(newReservation);
     return Result.success(response);
   }

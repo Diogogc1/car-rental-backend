@@ -12,6 +12,7 @@ export class CarRepository implements ICarRepository {
     const carPrisma = await prisma.carPrisma.create({
       data: {
         name: car.name,
+        plate: car.plate,
         brand: car.brand,
         year: car.year,
         price: car.price,

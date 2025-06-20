@@ -4,18 +4,17 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsString,
 } from 'class-validator';
 import { IUpdateReservationByIdPayload } from '../../interfaces/payloads';
 
 export class UpdateReservationPayload implements IUpdateReservationByIdPayload {
   @ApiPropertyOptional({
     description: 'O identificador único da reservation.',
-    example: 'a1b2c3d4-e5f6-7890-abcd-1234567890ef',
+    example: '1',
   })
   @IsNotEmpty()
-  @IsString()
-  id: string;
+  @IsNumber()
+  id: number;
 
   @ApiPropertyOptional({
     description: 'Data de início da reserva.',

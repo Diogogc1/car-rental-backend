@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { Result } from 'src/shared/utils';
 import { UpdateUserByIdResponse } from '../dtos/responses/update-user-by-id.response';
 import { IUpdateUserByIdPayload } from '../interfaces/dto/payloads';
@@ -12,9 +12,12 @@ export class UpdateUserByIdUseCase {
     params: IUpdateUserByIdPayload,
   ): Promise<Result<UpdateUserByIdResponse>> {
     const { id, ...dataUpdate } = params;
-    const user = await this.userRepository.findById(Number(id));
+    const user = await this.userRepository.findById(id);
     if (!user) {
-      throw new NotFoundException('User not found');
+      return Result.fail({
+        message: 'User not found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
     }
 
     user.update(dataUpdate);

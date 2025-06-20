@@ -15,7 +15,7 @@ export class GetAllCarUseCase {
 
     const cars = await this.carRepository.findAll({
       name,
-      brand: brand,
+      brand,
       year,
       price,
       page,

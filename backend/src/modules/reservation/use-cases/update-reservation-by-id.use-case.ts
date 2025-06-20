@@ -12,7 +12,7 @@ export class UpdateReservationByIdUseCase {
     params: IUpdateReservationByIdPayload,
   ): Promise<Result<UpdateReservationByIdResponse>> {
     const { id, ...dataUpdate } = params;
-    const reservation = await this.reservationRepository.findById(Number(id));
+    const reservation = await this.reservationRepository.findById(id);
     if (!reservation) {
       return Result.fail({
         message: 'Reservation not found',

@@ -1,5 +1,5 @@
 export interface IUpdateReservationByIdPayload {
-  id: string;
+  id: number;
   startDate?: Date;
   endDate?: Date;
   carId?: number;

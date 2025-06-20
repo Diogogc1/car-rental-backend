@@ -4,6 +4,7 @@ CREATE TYPE "CarStatus" AS ENUM ('AVAILABLE', 'RESERVED');
 -- CreateTable
 CREATE TABLE "car" (
     "id" SERIAL NOT NULL,
+    "plate" TEXT NOT NULL UNIQUE,
     "fabricationDate" TIMESTAMP(3) NOT NULL,
     "mark" TEXT NOT NULL,
     "year" INTEGER NOT NULL,
