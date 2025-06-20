@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { DeleteCarByIdResponse } from '../dtos/responses';
 import { CarRepository } from '../repositories';
 
@@ -6,14 +7,18 @@ import { CarRepository } from '../repositories';
 export class DeleteCarUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
-  async execute(id: number) {
+  async execute(id: number): Promise<Result<DeleteCarByIdResponse>> {
     const car = await this.carRepository.findById(id);
     if (!car) {
-      throw new NotFoundException('Car not found');
+      return Result.fail({
+        message: 'Car not found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
     }
 
     await this.carRepository.delete(id);
 
-    return DeleteCarByIdResponse.fromEntity(car);
+    const response = DeleteCarByIdResponse.fromEntity(car);
+    return Result.success(response);
   }
 }

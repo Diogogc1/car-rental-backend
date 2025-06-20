@@ -1,9 +1,6 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ConflictException, HttpStatus, Injectable } from '@nestjs/common';
 import { CarRepository } from 'src/modules/car/repositories';
+import { Result } from 'src/shared/utils';
 import { CreateReservationResponse } from '../dtos/responses';
 import { Reservation } from '../entities';
 import { ICreateReservationPayload } from '../interfaces/payloads';
@@ -16,11 +13,16 @@ export class CreateReservationUseCase {
     private readonly carRepository: CarRepository,
   ) {}
 
-  async execute(params: ICreateReservationPayload) {
+  async execute(
+    params: ICreateReservationPayload,
+  ): Promise<Result<CreateReservationResponse>> {
     const car = await this.carRepository.findById(params.carId);
 
     if (!car) {
-      throw new NotFoundException('Car not found');
+      return Result.fail({
+        message: 'Car not found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
     }
 
     if (!car.isAvailable(params.startDate, params.endDate)) {
@@ -39,6 +41,7 @@ export class CreateReservationUseCase {
     }
 
     const newReservation = await this.reservationRepository.create(reservation);
-    return CreateReservationResponse.fromEntity(newReservation);
+    const response = CreateReservationResponse.fromEntity(newReservation);
+    return Result.success(response);
   }
 }

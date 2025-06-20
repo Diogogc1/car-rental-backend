@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -69,8 +70,8 @@ export class UserController {
     status: 404,
     description: 'Usuário não encontrado.',
   })
-  async getById(@Param('id') id: string) {
-    return await this.getUserByIdUseCase.execute(Number(id));
+  async getById(@Param('id', ParseIntPipe) id: number) {
+    return await this.getUserByIdUseCase.execute(id);
   }
 
   @Put()
@@ -105,7 +106,7 @@ export class UserController {
     status: 404,
     description: 'Usuário não encontrado.',
   })
-  async deleteById(@Param('id') id: string) {
-    return await this.deleteUserUseCase.execute(Number(id));
+  async deleteById(@Param('id', ParseIntPipe) id: number) {
+    return await this.deleteUserUseCase.execute(id);
   }
 }

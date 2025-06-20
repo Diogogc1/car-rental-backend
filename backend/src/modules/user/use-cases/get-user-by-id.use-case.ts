@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { GetUserByIdResponse } from '../dtos/responses/get-user-by-id.response';
 import { UserRepository } from '../repositories/user.repository';
 
@@ -6,13 +7,17 @@ import { UserRepository } from '../repositories/user.repository';
 export class GetUserByIdUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
-  async execute(userId: number) {
+  async execute(userId: number): Promise<Result<GetUserByIdResponse>> {
     const user = await this.userRepository.findById(userId);
 
     if (!user) {
-      throw new NotFoundException('User not found');
+      return Result.fail({
+        message: 'User not found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
     }
 
-    return GetUserByIdResponse.fromEntity(user);
+    const response = GetUserByIdResponse.fromEntity(user);
+    return Result.success(response);
   }
 }

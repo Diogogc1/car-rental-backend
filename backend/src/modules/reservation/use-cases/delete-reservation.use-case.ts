@@ -1,4 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { Result } from 'src/shared/utils';
 import { DeleteReservationResponse } from '../dtos/responses';
 import { ReservationRepository } from '../repositories';
 
@@ -6,18 +7,18 @@ import { ReservationRepository } from '../repositories';
 export class DeleteReservationUseCase {
   constructor(private readonly reservationRepository: ReservationRepository) {}
 
-  async execute(id: number) {
+  async execute(id: number): Promise<Result<DeleteReservationResponse>> {
     const reservation = await this.reservationRepository.findById(id);
     if (!reservation) {
-      throw new NotFoundException('Reservation not found');
+      return Result.fail({
+        message: 'Reservation not found',
+        httpStatus: HttpStatus.NOT_FOUND,
+      });
     }
 
-    const hasDeleted = await this.reservationRepository.delete(id);
+    await this.reservationRepository.delete(id);
 
-    if (!hasDeleted) {
-      throw new NotFoundException('Reservation not found');
-    }
-
-    return DeleteReservationResponse.fromEntity(reservation);
+    const response = DeleteReservationResponse.fromEntity(reservation);
+    return Result.success(response);
   }
 }
