@@ -5,6 +5,7 @@ import { IDeleteCarByIdResponse } from '../../interfaces/dtos/responses';
 export class DeleteCarByIdResponse implements IDeleteCarByIdResponse {
   id: number;
   name: string;
+  plate: string;
   brand: string;
   year: number;
   price: number;
@@ -13,6 +14,7 @@ export class DeleteCarByIdResponse implements IDeleteCarByIdResponse {
   constructor(props: IDeleteCarByIdResponse) {
     this.id = props.id;
     this.name = props.name;
+    this.plate = props.plate;
     this.brand = props.brand;
     this.year = props.year;
     this.price = props.price;
@@ -23,6 +25,7 @@ export class DeleteCarByIdResponse implements IDeleteCarByIdResponse {
     return new DeleteCarByIdResponse({
       id: car.id!,
       name: car.name,
+      plate: car.plate,
       brand: car.brand,
       year: car.year,
       price: car.price,

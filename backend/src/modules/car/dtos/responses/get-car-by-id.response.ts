@@ -5,6 +5,7 @@ import { IGetCarByIdResponse } from '../../interfaces/dtos/responses';
 export class GetCarByIdResponse implements IGetCarByIdResponse {
   id: number;
   name: string;
+  plate: string;
   brand: string;
   year: number;
   price: number;
@@ -25,6 +26,7 @@ export class GetCarByIdResponse implements IGetCarByIdResponse {
     return new GetCarByIdResponse({
       id: car.id!,
       name: car.name,
+      plate: car.plate,
       brand: car.brand,
       year: car.year,
       price: car.price,

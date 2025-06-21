@@ -3,6 +3,7 @@ import { IGetReservationByIdResponse } from 'src/modules/reservation/interfaces/
 export interface IGetCarByIdResponse {
   id: number;
   name: string;
+  plate: string;
   brand: string;
   year: number;
   price: number;

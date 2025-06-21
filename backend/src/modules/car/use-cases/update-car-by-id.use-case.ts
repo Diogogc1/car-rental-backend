@@ -13,7 +13,7 @@ export class UpdateCarByIdUseCase {
   ): Promise<Result<UpdateCarByIdResponse>> {
     const { id, ...dataUpdate } = params;
 
-    const car = await this.carRepository.findById(Number(id));
+    const car = await this.carRepository.findById(id);
     if (!car) {
       return Result.fail({
         message: 'Car not found',

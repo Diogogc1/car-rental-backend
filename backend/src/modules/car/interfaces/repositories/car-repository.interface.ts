@@ -1,11 +1,11 @@
 import { Car } from '../../entities';
+import { IGetAllCarPayload } from '../dtos/payloads';
 import { ICar } from '../entities';
-import { IGetAllCarParams } from './get-all-car-params.interface';
 
 export interface ICarRepository {
   persist(car: ICar): Promise<Car>;
   findById(id: number): Promise<Car | null>;
-  findAll(params: IGetAllCarParams): Promise<{ data: Car[]; total: number }>;
+  findAll(params: IGetAllCarPayload): Promise<{ data: Car[]; total: number }>;
   update(car: ICar): Promise<Car>;
   delete(id: number): Promise<Car>;
 }

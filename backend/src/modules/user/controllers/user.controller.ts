@@ -7,15 +7,18 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guards';
 import { CreateUserPayload } from '../dtos/payloads/create-user.payload';
 import { UpdateUserByIdPayload } from '../dtos/payloads/update-user-by-id.payload';
 import { CreateUserResponse } from '../dtos/responses/create-user.response';
@@ -58,6 +61,8 @@ export class UserController {
     return await this.createUserUseCase.execute(body);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Buscar usuário por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do usuário' })

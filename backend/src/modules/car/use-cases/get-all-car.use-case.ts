@@ -11,16 +11,7 @@ export class GetAllCarUseCase {
   async execute(
     params: IGetAllCarPayload,
   ): Promise<Result<{ data: GetAllCarResponse[]; total: number }>> {
-    const { name, brand, year, price, page = 1, pageSize = 10 } = params;
-
-    const cars = await this.carRepository.findAll({
-      name,
-      brand,
-      year,
-      price,
-      page,
-      pageSize,
-    });
+    const cars = await this.carRepository.findAll(params);
 
     if (!cars || cars.data.length === 0) {
       return Result.fail({
