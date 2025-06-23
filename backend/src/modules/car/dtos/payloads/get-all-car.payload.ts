@@ -1,6 +1,13 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
+import {
+  IsNumber,
+  IsOptional,
+  IsString,
+  Matches,
+  Max,
+  Min,
+} from 'class-validator';
 import { PaginationPayload } from 'src/shared/dtos/payloads';
 import { IGetAllCarPayload } from '../../interfaces/dtos/payloads';
 
@@ -15,6 +22,17 @@ export class GetAllCarPayload
   @IsOptional()
   @IsString()
   name?: string;
+
+  @ApiPropertyOptional({
+    description: 'Placa do carro para busca (busca parcial).',
+    example: 'ABC-1D34',
+  })
+  @IsOptional()
+  @Matches(/^[A-Z]{3}\d[A-Z]\d{2}$/, {
+    message: 'Plate must follow the Mercosul format ABC1D23',
+  })
+  @IsString()
+  plate?: string;
 
   @ApiPropertyOptional({
     description: 'Marca do carro para busca (busca parcial).',

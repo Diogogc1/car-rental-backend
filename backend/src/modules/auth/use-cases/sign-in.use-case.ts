@@ -33,7 +33,9 @@ export class SignInUseCase {
     }
     const payload = { sub: user.id, username: user.name };
     const response = {
-      access_token: await this.jwtService.signAsync(payload),
+      access_token: await this.jwtService.signAsync(payload, {
+        expiresIn: '1h',
+      }),
     };
 
     return Result.success(response);

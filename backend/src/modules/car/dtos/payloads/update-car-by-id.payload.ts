@@ -34,7 +34,7 @@ export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
   @IsOptional()
   @IsString()
   @Matches(/^[A-Z]{3}\d[A-Z]\d{2}$/, {
-    message: 'Plate must follow the Brazilian format ABC1D23',
+    message: 'Plate must follow the Mercosul format ABC1D23',
   })
   plate?: string;
 

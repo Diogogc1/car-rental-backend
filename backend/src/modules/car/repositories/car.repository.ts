@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Prisma } from 'generated/prisma';
 import { prisma } from '../../../shared/utils/prisma';
 import { Car } from '../entities';
+import { IGetAllCarPayload } from '../interfaces/dtos/payloads';
 import { ICar } from '../interfaces/entities';
-import { ICarRepository, IGetAllCarParams } from '../interfaces/repositories';
+import { ICarRepository } from '../interfaces/repositories';
 import { CarMapper } from '../mappers';
 
 @Injectable()
@@ -65,7 +66,7 @@ export class CarRepository implements ICarRepository {
   }
 
   async findAll(
-    params: IGetAllCarParams,
+    params: IGetAllCarPayload,
   ): Promise<{ data: Car[]; total: number }> {
     const { name, brand, year, price, page, pageSize } = params;
 

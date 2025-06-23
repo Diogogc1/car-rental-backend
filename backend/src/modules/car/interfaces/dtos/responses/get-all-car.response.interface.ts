@@ -3,6 +3,7 @@ import { IGetAllReservationResponse } from 'src/modules/reservation/interfaces/r
 export interface IGetAllCarResponse {
   id: number;
   name: string;
+  plate: string;
   brand: string;
   year: number;
   price: number;
