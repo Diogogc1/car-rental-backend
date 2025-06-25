@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsNumber, Min } from 'class-validator';
 import { IPaginationPayload } from 'src/shared/interfaces';
 
 export class PaginationPayload implements IPaginationPayload {
@@ -9,7 +9,7 @@ export class PaginationPayload implements IPaginationPayload {
     example: 1,
     minimum: 1,
   })
-  @IsNotEmpty()
+  @IsDefined()
   @Type(() => Number)
   @IsNumber()
   @Min(1)
