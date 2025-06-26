@@ -19,7 +19,6 @@ import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import logo from "./../../../public/logo.svg";
-import welcomeImage from "./../../../public/welcome-img.svg";
 
 const formSchema = z.object({
   email: z.string().email("Email inválido").min(1, "Email é obrigatório"),
@@ -73,20 +72,12 @@ export default function Login() {
   };
 
   return (
-    <div className="flex h-screen w-full">
-      <div className="flex-1 bg-orange-400 flex items-center justify-center">
-        <Image
-          src={welcomeImage}
-          alt="Imagem de uma pessoa lendo informações"
-          width={700}
-          height={700}
-        />
-      </div>
-      <div className="flex-1 bg-background flex flex-col items-center justify-center p-8">
-        <div className="w-full space-y-10 flex flex-col items-center justify-center px-28">
+    <main className="flex h-screen items-center justify-center">
+      <div className="flex h-[80%] w-1/3 p-8 shadow-xl border-2 border-gray-300 rounded-lg">
+        <div className="w-full h-full space-y-10 flex flex-col items-center justify-center">
           <Image
             src={logo}
-            alt="Imagem de uma pessoa lendo informações"
+            alt="Logo da empresa, um ícone de roda e o nome laranja na frente Wheel&Road"
             width={350}
             height={350}
           />
@@ -139,6 +130,6 @@ export default function Login() {
           </Form>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
