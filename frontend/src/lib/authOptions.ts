@@ -7,16 +7,18 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { DefaultUser } from "next-auth";
 
 declare module "next-auth" {
-  interface Session {
-    user?: DefaultUser & { id: string };
-  }
   interface User extends DefaultUser {
     id: string;
+    accessToken: string;
+  }
+  interface Session {
+    user?: User;
   }
 }
 declare module "next-auth/jwt" {
   interface JWT {
     id: string;
+    accessToken: string;
   }
 }
 
@@ -72,12 +74,14 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
     session: async ({ session, token }) => {
       if (token && session.user) {
         session.user.id = token.id as string;
+        session.user.accessToken = token.accessToken as string;
       }
       return session;
     },
