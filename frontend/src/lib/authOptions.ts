@@ -74,6 +74,7 @@ export const authOptions: NextAuthOptions = {
     jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
+        console.log("User ID:", user.id);
         token.accessToken = user.accessToken;
       }
       return token;
@@ -93,5 +94,6 @@ export const authOptions: NextAuthOptions = {
 
   pages: {
     signIn: "/login",
+    signOut: "/login",
   },
 };
