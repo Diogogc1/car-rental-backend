@@ -5,6 +5,6 @@ export interface IReservationRepository {
   persist(reservation: IReservation): Promise<Reservation>;
   findById(id: number): Promise<Reservation | null>;
   findAll(page?: number, pageSize?: number): Promise<Reservation[]>;
-  update(reservation: IReservation): Promise<Reservation>;
+  update(id: number, dataUpdate: Partial<IReservation>): Promise<Reservation>;
   delete(id: number): Promise<Reservation>;
 }

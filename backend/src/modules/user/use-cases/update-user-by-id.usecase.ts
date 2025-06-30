@@ -22,7 +22,7 @@ export class UpdateUserByIdUseCase {
 
     user.update(dataUpdate);
 
-    await this.userRepository.update(user);
+    await this.userRepository.update(id, dataUpdate);
 
     const response = UpdateUserByIdResponse.fromEntity(user);
     return Result.success(response);

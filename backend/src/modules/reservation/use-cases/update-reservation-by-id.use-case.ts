@@ -22,7 +22,7 @@ export class UpdateReservationByIdUseCase {
 
     reservation.update(dataUpdate);
 
-    await this.reservationRepository.update(reservation);
+    await this.reservationRepository.update(id, dataUpdate);
 
     const response = UpdateReservationByIdResponse.fromEntity(reservation);
     return Result.success(response);

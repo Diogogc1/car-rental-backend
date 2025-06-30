@@ -23,7 +23,7 @@ export class UpdateCarByIdUseCase {
 
     car.update(dataUpdate);
 
-    await this.carRepository.update(car);
+    await this.carRepository.update(id, dataUpdate);
 
     const response = UpdateCarByIdResponse.fromEntity(car);
     return Result.success(response);

@@ -29,7 +29,7 @@ export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
 
   @ApiPropertyOptional({
     description: 'A placa do carro.',
-    example: 'XYZ-9876',
+    example: 'ABC1D23',
   })
   @IsOptional()
   @IsString()
@@ -70,4 +70,12 @@ export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
   @IsOptional()
   @IsEnum(CarStatusPrisma)
   status?: CarStatusPrisma;
+
+  @ApiPropertyOptional({
+    description: 'A URL da imagem do carro.',
+    example: 'https://example.com/car-image.jpg',
+  })
+  @IsOptional()
+  @IsString()
+  imageUrl?: string;
 }

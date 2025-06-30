@@ -8,13 +8,10 @@ import { ReservationMapper } from '../mappers';
 @Injectable()
 export class ReservationRepository implements IReservationRepository {
   async persist(reservation: IReservation): Promise<Reservation> {
+    const reservationPersistence = ReservationMapper.toPersistence(reservation);
     const reservationPrisma = await prisma.reservationPrisma.create({
       data: {
-        startDate: reservation.startDate,
-        endDate: reservation.endDate,
-        carId: reservation.carId,
-        userId: reservation.userId,
-        totalPrice: reservation.totalPrice,
+        ...reservationPersistence,
       },
     });
 
@@ -48,16 +45,13 @@ export class ReservationRepository implements IReservationRepository {
     );
   }
 
-  async update(reservation: IReservation): Promise<Reservation> {
+  async update(
+    id: number,
+    dataUpdate: Partial<Omit<IReservation, 'id'>>,
+  ): Promise<Reservation> {
     const reservationPrisma = await prisma.reservationPrisma.update({
-      where: { id: reservation.id },
-      data: {
-        startDate: reservation.startDate,
-        endDate: reservation.endDate,
-        carId: reservation.carId,
-        userId: reservation.userId,
-        totalPrice: reservation.totalPrice,
-      },
+      where: { id: id },
+      data: dataUpdate,
     });
 
     return ReservationMapper.toEntity(reservationPrisma);

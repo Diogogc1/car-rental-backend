@@ -6,6 +6,6 @@ export interface ICarRepository {
   persist(car: ICar): Promise<Car>;
   findById(id: number): Promise<Car | null>;
   findAll(params: IGetAllCarPayload): Promise<{ data: Car[]; total: number }>;
-  update(car: ICar): Promise<Car>;
+  update(id: number, dataUpdate: Partial<ICar>): Promise<Car>;
   delete(id: number): Promise<Car>;
 }

@@ -131,7 +131,6 @@ export class CarController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar carro por ID' })
-  @ApiParam({ name: 'Id', type: Number, description: 'ID do carro' })
   @ApiResponse({
     status: 200,
     description: 'Carro deletado com sucesso.',

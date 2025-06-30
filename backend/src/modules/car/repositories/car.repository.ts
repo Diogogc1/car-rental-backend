@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from 'generated/prisma';
+import { CarStatusPrisma, Prisma } from 'generated/prisma';
 import { prisma } from '../../../shared/utils/prisma';
 import { Car } from '../entities';
-import { IGetAllCarPayload } from '../interfaces/dtos/payloads';
+import {
+  IGetAllCarPayload,
+  IUpdateCarByIdPayload,
+} from '../interfaces/dtos/payloads';
 import { ICar } from '../interfaces/entities';
 import { ICarRepository } from '../interfaces/repositories';
 import { CarMapper } from '../mappers';
@@ -10,17 +13,10 @@ import { CarMapper } from '../mappers';
 @Injectable()
 export class CarRepository implements ICarRepository {
   async persist(car: ICar): Promise<Car> {
+    const carPersistence = CarMapper.toPersistence(car);
     const carPrisma = await prisma.carPrisma.create({
       data: {
-        name: car.name,
-        plate: car.plate,
-        brand: car.brand,
-        year: car.year,
-        price: car.price,
-        status: car.status,
-      },
-      include: {
-        reservations: true,
+        ...carPersistence,
       },
     });
 
@@ -31,7 +27,11 @@ export class CarRepository implements ICarRepository {
     const carPrisma = await prisma.carPrisma.findFirst({
       where: { id, deletedAt: null },
       include: {
-        reservations: true,
+        reservations: {
+          where: {
+            deletedAt: null,
+          },
+        },
       },
     });
 
@@ -72,6 +72,7 @@ export class CarRepository implements ICarRepository {
 
     const where: Prisma.CarPrismaWhereInput = {
       deletedAt: null,
+      status: CarStatusPrisma.AVAILABLE,
     };
 
     if (name) {
@@ -106,7 +107,11 @@ export class CarRepository implements ICarRepository {
           createdAt: 'desc',
         },
         include: {
-          reservations: true,
+          reservations: {
+            where: {
+              deletedAt: null,
+            },
+          },
         },
       }),
     ]);
@@ -116,13 +121,13 @@ export class CarRepository implements ICarRepository {
     return { data: cars, total };
   }
 
-  async update(car: ICar): Promise<Car> {
+  async update(
+    id: number,
+    dataUpdate: Omit<IUpdateCarByIdPayload, 'id'>,
+  ): Promise<Car> {
     const carPrisma = await prisma.carPrisma.update({
-      where: { id: car.id },
-      data: CarMapper.toPrismaModel(car),
-      include: {
-        reservations: true,
-      },
+      where: { id: id },
+      data: dataUpdate,
     });
 
     return CarMapper.toEntity(carPrisma);

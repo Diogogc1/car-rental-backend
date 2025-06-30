@@ -20,7 +20,7 @@ export class CreateCarPayload implements ICreateCarPayload {
 
   @ApiProperty({
     description: 'A placa do carro.',
-    example: 'ABC-1234',
+    example: 'ABC1D34',
   })
   @IsString()
   @IsNotEmpty()
@@ -52,6 +52,14 @@ export class CreateCarPayload implements ICreateCarPayload {
   @IsNumber()
   @IsNotEmpty()
   price: number;
+
+  @ApiProperty({
+    description: 'A URL da imagem do carro.',
+    example: 'https://example.com/car-image.jpg',
+  })
+  @IsString()
+  @IsNotEmpty()
+  imageUrl: string;
 
   @ApiProperty({
     description: 'O status atual do carro.',
