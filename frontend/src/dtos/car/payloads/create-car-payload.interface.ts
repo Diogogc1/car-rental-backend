@@ -1,4 +1,4 @@
-import { CarStatusPrisma } from 'generated/prisma';
+import { CarStatus } from "../car-status.enum";
 
 export interface ICreateCarPayload {
   name: string;
@@ -6,5 +6,5 @@ export interface ICreateCarPayload {
   brand: string;
   year: number;
   price: number;
-  status: CarStatusPrisma;
+  status: CarStatus;
 }

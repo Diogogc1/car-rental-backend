@@ -1,4 +1,4 @@
-import { IGetAllCarResponse } from "@/dtos/car/responses";
+import { IGetAllCarResponse, IGetCarByIdResponse } from "@/dtos/car/responses";
 import { api } from "@/lib/axios";
 
 class CarService {
@@ -6,6 +6,11 @@ class CarService {
     name?: string
   ): Promise<{ data: IGetAllCarResponse[]; total: number }> {
     const response = await api.get(`/car?name=${name || ""}`);
+    return response.data;
+  }
+
+  async getById(id: string): Promise<IGetCarByIdResponse> {
+    const response = await api.get(`/car/${id}`);
     return response.data;
   }
 }

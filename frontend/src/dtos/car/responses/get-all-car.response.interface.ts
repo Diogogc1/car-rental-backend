@@ -7,6 +7,7 @@ export interface IGetAllCarResponse {
   brand: string;
   year: number;
   price: number;
+  imageUrl: string;
   status: string;
   reservations?: IGetAllReservationResponse[];
 }

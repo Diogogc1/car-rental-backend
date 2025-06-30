@@ -22,6 +22,13 @@ declare module "next-auth/jwt" {
   }
 }
 
+interface JWTPayload {
+  sub: string;
+  username: string;
+  iat: number;
+  exp: number;
+}
+
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
@@ -55,10 +62,18 @@ export const authOptions: NextAuthOptions = {
             return null;
           }
 
-          const user = await res.json();
+          const user = (await res.json()) as { access_token: string };
 
           if (user) {
-            return user;
+            const payload: JWTPayload = JSON.parse(
+              atob(user.access_token.split(".")[1])
+            );
+            return {
+              id: payload.sub,
+              name: payload.username,
+              email: credentials.email,
+              accessToken: user.access_token,
+            };
           }
         } catch (e) {
           console.error("Erro na autorização: ", e);
@@ -71,10 +86,9 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ user, token }) => {
       if (user) {
         token.id = user.id;
-        console.log("User ID:", user.id);
         token.accessToken = user.accessToken;
       }
       return token;
