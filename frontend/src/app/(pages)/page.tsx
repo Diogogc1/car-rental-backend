@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { SearchIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -45,13 +46,13 @@ export default function Home() {
     }
   }, [session, status, router]);
 
-  const searcValue = form.watch("search");
-  const [debouncedSearch] = useDebounce(searcValue, 500);
+  const searchValue = form.watch("search");
+  const [debouncedSearch] = useDebounce(searchValue, 500);
 
   const { data, error } = useQuery({
-    queryKey: ["cars", form.getValues("search")],
+    queryKey: ["cars", debouncedSearch],
     queryFn: async () => {
-      return await carService.getAllCars(form.getValues("search"));
+      return await carService.getAllCars(debouncedSearch);
     },
     enabled: !!debouncedSearch || debouncedSearch === "",
   });
@@ -117,6 +118,13 @@ export default function Home() {
           <Card key={car.id} className="mt-4 w-1/4 border rounded-lg">
             <CardContent className="flex flex-col gap-4 py-2 items-center w-full">
               <div className="flex items-center justify-between w-full">
+                <Image
+                  src={car.imageUrl}
+                  width={100}
+                  height={100}
+                  alt={`Imagem do carro ${car.name}`}
+                ></Image>
+
                 <CardTitle className="text-xl font-semibold">
                   {car.name}
                 </CardTitle>
