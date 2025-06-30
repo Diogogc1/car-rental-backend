@@ -9,6 +9,7 @@ export class Car implements ICar {
   brand: string;
   year: number;
   price: number;
+  imageUrl: string;
   status: CarStatusPrisma;
   reservations?: Reservation[];
 
@@ -19,6 +20,7 @@ export class Car implements ICar {
     this.brand = car.brand;
     this.year = car.year;
     this.price = car.price;
+    this.imageUrl = car.imageUrl;
     this.status = car.status;
     this.reservations = car.reservations?.map(
       (reservation) => new Reservation(reservation),
@@ -40,7 +42,19 @@ export class Car implements ICar {
     return !hasReservations && dataIsValid;
   }
 
-  update({ name, plate, brand, year, price, status }: Partial<ICar>): void {
+  reserve() {
+    this.status = CarStatusPrisma.RESERVED;
+  }
+
+  update({
+    name,
+    plate,
+    brand,
+    year,
+    price,
+    imageUrl,
+    status,
+  }: Partial<ICar>): void {
     if (name !== undefined) {
       this.name = name;
     }
@@ -55,6 +69,9 @@ export class Car implements ICar {
     }
     if (price !== undefined) {
       this.price = price;
+    }
+    if (imageUrl !== undefined) {
+      this.imageUrl = imageUrl;
     }
     if (status !== undefined) {
       this.status = status;

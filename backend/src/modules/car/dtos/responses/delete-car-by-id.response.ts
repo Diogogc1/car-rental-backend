@@ -9,6 +9,7 @@ export class DeleteCarByIdResponse implements IDeleteCarByIdResponse {
   brand: string;
   year: number;
   price: number;
+  imageUrl: string;
   status: CarStatusPrisma;
 
   constructor(props: IDeleteCarByIdResponse) {
@@ -18,6 +19,7 @@ export class DeleteCarByIdResponse implements IDeleteCarByIdResponse {
     this.brand = props.brand;
     this.year = props.year;
     this.price = props.price;
+    this.imageUrl = props.imageUrl;
     this.status = props.status;
   }
 
@@ -29,6 +31,7 @@ export class DeleteCarByIdResponse implements IDeleteCarByIdResponse {
       brand: car.brand,
       year: car.year,
       price: car.price,
+      imageUrl: car.imageUrl,
       status: car.status,
     });
   }

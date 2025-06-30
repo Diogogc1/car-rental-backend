@@ -7,5 +7,6 @@ export interface IUpdateCarByIdPayload {
   brand?: string;
   year?: number;
   price?: number;
+  imageUrl?: string;
   status?: CarStatusPrisma;
 }

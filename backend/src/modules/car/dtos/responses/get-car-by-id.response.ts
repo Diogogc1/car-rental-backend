@@ -9,6 +9,7 @@ export class GetCarByIdResponse implements IGetCarByIdResponse {
   brand: string;
   year: number;
   price: number;
+  imageUrl: string;
   status: string;
   reservations?: GetReservationByIdResponse[];
 
@@ -18,6 +19,8 @@ export class GetCarByIdResponse implements IGetCarByIdResponse {
     this.brand = props.brand;
     this.year = props.year;
     this.price = props.price;
+    this.plate = props.plate;
+    this.imageUrl = props.imageUrl;
     this.status = props.status;
     this.reservations = props.reservations;
   }
@@ -30,6 +33,7 @@ export class GetCarByIdResponse implements IGetCarByIdResponse {
       brand: car.brand,
       year: car.year,
       price: car.price,
+      imageUrl: car.imageUrl,
       status: car.status,
       reservations: car.reservations?.map((reservation) =>
         GetReservationByIdResponse.fromEntity(reservation),

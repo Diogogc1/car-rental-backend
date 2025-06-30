@@ -7,5 +7,6 @@ export interface IDeleteCarByIdResponse {
   brand: string;
   year: number;
   price: number;
+  imageUrl: string;
   status: CarStatusPrisma;
 }

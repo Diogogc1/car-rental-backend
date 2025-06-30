@@ -41,6 +41,7 @@ model CarPrisma {
   brand        String              @map("mark")
   year         Int
   price        Float
+  imageUrl     String
   status       CarStatusPrisma     @default(AVAILABLE)
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
