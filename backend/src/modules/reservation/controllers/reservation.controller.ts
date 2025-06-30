@@ -145,7 +145,6 @@ export class ReservationController {
     description: 'Reserva não encontrada.',
   })
   async deleteById(@Param('id', ParseIntPipe) id: number) {
-    await this.deleteReservationUseCase.execute(id);
-    return { message: 'Reservation deleted successfully' };
+    return await this.deleteReservationUseCase.execute(id);
   }
 }
