@@ -1,6 +1,4 @@
-import { IPaginationPayload } from 'src/shared/interfaces';
-
-export interface IGetAllCarPayload extends IPaginationPayload {
+export interface IGetAllCarPayload {
   name?: string;
   plate?: string;
   brand?: string;

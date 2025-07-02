@@ -1,4 +1,3 @@
-import { CarStatusPrisma } from 'generated/prisma';
 import { Reservation } from 'src/modules/reservation/entities';
 import { ICar } from '../interfaces/entities';
 
@@ -9,7 +8,7 @@ export class Car implements ICar {
   brand: string;
   year: number;
   price: number;
-  status: CarStatusPrisma;
+  imageUrl: string;
   reservations?: Reservation[];
 
   constructor(car: ICar) {
@@ -19,7 +18,7 @@ export class Car implements ICar {
     this.brand = car.brand;
     this.year = car.year;
     this.price = car.price;
-    this.status = car.status;
+    this.imageUrl = car.imageUrl;
     this.reservations = car.reservations?.map(
       (reservation) => new Reservation(reservation),
     );
@@ -32,15 +31,12 @@ export class Car implements ICar {
       throw new Error('End date must be after start date');
     }
 
-    const hasReservations =
-      this.reservations &&
-      this.reservations.length > 0 &&
-      this.status === CarStatusPrisma.RESERVED;
+    const hasReservations = this.reservations && this.reservations.length > 0;
 
     return !hasReservations && dataIsValid;
   }
 
-  update({ name, plate, brand, year, price, status }: Partial<ICar>): void {
+  update({ name, plate, brand, year, price, imageUrl }: Partial<ICar>): void {
     if (name !== undefined) {
       this.name = name;
     }
@@ -56,8 +52,8 @@ export class Car implements ICar {
     if (price !== undefined) {
       this.price = price;
     }
-    if (status !== undefined) {
-      this.status = status;
+    if (imageUrl !== undefined) {
+      this.imageUrl = imageUrl;
     }
   }
 }

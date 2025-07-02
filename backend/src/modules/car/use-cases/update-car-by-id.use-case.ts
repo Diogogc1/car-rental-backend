@@ -9,10 +9,9 @@ export class UpdateCarByIdUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
   async execute(
-    params: IUpdateCarByIdPayload,
+    id: number,
+    dataUpdate: IUpdateCarByIdPayload,
   ): Promise<Result<UpdateCarByIdResponse>> {
-    const { id, ...dataUpdate } = params;
-
     const car = await this.carRepository.findById(id);
     if (!car) {
       return Result.fail({
@@ -23,7 +22,7 @@ export class UpdateCarByIdUseCase {
 
     car.update(dataUpdate);
 
-    await this.carRepository.update(car);
+    await this.carRepository.update(id, dataUpdate);
 
     const response = UpdateCarByIdResponse.fromEntity(car);
     return Result.success(response);

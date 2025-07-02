@@ -51,6 +51,7 @@ export class CreateReservationUseCase {
     const newReservation = await this.reservationRepository.persist(
       result.data,
     );
+
     const response = CreateReservationResponse.fromEntity(newReservation);
     return Result.success(response);
   }

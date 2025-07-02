@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsNumber, MinDate } from 'class-validator';
+import { IsDateString, IsNotEmpty, IsNumber } from 'class-validator';
 import { ICreateReservationPayload } from '../../interfaces/payloads';
 
 export class CreateReservationPayload implements ICreateReservationPayload {
@@ -9,9 +9,6 @@ export class CreateReservationPayload implements ICreateReservationPayload {
   })
   @IsDateString()
   @IsNotEmpty()
-  @MinDate(new Date(), {
-    message: 'A data de início deve ser maior que a data atual',
-  })
   startDate: Date;
 
   @ApiProperty({
@@ -20,9 +17,6 @@ export class CreateReservationPayload implements ICreateReservationPayload {
   })
   @IsDateString()
   @IsNotEmpty()
-  @MinDate(new Date(), {
-    message: 'A data final deve ser maior que a data atual',
-  })
   endDate: Date;
 
   @ApiProperty({

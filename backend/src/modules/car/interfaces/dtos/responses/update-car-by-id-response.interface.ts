@@ -1,5 +1,3 @@
-import { CarStatusPrisma } from 'generated/prisma';
-
 export interface IUpdateCarByIdResponse {
   id: number;
   name: string;
@@ -7,5 +5,5 @@ export interface IUpdateCarByIdResponse {
   brand: string;
   year: number;
   price: number;
-  status: CarStatusPrisma;
+  imageUrl: string;
 }

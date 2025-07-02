@@ -31,6 +31,8 @@ import { GetUserByIdUseCase } from '../use-cases/get-user-by-id.use-case';
 import { UpdateUserByIdUseCase } from '../use-cases/update-user-by-id.usecase';
 
 @ApiTags('User')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('user')
 export class UserController {
   constructor(
@@ -61,8 +63,6 @@ export class UserController {
     return await this.createUserUseCase.execute(body);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
   @Get(':id')
   @ApiOperation({ summary: 'Buscar usuário por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do usuário' })
@@ -79,7 +79,7 @@ export class UserController {
     return await this.getUserByIdUseCase.execute(id);
   }
 
-  @Put()
+  @Put('id')
   @ApiOperation({ summary: 'Atualizar dados do usuário por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do usuário' })
   @ApiBody({
@@ -95,8 +95,11 @@ export class UserController {
     status: 404,
     description: 'Usuário não encontrado.',
   })
-  async updateById(@Body() body: UpdateUserByIdPayload) {
-    return await this.updateUserByIdUseCase.execute(body);
+  async updateById(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateUserByIdPayload,
+  ) {
+    return await this.updateUserByIdUseCase.execute(id, body);
   }
 
   @Delete(':id')

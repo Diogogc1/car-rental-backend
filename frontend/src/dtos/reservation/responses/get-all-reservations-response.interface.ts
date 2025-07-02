@@ -9,5 +9,5 @@ export interface IGetAllReservationResponse {
   endDate: Date;
   totalPrice: number;
   user?: IGetAllUserResponse;
-  car?: IGetAllCarResponse;
+  car: IGetAllCarResponse;
 }

@@ -8,9 +8,11 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -18,6 +20,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guards';
 import {
   CreateCarPayload,
   GetAllCarPayload,
@@ -37,6 +40,8 @@ import { GetCarByIdUseCase } from '../use-cases/get-car-by-id.use-case';
 import { UpdateCarByIdUseCase } from '../use-cases/update-car-by-id.use-case';
 
 @ApiTags('Car')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('car')
 export class CarController {
   constructor(
@@ -109,7 +114,7 @@ export class CarController {
     return await this.getCarByIdUseCase.execute(id);
   }
 
-  @Put()
+  @Put(':id')
   @ApiOperation({ summary: 'Atualizar dados do carro por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do carro' })
   @ApiBody({
@@ -125,13 +130,15 @@ export class CarController {
     status: 404,
     description: 'Carro não encontrado.',
   })
-  async updateById(@Body() body: UpdateCarByIdPayload) {
-    return await this.updateCarUseCase.execute(body);
+  async updateById(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateCarByIdPayload,
+  ) {
+    return await this.updateCarUseCase.execute(id, body);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Deletar carro por ID' })
-  @ApiParam({ name: 'Id', type: Number, description: 'ID do carro' })
   @ApiResponse({
     status: 200,
     description: 'Carro deletado com sucesso.',

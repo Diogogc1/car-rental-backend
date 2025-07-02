@@ -11,7 +11,7 @@ export class GetAllReservationUseCase {
   async execute(
     params: IGetAllReservationPayload,
   ): Promise<Result<GetAllReservationResponse[]>> {
-    const { page, pageSize } = params;
+    const { page, limit: pageSize } = params;
     const reservations = await this.reservationRepository.findAll(
       page,
       pageSize,

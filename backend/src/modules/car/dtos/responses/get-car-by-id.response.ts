@@ -9,7 +9,7 @@ export class GetCarByIdResponse implements IGetCarByIdResponse {
   brand: string;
   year: number;
   price: number;
-  status: string;
+  imageUrl: string;
   reservations?: GetReservationByIdResponse[];
 
   constructor(props: IGetCarByIdResponse) {
@@ -18,7 +18,8 @@ export class GetCarByIdResponse implements IGetCarByIdResponse {
     this.brand = props.brand;
     this.year = props.year;
     this.price = props.price;
-    this.status = props.status;
+    this.plate = props.plate;
+    this.imageUrl = props.imageUrl;
     this.reservations = props.reservations;
   }
 
@@ -30,7 +31,7 @@ export class GetCarByIdResponse implements IGetCarByIdResponse {
       brand: car.brand,
       year: car.year,
       price: car.price,
-      status: car.status,
+      imageUrl: car.imageUrl,
       reservations: car.reservations?.map((reservation) =>
         GetReservationByIdResponse.fromEntity(reservation),
       ),

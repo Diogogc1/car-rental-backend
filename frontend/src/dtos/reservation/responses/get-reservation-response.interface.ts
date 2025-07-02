@@ -9,5 +9,5 @@ export interface IGetReservationByIdResponse {
   endDate: Date;
   totalPrice: number;
   user?: IGetUserByIdResponse;
-  car?: IGetCarByIdResponse;
+  car: IGetCarByIdResponse;
 }

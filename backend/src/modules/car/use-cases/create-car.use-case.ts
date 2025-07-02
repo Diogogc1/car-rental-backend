@@ -11,14 +11,7 @@ export class CreateCarUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
   async execute(params: ICreateCarPayload): Promise<Result<CreateCarResponse>> {
-    const { name, plate, brand, year, price, status } = params;
-
-    const carExists = await this.carRepository.verifyIfExistsByParams({
-      name,
-      brand,
-      year,
-      price,
-    });
+    const carExists = await this.carRepository.verifyIfExistsByParams(params);
 
     if (carExists) {
       return Result.fail({
@@ -27,14 +20,7 @@ export class CreateCarUseCase {
       });
     }
 
-    const car = new Car({
-      name,
-      plate,
-      brand,
-      year,
-      price,
-      status,
-    });
+    const car = new Car(params);
 
     const newCar = await this.carRepository.persist(car);
     const response = CreateCarResponse.fromEntity(newCar);

@@ -27,13 +27,6 @@ model UserPrisma {
   @@map("user")
 }
 
-enum CarStatusPrisma {
-  AVAILABLE
-  RESERVED
-
-  @@map("car_status")
-}
-
 model CarPrisma {
   id           Int                 @id @default(autoincrement())
   plate        String              @unique
@@ -41,7 +34,7 @@ model CarPrisma {
   brand        String              @map("mark")
   year         Int
   price        Float
-  status       CarStatusPrisma     @default(AVAILABLE)
+  imageUrl     String
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
   deletedAt    DateTime?

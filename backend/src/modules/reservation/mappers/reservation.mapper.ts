@@ -3,19 +3,19 @@ import { Reservation } from '../entities';
 import { IReservation } from '../interfaces/entities';
 
 export class ReservationMapper {
-  static toEntity(reservationPrisma: ReservationPrisma): Reservation {
+  static toEntity(reservationPersistence: ReservationPrisma): Reservation {
     const reservationProps: IReservation = {
-      id: reservationPrisma.id,
-      startDate: reservationPrisma.startDate,
-      endDate: reservationPrisma.endDate,
-      carId: reservationPrisma.carId,
-      userId: reservationPrisma.userId,
-      totalPrice: reservationPrisma.totalPrice,
+      id: reservationPersistence.id,
+      startDate: reservationPersistence.startDate,
+      endDate: reservationPersistence.endDate,
+      carId: reservationPersistence.carId,
+      userId: reservationPersistence.userId,
+      totalPrice: reservationPersistence.totalPrice,
     };
     return new Reservation(reservationProps);
   }
 
-  static toPrismaModel(reservation: IReservation): {
+  static toPersistence(reservation: IReservation): {
     startDate: Date;
     endDate: Date;
     carId: number;

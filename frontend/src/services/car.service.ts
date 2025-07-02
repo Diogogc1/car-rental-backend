@@ -1,9 +1,25 @@
-import { IGetAllCarResponse } from "@/dtos/car/responses";
+import { IGetAllCarResponse, IGetCarByIdResponse } from "@/dtos/car/responses";
 import { api } from "@/lib/axios";
 
 class CarService {
-  async getAllCars(): Promise<{ data: IGetAllCarResponse[]; total: number }> {
-    const response = await api.get("/car");
+  async getAllCars(
+    name?: string,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<{ data: IGetAllCarResponse[]; total: number }> {
+    const params = new URLSearchParams();
+    if (name) {
+      params.append("name", name);
+    }
+    params.append("page", page.toString());
+    params.append("limit", limit.toString());
+
+    const response = await api.get(`/car?${params.toString()}`);
+    return response.data;
+  }
+
+  async getById(id: string): Promise<IGetCarByIdResponse> {
+    const response = await api.get(`/car/${id}`);
     return response.data;
   }
 }

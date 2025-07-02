@@ -25,7 +25,7 @@ export class GetAllCarPayload
 
   @ApiPropertyOptional({
     description: 'Placa do carro para busca (busca parcial).',
-    example: 'ABC-1D34',
+    example: 'ABC1D24',
   })
   @IsOptional()
   @Matches(/^[A-Z]{3}\d[A-Z]\d{2}$/, {

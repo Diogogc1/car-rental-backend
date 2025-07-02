@@ -8,9 +8,11 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -18,6 +20,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guards';
 import { CreateReservationPayload } from '../dtos/payload/create-reservation.payload';
 import { GetAllReservationPayload } from '../dtos/payload/get-all-reservation.payload';
 import { UpdateReservationPayload } from '../dtos/payload/update-reservation.payload';
@@ -34,6 +37,8 @@ import {
 } from '../use-cases';
 
 @ApiTags('Reservation')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('reservation')
 export class ReservationController {
   constructor(
@@ -112,7 +117,7 @@ export class ReservationController {
     return await this.getReservationByIdUseCase.execute(id);
   }
 
-  @Put()
+  @Put(':id')
   @ApiOperation({ summary: 'Atualizar dados da reserva por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID da reserva' })
   @ApiBody({
@@ -128,8 +133,11 @@ export class ReservationController {
     status: 404,
     description: 'Reserva não encontrada.',
   })
-  async updateById(@Body() body: UpdateReservationPayload) {
-    return await this.updateReservationByIdUseCase.execute(body);
+  async updateById(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateReservationPayload,
+  ) {
+    return await this.updateReservationByIdUseCase.execute(id, body);
   }
 
   @Delete(':id')
@@ -145,7 +153,6 @@ export class ReservationController {
     description: 'Reserva não encontrada.',
   })
   async deleteById(@Param('id', ParseIntPipe) id: number) {
-    await this.deleteReservationUseCase.execute(id);
-    return { message: 'Reservation deleted successfully' };
+    return await this.deleteReservationUseCase.execute(id);
   }
 }

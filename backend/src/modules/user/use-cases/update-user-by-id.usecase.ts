@@ -9,9 +9,9 @@ export class UpdateUserByIdUseCase {
   constructor(private readonly userRepository: UserRepository) {}
 
   async execute(
-    params: IUpdateUserByIdPayload,
+    id: number,
+    dataUpdate: IUpdateUserByIdPayload,
   ): Promise<Result<UpdateUserByIdResponse>> {
-    const { id, ...dataUpdate } = params;
     const user = await this.userRepository.findById(id);
     if (!user) {
       return Result.fail({
@@ -22,7 +22,7 @@ export class UpdateUserByIdUseCase {
 
     user.update(dataUpdate);
 
-    await this.userRepository.update(user);
+    await this.userRepository.update(id, dataUpdate);
 
     const response = UpdateUserByIdResponse.fromEntity(user);
     return Result.success(response);

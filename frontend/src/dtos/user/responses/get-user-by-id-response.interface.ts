@@ -1,4 +1,4 @@
-import { IGetAllReservationResponse } from 'src/modules/reservation/interfaces/responses';
+import { IGetAllReservationResponse } from "@/dtos/reservation/responses";
 
 export interface IGetUserByIdResponse {
   id: number;

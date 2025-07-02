@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { prisma } from '../../../shared/utils/prisma';
 import { User } from '../entities/user.entity';
+import { IUpdateUserByIdPayload } from '../interfaces/dto/payloads';
 import { IUser } from '../interfaces/entities';
 import { IUserRepository } from '../interfaces/repositories';
-import { UserMapper } from '../mappers/user.mapper';
+import { UserMapper } from '../mappers';
 
 @Injectable()
 export class UserRepository implements IUserRepository {
@@ -14,9 +15,6 @@ export class UserRepository implements IUserRepository {
         name: user.name,
         password: user.password,
       },
-      include: {
-        reservations: true,
-      },
     });
 
     return UserMapper.toEntity(userPrisma);
@@ -26,7 +24,11 @@ export class UserRepository implements IUserRepository {
     const userPrisma = await prisma.userPrisma.findUnique({
       where: { id, deletedAt: null },
       include: {
-        reservations: true,
+        reservations: {
+          where: {
+            deletedAt: null,
+          },
+        },
       },
     });
 
@@ -49,13 +51,13 @@ export class UserRepository implements IUserRepository {
     return UserMapper.toEntity(userPrisma);
   }
 
-  async update(user: IUser): Promise<User> {
+  async update(
+    id: number,
+    user: Partial<Omit<IUpdateUserByIdPayload, 'id'>>,
+  ): Promise<User> {
     const userPrisma = await prisma.userPrisma.update({
-      where: { id: user.id },
-      data: UserMapper.toPrismaModel(user),
-      include: {
-        reservations: true,
-      },
+      where: { id: id },
+      data: user,
     });
 
     return UserMapper.toEntity(userPrisma);

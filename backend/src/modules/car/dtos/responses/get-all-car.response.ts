@@ -9,7 +9,7 @@ export class GetAllCarResponse implements IGetAllCarResponse {
   brand: string;
   year: number;
   price: number;
-  status: string;
+  imageUrl: string;
   reservations?: GetAllReservationResponse[];
 
   constructor(props: IGetAllCarResponse) {
@@ -19,7 +19,7 @@ export class GetAllCarResponse implements IGetAllCarResponse {
     this.brand = props.brand;
     this.year = props.year;
     this.price = props.price;
-    this.status = props.status;
+    this.imageUrl = props.imageUrl;
     this.reservations = props.reservations;
   }
 
@@ -31,7 +31,7 @@ export class GetAllCarResponse implements IGetAllCarResponse {
       brand: car.brand,
       year: car.year,
       price: car.price,
-      status: car.status,
+      imageUrl: car.imageUrl,
       reservations: car.reservations?.map((reservation) =>
         GetAllReservationResponse.fromEntity(reservation),
       ),

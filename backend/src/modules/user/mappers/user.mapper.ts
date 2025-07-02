@@ -5,14 +5,14 @@ import { IUser } from '../interfaces/entities';
 
 export class UserMapper {
   static toEntity(
-    userPrisma: UserPrisma & { reservations?: ReservationPrisma[] },
+    userPersistence: UserPrisma & { reservations?: ReservationPrisma[] },
   ): User {
     const userProps: IUser = {
-      id: userPrisma.id,
-      name: userPrisma.name,
-      email: userPrisma.email,
-      password: userPrisma.password,
-      reservations: userPrisma.reservations?.map((reservation) =>
+      id: userPersistence.id,
+      name: userPersistence.name,
+      email: userPersistence.email,
+      password: userPersistence.password,
+      reservations: userPersistence.reservations?.map((reservation) =>
         ReservationMapper.toEntity(reservation),
       ),
     };

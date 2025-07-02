@@ -1,4 +1,3 @@
-import { CarStatusPrisma } from 'generated/prisma';
 import { Car } from '../../entities';
 import { ICreateCarResponse } from '../../interfaces/dtos/responses';
 
@@ -9,7 +8,7 @@ export class CreateCarResponse implements ICreateCarResponse {
   brand: string;
   year: number;
   price: number;
-  status: CarStatusPrisma;
+  imageUrl: string;
 
   constructor(props: ICreateCarResponse) {
     this.id = props.id;
@@ -18,7 +17,7 @@ export class CreateCarResponse implements ICreateCarResponse {
     this.brand = props.brand;
     this.year = props.year;
     this.price = props.price;
-    this.status = props.status;
+    this.imageUrl = props.imageUrl;
   }
 
   static fromEntity(car: Car): CreateCarResponse {
@@ -29,7 +28,7 @@ export class CreateCarResponse implements ICreateCarResponse {
       brand: car.brand,
       year: car.year,
       price: car.price,
-      status: car.status,
+      imageUrl: car.imageUrl,
     });
   }
 }

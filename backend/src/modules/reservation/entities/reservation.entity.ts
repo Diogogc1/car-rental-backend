@@ -27,6 +27,14 @@ export class Reservation implements IReservation {
         httpStatus: HttpStatus.CONFLICT,
       });
     }
+
+    if (newReservation.startDate >= newReservation.endDate) {
+      return Result.fail({
+        message: 'Start date must be before end date',
+        httpStatus: HttpStatus.BAD_REQUEST,
+      });
+    }
+
     return Result.success(newReservation);
   }
 
