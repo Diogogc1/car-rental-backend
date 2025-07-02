@@ -1,9 +1,10 @@
 const nextConfig = {
   images: {
-    domains: [
-      "www.disalconsorcio.com.br",
-      "admin.cnnbrasil.com.br",
-      "f.allegroimg.com",
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '*',
+      },
     ],
   },
 };

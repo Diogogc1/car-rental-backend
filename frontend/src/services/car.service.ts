@@ -3,9 +3,18 @@ import { api } from "@/lib/axios";
 
 class CarService {
   async getAllCars(
-    name?: string
+    name?: string,
+    page: number = 1,
+    limit: number = 10
   ): Promise<{ data: IGetAllCarResponse[]; total: number }> {
-    const response = await api.get(`/car?name=${name || ""}`);
+    const params = new URLSearchParams();
+    if (name) {
+      params.append("name", name);
+    }
+    params.append("page", page.toString());
+    params.append("limit", limit.toString());
+
+    const response = await api.get(`/car?${params.toString()}`);
     return response.data;
   }
 

@@ -1,5 +1,3 @@
-import { CarStatus } from "../car-status.enum";
-
 export interface IDeleteCarByIdResponse {
   id: number;
   name: string;
@@ -7,5 +5,4 @@ export interface IDeleteCarByIdResponse {
   brand: string;
   year: number;
   price: number;
-  status: CarStatus;
 }

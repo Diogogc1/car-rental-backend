@@ -109,7 +109,7 @@ export class CarController {
     return await this.getCarByIdUseCase.execute(id);
   }
 
-  @Put()
+  @Put(':id')
   @ApiOperation({ summary: 'Atualizar dados do carro por ID' })
   @ApiParam({ name: 'id', type: Number, description: 'ID do carro' })
   @ApiBody({
@@ -125,8 +125,11 @@ export class CarController {
     status: 404,
     description: 'Carro não encontrado.',
   })
-  async updateById(@Body() body: UpdateCarByIdPayload) {
-    return await this.updateCarUseCase.execute(body);
+  async updateById(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: UpdateCarByIdPayload,
+  ) {
+    return await this.updateCarUseCase.execute(id, body);
   }
 
   @Delete(':id')

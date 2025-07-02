@@ -32,7 +32,6 @@ export class CreateReservationUseCase {
       });
     }
 
-    car.reserve();
     const result = Reservation.create(params);
 
     if (result.isFail() && result.error) {
@@ -52,13 +51,6 @@ export class CreateReservationUseCase {
     const newReservation = await this.reservationRepository.persist(
       result.data,
     );
-
-    if (car.id) {
-      const dataUpdate = {
-        status: car.status,
-      };
-      await this.carRepository.update(car.id, dataUpdate);
-    }
 
     const response = CreateReservationResponse.fromEntity(newReservation);
     return Result.success(response);

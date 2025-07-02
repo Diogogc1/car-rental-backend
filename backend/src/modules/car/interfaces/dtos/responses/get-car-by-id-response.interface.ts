@@ -8,6 +8,5 @@ export interface IGetCarByIdResponse {
   year: number;
   price: number;
   imageUrl: string;
-  status: string;
   reservations?: IGetReservationByIdResponse[];
 }

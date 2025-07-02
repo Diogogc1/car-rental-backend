@@ -1,4 +1,3 @@
-import { CarStatusPrisma } from 'generated/prisma';
 import { Car } from '../../entities';
 import { IUpdateCarByIdResponse } from '../../interfaces/dtos/responses';
 
@@ -10,7 +9,6 @@ export class UpdateCarByIdResponse implements IUpdateCarByIdResponse {
   year: number;
   price: number;
   imageUrl: string;
-  status: CarStatusPrisma;
 
   constructor(props: IUpdateCarByIdResponse) {
     this.id = props.id;
@@ -20,7 +18,6 @@ export class UpdateCarByIdResponse implements IUpdateCarByIdResponse {
     this.year = props.year;
     this.price = props.price;
     this.imageUrl = props.imageUrl;
-    this.status = props.status;
   }
 
   static fromEntity(car: Car): UpdateCarByIdResponse {
@@ -32,7 +29,6 @@ export class UpdateCarByIdResponse implements IUpdateCarByIdResponse {
       year: car.year,
       price: car.price,
       imageUrl: car.imageUrl,
-      status: car.status,
     });
   }
 }

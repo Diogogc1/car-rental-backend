@@ -10,14 +10,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { carService } from "@/services/car.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { SearchIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDebounce } from "use-debounce";
 import { z } from "zod";
@@ -29,7 +36,8 @@ const formSchema = z.object({
 type LoginFormData = z.infer<typeof formSchema>;
 
 export default function Home() {
-  const { data: session, status } = useSession();
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
   const router = useRouter();
   const form = useForm<LoginFormData>({
     resolver: zodResolver(formSchema),
@@ -38,31 +46,23 @@ export default function Home() {
     },
   });
 
-  useEffect(() => {
-    if (status === "loading") return;
-
-    if (!session) {
-      router.push("/login");
-    }
-  }, [session, status, router]);
-
   const searchValue = form.watch("search");
   const [debouncedSearch] = useDebounce(searchValue, 500);
 
-  const { data, error } = useQuery({
-    queryKey: ["cars", debouncedSearch],
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["cars", debouncedSearch, currentPage],
     queryFn: async () => {
-      return await carService.getAllCars(debouncedSearch);
+      return await carService.getAllCars(
+        debouncedSearch,
+        currentPage,
+        itemsPerPage
+      );
     },
     enabled: !!debouncedSearch || debouncedSearch === "",
   });
 
-  if (status === "loading") {
+  if (isLoading) {
     return <div>Carregando...</div>;
-  }
-
-  if (!session) {
-    return <div>Redirecionando...</div>;
   }
 
   const onSubmit = async (data: LoginFormData) => {
@@ -73,13 +73,19 @@ export default function Home() {
     router.push(`/reserve/${carId}`);
   };
 
+  const totalPages = data ? Math.ceil(data.total / itemsPerPage) : 0;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <>
-      <h1 className="text-3xl font-bold text-gray-700">
+      <h1 className="text-3xl font-bold text-gray-700 text-center">
         Alugue carros de forma fácil e simples
       </h1>
-      <h2 className="mt-2 mb-8 text-sm">
-        Lorem ipsum dolor sit amet consectetur. Orci tincidunt laoreet.
+      <h2 className="mt-2 mb-8 text-sm text-center">
+        Sua mobilidade garantida com praticidade e segurança
       </h2>
       <Form {...form}>
         <form
@@ -94,8 +100,8 @@ export default function Home() {
                 <FormControl>
                   <Input
                     type="text"
-                    className="w-full p-4 border rounded-full bg-gray-200"
-                    placeholder="Search"
+                    className="w-full p-4 border rounded-full bg-gray-300"
+                    placeholder="Buscar pelo nome"
                     icon={SearchIcon}
                     {...field}
                   />
@@ -113,39 +119,99 @@ export default function Home() {
         </div>
       )}
 
-      {data &&
-        data.data.map((car) => (
-          <Card key={car.id} className="mt-4 w-1/4 border rounded-lg">
-            <CardContent className="flex flex-col gap-4 py-2 items-center w-full">
-              <div className="flex items-center justify-between w-full">
-                <Image
-                  src={car.imageUrl}
-                  width={100}
-                  height={100}
-                  alt={`Imagem do carro ${car.name}`}
-                ></Image>
-
-                <CardTitle className="text-xl font-semibold">
-                  {car.name}
-                </CardTitle>
-
-                <p className="text-gray-500 text-xl font-bold">
-                  R$ {car.price}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between w-full">
-                <div>
-                  <p className="text-gray-500 text-sm">Marca: {car.brand}</p>
-                  <p className="text-gray-500 text-sm">Ano: {car.year}</p>
-                  <p className="text-gray-500 text-sm">Placa: {car.plate}</p>
+      <div className="flex flex-wrap gap-14 mt-8 w-full px-20 items-center justify-center">
+        {data &&
+          data.data.map((car) => (
+            <Card key={car.id} className="mt-4 w-[30%] border rounded-3xl">
+              <CardContent className="flex flex-col items-center">
+                <div className="w-full h-70 relative">
+                  <Image
+                    src={car.imageUrl}
+                    fill
+                    className="rounded-t-3xl"
+                    alt={`Imagem do carro ${car.name}`}
+                  />
                 </div>
-                <p className="text-gray-500 text-center">{car.status}</p>
-              </div>
-            </CardContent>
-            <Button onClick={() => handleReserveCar(car.id)}>Reservar</Button>
-          </Card>
-        ))}
+
+                <div className="flex flex-col items-center justify-between w-full gap-6 px-4 py-4">
+                  <div className="flex w-full justify-between items-center">
+                    <CardTitle className="text-xl font-semibold">
+                      {car.name}
+                    </CardTitle>
+
+                    <p className="text-gray-500 text-xl font-bold">
+                      R$ {car.price}
+                    </p>
+                  </div>
+                  <div className="flex w-full justify-between items-center">
+                    <div className="flex flex-col items-start w-full">
+                      <p className="text-gray-500 text-sm">
+                        Marca: {car.brand}
+                      </p>
+                      <p className="text-gray-500 text-sm">Ano: {car.year}</p>
+                      <p className="text-gray-500 text-sm">
+                        Placa: {car.plate}
+                      </p>
+                    </div>
+                    {car.reservations && car.reservations.length > 0 ? (
+                      <p className="text-red-500 text-sm">Reservado</p>
+                    ) : (
+                      <p className="text-green-500 text-sm">Disponível</p>
+                    )}
+                  </div>
+                  <Button
+                    className="w-full"
+                    onClick={() => handleReserveCar(car.id)}
+                  >
+                    Reservar
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+      </div>
+
+      {totalPages > 1 && (
+        <Pagination className="mt-8">
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage > 1) handlePageChange(currentPage - 1);
+                }}
+              />
+            </PaginationItem>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <PaginationItem key={page}>
+                <PaginationLink
+                  href="#"
+                  isActive={currentPage === page}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handlePageChange(page);
+                  }}
+                >
+                  {page}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+
+            <PaginationItem>
+              <PaginationNext
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (currentPage < totalPages)
+                    handlePageChange(currentPage + 1);
+                }}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
+      )}
     </>
   );
 }

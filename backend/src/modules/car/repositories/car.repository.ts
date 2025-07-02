@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CarStatusPrisma, Prisma } from 'generated/prisma';
+import { Prisma } from 'generated/prisma';
 import { prisma } from '../../../shared/utils/prisma';
 import { Car } from '../entities';
 import {
@@ -68,11 +68,10 @@ export class CarRepository implements ICarRepository {
   async findAll(
     params: IGetAllCarPayload,
   ): Promise<{ data: Car[]; total: number }> {
-    const { name, brand, year, price, page, pageSize } = params;
+    const { name, brand, year, price, page, limit } = params;
 
     const where: Prisma.CarPrismaWhereInput = {
       deletedAt: null,
-      status: CarStatusPrisma.AVAILABLE,
     };
 
     if (name) {
@@ -101,8 +100,8 @@ export class CarRepository implements ICarRepository {
       prisma.carPrisma.count({ where }),
       prisma.carPrisma.findMany({
         where,
-        skip: (page - 1) * pageSize,
-        take: pageSize,
+        skip: (page - 1) * limit,
+        take: limit,
         orderBy: {
           createdAt: 'desc',
         },

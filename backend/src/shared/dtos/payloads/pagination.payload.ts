@@ -24,5 +24,5 @@ export class PaginationPayload implements IPaginationPayload {
   @Type(() => Number)
   @IsNumber()
   @Min(1)
-  pageSize: number = 10;
+  limit: number = 10;
 }

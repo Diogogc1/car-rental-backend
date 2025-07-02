@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  Matches,
-} from 'class-validator';
-import { CarStatusPrisma } from 'generated/prisma';
+import { IsNotEmpty, IsNumber, IsString, Matches } from 'class-validator';
 import { ICreateCarPayload } from '../../interfaces/dtos/payloads';
 
 export class CreateCarPayload implements ICreateCarPayload {
@@ -60,13 +53,4 @@ export class CreateCarPayload implements ICreateCarPayload {
   @IsString()
   @IsNotEmpty()
   imageUrl: string;
-
-  @ApiProperty({
-    description: 'O status atual do carro.',
-    enum: CarStatusPrisma,
-    example: CarStatusPrisma.AVAILABLE,
-  })
-  @IsEnum(CarStatusPrisma)
-  @IsNotEmpty()
-  status: CarStatusPrisma;
 }

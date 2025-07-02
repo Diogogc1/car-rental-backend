@@ -9,10 +9,9 @@ export class UpdateCarByIdUseCase {
   constructor(private readonly carRepository: CarRepository) {}
 
   async execute(
-    params: IUpdateCarByIdPayload,
+    id: number,
+    dataUpdate: IUpdateCarByIdPayload,
   ): Promise<Result<UpdateCarByIdResponse>> {
-    const { id, ...dataUpdate } = params;
-
     const car = await this.carRepository.findById(id);
     if (!car) {
       return Result.fail({

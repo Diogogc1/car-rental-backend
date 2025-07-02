@@ -1,21 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsDateString,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-} from 'class-validator';
+import { IsDateString, IsNumber, IsOptional } from 'class-validator';
 import { IUpdateReservationByIdPayload } from '../../interfaces/payloads';
 
 export class UpdateReservationPayload implements IUpdateReservationByIdPayload {
-  @ApiPropertyOptional({
-    description: 'O identificador único da reservation.',
-    example: '1',
-  })
-  @IsNotEmpty()
-  @IsNumber()
-  id: number;
-
   @ApiPropertyOptional({
     description: 'Data de início da reserva.',
     example: '2025-06-16T10:00:00.000Z',

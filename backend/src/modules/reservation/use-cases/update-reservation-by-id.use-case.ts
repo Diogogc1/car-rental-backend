@@ -9,9 +9,9 @@ export class UpdateReservationByIdUseCase {
   constructor(private readonly reservationRepository: ReservationRepository) {}
 
   async execute(
-    params: IUpdateReservationByIdPayload,
+    id: number,
+    dataUpdate: IUpdateReservationByIdPayload,
   ): Promise<Result<UpdateReservationByIdResponse>> {
-    const { id, ...dataUpdate } = params;
     const reservation = await this.reservationRepository.findById(id);
     if (!reservation) {
       return Result.fail({

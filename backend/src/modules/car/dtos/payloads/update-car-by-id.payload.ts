@@ -1,24 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import {
-  IsEnum,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  Matches,
-} from 'class-validator';
-import { CarStatusPrisma } from 'generated/prisma';
+import { IsNumber, IsOptional, IsString, Matches } from 'class-validator';
 import { IUpdateCarByIdPayload } from '../../interfaces/dtos/payloads';
 
 export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
-  @ApiPropertyOptional({
-    description: 'O identificador único do carro.',
-    example: '1',
-  })
-  @IsNotEmpty()
-  @IsString()
-  id: number;
-
   @ApiPropertyOptional({
     description: 'O nome do carro.',
     example: 'Civic EXL 1.5 Turbo',
@@ -61,15 +45,6 @@ export class UpdateCarByIdPayload implements IUpdateCarByIdPayload {
   @IsOptional()
   @IsNumber()
   price?: number;
-
-  @ApiPropertyOptional({
-    description: 'O status atual do carro.',
-    enum: CarStatusPrisma,
-    example: CarStatusPrisma.RESERVED,
-  })
-  @IsOptional()
-  @IsEnum(CarStatusPrisma)
-  status?: CarStatusPrisma;
 
   @ApiPropertyOptional({
     description: 'A URL da imagem do carro.',

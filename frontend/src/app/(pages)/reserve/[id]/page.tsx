@@ -1,12 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { DateRangePicker } from "@/components/ui/date-range-picker";
 import { reservationService } from "@/services";
 import { carService } from "@/services/car.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
@@ -37,7 +39,11 @@ export default function Reserve() {
 
   const queryClient = useQueryClient();
 
-  const { data, error, isLoading } = useQuery({
+  const {
+    data: car,
+    error,
+    isLoading,
+  } = useQuery({
     queryKey: ["car", idCar],
     queryFn: async () => {
       return await carService.getById(idCar as string);
@@ -80,7 +86,7 @@ export default function Reserve() {
           ) + 1
         : 0;
 
-    const totalPrice = data?.price ? data.price * days : 0;
+    const totalPrice = car?.price ? car.price * days : 0;
 
     mutate({
       carId: Number(idCar as string),
@@ -93,9 +99,11 @@ export default function Reserve() {
 
   if (!idCar) {
     return (
-      <div className="flex flex-col h-screen items-center justify-center">
-        <h1 className="text-3xl font-bold">Carro não encontrado</h1>
-        <p className="mt-4 text-gray-500">
+      <div className="flex flex-col min-h-screen items-center justify-center px-20">
+        <h1 className="text-3xl font-bold text-gray-700 text-center">
+          Carro não encontrado
+        </h1>
+        <p className="mt-4 text-gray-500 text-center">
           Por favor, selecione um carro válido.
         </p>
       </div>
@@ -104,48 +112,154 @@ export default function Reserve() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col h-screen items-center justify-center">
-        <h1 className="text-3xl font-bold">Carregando...</h1>
+      <div className="flex flex-col min-h-screen items-center justify-center px-20">
+        <h1 className="text-3xl font-bold text-gray-700 text-center">
+          Carregando...
+        </h1>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="flex flex-col h-screen items-center justify-center">
-        <h1 className="text-3xl font-bold">Erro ao carregar o carro</h1>
-        <p className="mt-4 text-red-500">{(error as Error).message}</p>
+      <div className="flex flex-col min-h-screen items-center justify-center px-20">
+        <h1 className="text-3xl font-bold text-gray-700 text-center">
+          Erro ao carregar o carro
+        </h1>
+        <p className="mt-4 text-red-500 text-center">
+          {(error as Error).message}
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col h-screen items-center justify-center">
-      <h1 className="text-3xl font-bold">Reservar Carro {idCar}</h1>
-      <p className="mt-4 text-gray-500">Aqui você pode reservar o carro.</p>
-      <div className="mt-8">
-        <h2 className="text-xl font-semibold">Detalhes do Carro</h2>
-        <p>Modelo: {data?.name}</p>
-        <p>Marca: {data?.brand}</p>
-        <p>Ano: {data?.year}</p>
-        <p>Preço: R$ {data?.price}</p>
-        <p>Status: {data?.status}</p>
+    <div className="min-h-screen px-20 py-8 w-full">
+      <div className="text-center mb-12">
+        <h1 className="text-3xl font-bold text-gray-700 mb-2">
+          Reservar Carro
+        </h1>
+        <h2 className="text-sm text-gray-500">
+          Complete os dados para finalizar sua reserva
+        </h2>
       </div>
 
-      <div className="mt-8">
-        <h3 className="text-lg font-semibold mb-4">
-          Selecione o período da reserva
-        </h3>
-        <DateRangePicker
-          date={dateRange}
-          onDateChange={setDateRange}
-          placeholder="Selecione as datas de início e fim"
-        />
-      </div>
+      <div className="flex flex-col justify-center items-center lg:flex-row gap-8">
+        <div className="w-1/2 lg:w-1/3">
+          <Card key={car?.id} className="mt-4 border rounded-3xl">
+            <CardContent className="flex flex-col items-center">
+              <div className="w-full h-70 relative">
+                <Image
+                  src={car!.imageUrl}
+                  fill
+                  className="rounded-t-3xl"
+                  alt={`Imagem do carro ${car?.name}`}
+                />
+              </div>
 
-      <Button onClick={handleReserve} className="mt-6">
-        Reservar
-      </Button>
+              <div className="flex flex-col items-center justify-between w-full gap-6 px-4 py-4">
+                <div className="flex w-full justify-between items-center">
+                  <CardTitle className="text-xl font-semibold">
+                    {car?.name}
+                  </CardTitle>
+
+                  <p className="text-gray-500 text-xl font-bold">
+                    R$ {car?.price}
+                  </p>
+                </div>
+                <div className="flex w-full justify-between items-center">
+                  <div className="flex flex-col items-start w-full">
+                    <p className="text-gray-500 text-sm">Marca: {car?.brand}</p>
+                    <p className="text-gray-500 text-sm">Ano: {car?.year}</p>
+                    <p className="text-gray-500 text-sm">Placa: {car?.plate}</p>
+                  </div>
+                  {car?.reservations && car.reservations.length > 0 ? (
+                    <p className="text-red-500 text-sm">Reservado</p>
+                  ) : (
+                    <p className="text-green-500 text-sm">Disponível</p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="lg:w-1/2">
+          <Card className="border rounded-3xl">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-semibold text-gray-700 mb-6 text-center">
+                Período da Reserva
+              </h3>
+
+              <div className="mb-6 flex items-center justify-center">
+                <DateRangePicker
+                  date={dateRange}
+                  onDateChange={setDateRange}
+                  placeholder="Selecione as datas de início e fim"
+                />
+              </div>
+
+              {dateRange?.from && dateRange?.to && (
+                <div className="mb-6 p-4 bg-gray-50 rounded-2xl">
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm text-gray-500">
+                        Período selecionado
+                      </p>
+                      <p className="font-medium text-gray-700">
+                        {dateRange.from.toLocaleDateString("pt-BR")} até{" "}
+                        {dateRange.to.toLocaleDateString("pt-BR")}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-sm text-gray-500">Total de dias</p>
+                        <p className="font-medium text-gray-700">
+                          {Math.ceil(
+                            (dateRange.to.getTime() -
+                              dateRange.from.getTime()) /
+                              (1000 * 60 * 60 * 24)
+                          ) + 1}{" "}
+                          dias
+                        </p>
+                      </div>
+
+                      {car?.price && (
+                        <div className="text-right">
+                          <p className="text-sm text-gray-500">Valor total</p>
+                          <p className="text-xl font-bold text-gray-700">
+                            R${" "}
+                            {(
+                              car.price *
+                              (Math.ceil(
+                                (dateRange.to.getTime() -
+                                  dateRange.from.getTime()) /
+                                  (1000 * 60 * 60 * 24)
+                              ) +
+                                1)
+                            ).toLocaleString("pt-BR")}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <Button
+                onClick={handleReserve}
+                className="w-full h-10 text-lg font-semibold"
+                disabled={!dateRange?.from || !dateRange?.to}
+              >
+                {!dateRange?.from || !dateRange?.to
+                  ? "Selecione as datas"
+                  : "Confirmar Reserva"}
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   );
 }

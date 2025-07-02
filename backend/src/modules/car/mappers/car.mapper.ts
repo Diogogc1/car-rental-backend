@@ -1,8 +1,4 @@
-import {
-  CarPrisma,
-  CarStatusPrisma,
-  ReservationPrisma,
-} from 'generated/prisma';
+import { CarPrisma, ReservationPrisma } from 'generated/prisma';
 import { ReservationMapper } from 'src/modules/reservation/mappers';
 import { Car } from '../entities';
 import { ICar } from '../interfaces/entities';
@@ -19,7 +15,6 @@ export class CarMapper {
       year: carPersistence.year,
       price: carPersistence.price,
       imageUrl: carPersistence.imageUrl,
-      status: carPersistence.status,
       reservations: carPersistence.reservations?.map((reservation) =>
         ReservationMapper.toEntity(reservation),
       ),
@@ -34,7 +29,6 @@ export class CarMapper {
     year: number;
     price: number;
     imageUrl: string;
-    status: CarStatusPrisma;
   } {
     return {
       name: car.name,
@@ -43,7 +37,6 @@ export class CarMapper {
       year: car.year,
       price: car.price,
       imageUrl: car.imageUrl,
-      status: car.status,
     };
   }
 }

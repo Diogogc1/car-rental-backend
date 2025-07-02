@@ -1,5 +1,3 @@
-import { CarStatus } from "../car-status.enum";
-
 export interface IUpdateCarByIdResponse {
   id: number;
   name: string;
@@ -7,5 +5,4 @@ export interface IUpdateCarByIdResponse {
   brand: string;
   year: number;
   price: number;
-  status: CarStatus;
 }

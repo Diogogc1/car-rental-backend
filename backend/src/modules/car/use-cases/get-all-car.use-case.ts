@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Result } from 'src/shared/utils';
 import { GetAllCarResponse } from '../dtos/responses';
 import { IGetAllCarPayload } from '../interfaces/dtos/payloads';
@@ -14,9 +14,9 @@ export class GetAllCarUseCase {
     const cars = await this.carRepository.findAll(params);
 
     if (!cars || cars.data.length === 0) {
-      return Result.fail({
-        message: 'No cars found',
-        httpStatus: HttpStatus.NOT_FOUND,
+      return Result.success({
+        data: [],
+        total: 0,
       });
     }
 

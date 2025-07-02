@@ -1,7 +1,7 @@
 "use client";
 
 import { UserIcon } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import logo from "./../../../public/logo.svg";
@@ -11,7 +11,12 @@ export default function PagesLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { data: session } = useSession();
   const router = useRouter();
+
+  if (!session) {
+    return <div>Redirecionando...</div>;
+  }
   return (
     <>
       <header className="flex items-center justify-between bg-background p-4 border-b-2 border-gray-200">
