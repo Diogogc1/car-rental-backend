@@ -8,9 +8,11 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -18,6 +20,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guards';
 import {
   CreateCarPayload,
   GetAllCarPayload,
@@ -37,6 +40,8 @@ import { GetCarByIdUseCase } from '../use-cases/get-car-by-id.use-case';
 import { UpdateCarByIdUseCase } from '../use-cases/update-car-by-id.use-case';
 
 @ApiTags('Car')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('car')
 export class CarController {
   constructor(

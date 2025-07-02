@@ -4,6 +4,8 @@ import { UserIcon } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Toaster } from "sonner";
 import logo from "./../../../public/logo.svg";
 
 export default function PagesLayout({
@@ -11,8 +13,16 @@ export default function PagesLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (status === "loading") return;
+
+    if (!session) {
+      router.push("/login");
+    }
+  }, [session, status, router]);
 
   if (!session) {
     return <div>Redirecionando...</div>;
@@ -41,6 +51,7 @@ export default function PagesLayout({
       <main className="flex justify-center items-center flex-col px-28 py-12">
         {children}
       </main>
+      <Toaster />
     </>
   );
 }

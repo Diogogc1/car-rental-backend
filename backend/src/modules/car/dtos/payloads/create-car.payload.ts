@@ -13,7 +13,7 @@ export class CreateCarPayload implements ICreateCarPayload {
 
   @ApiProperty({
     description: 'A placa do carro.',
-    example: 'ABC1D34',
+    example: 'ABC1D24',
   })
   @IsString()
   @IsNotEmpty()

@@ -13,6 +13,7 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 const formSchema = z.object({
@@ -55,16 +56,18 @@ export default function Reserve() {
     mutationFn: reservationService.create,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cars"] });
-      alert(`Carro ${idCar} reservado com sucesso!`);
+      toast.success(`Carro ${idCar} reservado com sucesso!`);
     },
     onError: (err) => {
-      alert(`Falha ao reservar: ${err.message}`);
+      toast.error(`Falha ao reservar: ${err.message}`);
     },
   });
 
   const handleReserve = () => {
     if (!dateRange?.from || !dateRange?.to) {
-      alert("Por favor, selecione as datas de início e fim da reserva.");
+      toast.warning(
+        "Por favor, selecione as datas de início e fim da reserva."
+      );
       return;
     }
 
@@ -134,7 +137,7 @@ export default function Reserve() {
   }
 
   return (
-    <div className="min-h-screen px-20 py-8 w-full">
+    <div className="h-screen px-20 py-8 w-full">
       <div className="text-center mb-12">
         <h1 className="text-3xl font-bold text-gray-700 mb-2">
           Reservar Carro
@@ -144,7 +147,7 @@ export default function Reserve() {
         </h2>
       </div>
 
-      <div className="flex flex-col justify-center items-center lg:flex-row gap-8">
+      <div className="flex h-96 flex-col justify-center items-center lg:flex-row gap-8">
         <div className="w-1/2 lg:w-1/3">
           <Card key={car?.id} className="mt-4 border rounded-3xl">
             <CardContent className="flex flex-col items-center">
@@ -184,8 +187,8 @@ export default function Reserve() {
           </Card>
         </div>
 
-        <div className="lg:w-1/2">
-          <Card className="border rounded-3xl">
+        <div className="h-full lg:w-1/2">
+          <Card className="h-full rounded-3xl flex justify-center items-center">
             <CardContent className="p-6">
               <h3 className="text-xl font-semibold text-gray-700 mb-6 text-center">
                 Período da Reserva

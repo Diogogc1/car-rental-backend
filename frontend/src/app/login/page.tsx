@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import logo from "./../../../public/logo.svg";
 
 const formSchema = z.object({
@@ -65,9 +66,9 @@ export default function Login() {
 
     setIsLoading(false);
     if (result?.error) {
-      alert(`Erro ao fazer login: Email ou senha inválidos`);
+      toast(`Erro ao fazer login: Email ou senha inválidos`);
     } else {
-      alert("Erro desconhecido ao fazer login.");
+      toast("Erro desconhecido ao fazer login.");
     }
   };
 

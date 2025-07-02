@@ -8,9 +8,11 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
 import {
+  ApiBearerAuth,
   ApiBody,
   ApiOperation,
   ApiParam,
@@ -18,6 +20,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { AuthGuard } from 'src/guards';
 import { CreateReservationPayload } from '../dtos/payload/create-reservation.payload';
 import { GetAllReservationPayload } from '../dtos/payload/get-all-reservation.payload';
 import { UpdateReservationPayload } from '../dtos/payload/update-reservation.payload';
@@ -34,6 +37,8 @@ import {
 } from '../use-cases';
 
 @ApiTags('Reservation')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('reservation')
 export class ReservationController {
   constructor(
