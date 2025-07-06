@@ -128,7 +128,7 @@ export default function Home() {
                   <Image
                     src={car.imageUrl}
                     fill
-                    className="xl:rounded-t-3xl rounded-l-3xl "
+                    className="rounded-l-3xl xl:rounded-t-3xl xl:rounded-b-none"
                     alt={`Imagem do carro ${car.name}`}
                   />
                 </div>
