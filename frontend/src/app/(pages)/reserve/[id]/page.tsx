@@ -137,7 +137,7 @@ export default function Reserve() {
   }
 
   return (
-    <div className="h-screen px-20 py-8 w-full">
+    <div className="h-full xl:px-20 w-full">
       <div className="text-center mb-12">
         <h1 className="text-3xl font-bold text-gray-700 mb-2">
           Reservar Carro
@@ -148,44 +148,37 @@ export default function Reserve() {
       </div>
 
       <div className="flex h-96 flex-col justify-center items-center lg:flex-row gap-8">
-        <div className="w-1/2 lg:w-1/3">
-          <Card key={car?.id} className="mt-4 border rounded-3xl">
-            <CardContent className="flex flex-col items-center">
-              <div className="w-full h-70 relative">
-                <Image
-                  src={car!.imageUrl}
-                  fill
-                  className="rounded-t-3xl"
-                  alt={`Imagem do carro ${car?.name}`}
-                />
+        <Card key={car?.id} className="mt-4 w-[340px] border rounded-3xl">
+          <CardContent className="flex xl:flex-col flex-row items-center">
+            <div className="w-full xl:h-70 h-50 relative">
+              <Image
+                src={car!.imageUrl}
+                fill
+                className="rounded-l-3xl xl:rounded-t-3xl xl:rounded-b-none"
+                alt={`Imagem do carro ${car?.name}`}
+              />
+            </div>
+
+            <div className="flex flex-col items-center justify-between w-full gap-6 px-4 py-4">
+              <div className="flex w-full justify-between items-center">
+                <CardTitle className="xl:text-xl text-md font-semibold">
+                  {car?.name}
+                </CardTitle>
+
+                <p className="text-gray-500 xl:text-xl text-md font-bold">
+                  R$ {car?.price}
+                </p>
               </div>
-
-              <div className="flex flex-col items-center justify-between w-full gap-6 px-4 py-4">
-                <div className="flex w-full justify-between items-center">
-                  <CardTitle className="text-xl font-semibold">
-                    {car?.name}
-                  </CardTitle>
-
-                  <p className="text-gray-500 text-xl font-bold">
-                    R$ {car?.price}
-                  </p>
-                </div>
-                <div className="flex w-full justify-between items-center">
-                  <div className="flex flex-col items-start w-full">
-                    <p className="text-gray-500 text-sm">Marca: {car?.brand}</p>
-                    <p className="text-gray-500 text-sm">Ano: {car?.year}</p>
-                    <p className="text-gray-500 text-sm">Placa: {car?.plate}</p>
-                  </div>
-                  {car?.reservations && car.reservations.length > 0 ? (
-                    <p className="text-red-500 text-sm">Reservado</p>
-                  ) : (
-                    <p className="text-green-500 text-sm">Disponível</p>
-                  )}
+              <div className="flex w-full justify-between items-center">
+                <div className="flex flex-col items-start w-full">
+                  <p className="text-gray-500 text-sm">Marca: {car?.brand}</p>
+                  <p className="text-gray-500 text-sm">Ano: {car?.year}</p>
+                  <p className="text-gray-500 text-sm">Placa: {car?.plate}</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        </div>
+            </div>
+          </CardContent>
+        </Card>
 
         <div className="h-full lg:w-1/2">
           <Card className="h-full rounded-3xl flex justify-center items-center">

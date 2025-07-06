@@ -43,8 +43,8 @@ export default function Profile() {
   }
 
   return (
-    <div className="min-h-screen px-20 py-8">
-      <div className="text-center mb-12">
+    <div className="min-h-screen px-20">
+      <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-gray-700 mb-2">Meu Perfil</h1>
         <h2 className="text-sm text-gray-500">
           Gerencie suas informações e reservas
@@ -55,14 +55,16 @@ export default function Profile() {
         <Card className="border rounded-3xl">
           <CardContent className="p-8 flex items-center justify-center">
             <div className="flex items-center justify-center  gap-6">
-              <div className="w-24 h-24 bg-blue-500 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
+              <div className="w-24 h-24 bg-primary rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                 {data?.name?.charAt(0).toUpperCase() || "U"}
               </div>
               <div className="flex-1 text-center justify-center items-center md:text-left ">
-                <h2 className="text-2xl font-bold text-gray-700 mb-2">
+                <h2 className="xl:text-2xl text-lg font-bold text-gray-700 mb-2">
                   {data?.name}
                 </h2>
-                <p className="text-gray-500 text-lg">{data?.email}</p>
+                <p className="text-gray-500 xl:text-lg text-md">
+                  {data?.email}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -87,7 +89,7 @@ export default function Profile() {
                         "pt-BR"
                       )}
                     </p>
-                    <p className="text-sm text-blue-600 font-medium mt-1">
+                    <p className="text-sm text-primary font-medium mt-1">
                       R${" "}
                       {reservation.totalPrice?.toLocaleString("pt-BR") || "N/A"}
                     </p>
