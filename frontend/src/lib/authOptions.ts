@@ -13,6 +13,7 @@ declare module "next-auth" {
   }
   interface Session {
     user?: User;
+    isExpired?: boolean;
   }
 }
 declare module "next-auth/jwt" {
@@ -86,18 +87,25 @@ export const authOptions: NextAuthOptions = {
   ],
 
   callbacks: {
-    jwt: async ({ user, token }) => {
+    jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
         token.accessToken = user.accessToken;
       }
+
       return token;
     },
+
     session: async ({ session, token }) => {
       if (token && session.user) {
         session.user.id = token.id as string;
         session.user.accessToken = token.accessToken as string;
+        const payload: JWTPayload = JSON.parse(
+          atob(session.user.accessToken.split(".")[1])
+        );
+        session.isExpired = Date.now() >= payload.exp * 1000;
       }
+
       return session;
     },
   },

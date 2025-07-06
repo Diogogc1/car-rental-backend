@@ -19,8 +19,8 @@ export default function PagesLayout({
   useEffect(() => {
     if (status === "loading") return;
 
-    if (!session) {
-      router.push("/login");
+    if (!session || session.isExpired) {
+      signOut({ callbackUrl: "/login" });
     }
   }, [session, status, router]);
 
