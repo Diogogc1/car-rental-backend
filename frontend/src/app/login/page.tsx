@@ -66,9 +66,9 @@ export default function Login() {
 
     setIsLoading(false);
     if (result?.error) {
-      toast(`Erro ao fazer login: Email ou senha inválidos`);
+      toast.error(`Erro ao fazer login: Email ou senha inválidos`);
     } else {
-      toast("Erro desconhecido ao fazer login.");
+      toast.error("Erro desconhecido ao fazer login.");
     }
   };
 
