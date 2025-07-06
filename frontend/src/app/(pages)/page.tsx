@@ -90,7 +90,7 @@ export default function Home() {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-5 w-1/2 relative"
+          className="space-y-5 w-full xl:w-[500px] relative"
         >
           <FormField
             control={form.control}
@@ -119,27 +119,27 @@ export default function Home() {
         </div>
       )}
 
-      <div className="flex flex-wrap gap-14 mt-8 w-full px-20 items-center justify-center">
+      <div className="flex flex-col xl:flex-row flex-wrap xl:gap-14 gap-8 mt-8 w-full xl:px-20 items-center justify-center">
         {data &&
           data.data.map((car) => (
-            <Card key={car.id} className="mt-4 w-[30%] border rounded-3xl">
-              <CardContent className="flex flex-col items-center">
-                <div className="w-full h-70 relative">
+            <Card key={car.id} className="mt-4 w-[340px] border rounded-3xl">
+              <CardContent className="flex xl:flex-col flex-row items-center">
+                <div className="w-full xl:h-70 h-50 relative">
                   <Image
                     src={car.imageUrl}
                     fill
-                    className="rounded-t-3xl"
+                    className="xl:rounded-t-3xl rounded-l-3xl "
                     alt={`Imagem do carro ${car.name}`}
                   />
                 </div>
 
                 <div className="flex flex-col items-center justify-between w-full gap-6 px-4 py-4">
                   <div className="flex w-full justify-between items-center">
-                    <CardTitle className="text-xl font-semibold">
+                    <CardTitle className="xl:text-xl text-md font-semibold">
                       {car.name}
                     </CardTitle>
 
-                    <p className="text-gray-500 text-xl font-bold">
+                    <p className="text-gray-500 xl:text-xl text-md font-bold">
                       R$ {car.price}
                     </p>
                   </div>
@@ -153,11 +153,6 @@ export default function Home() {
                         Placa: {car.plate}
                       </p>
                     </div>
-                    {car.reservations && car.reservations.length > 0 ? (
-                      <p className="text-red-500 text-sm">Reservado</p>
-                    ) : (
-                      <p className="text-green-500 text-sm">Disponível</p>
-                    )}
                   </div>
                   <Button
                     className="w-full"

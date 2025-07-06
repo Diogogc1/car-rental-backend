@@ -48,7 +48,7 @@ export default function PagesLayout({
           ></UserIcon>
         </div>
       </header>
-      <main className="flex justify-center items-center flex-col px-28 py-12">
+      <main className="flex justify-center items-center flex-col xl:px-28 px-8 py-12">
         {children}
       </main>
       <Toaster />

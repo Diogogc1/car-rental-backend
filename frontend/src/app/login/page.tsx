@@ -73,8 +73,8 @@ export default function Login() {
   };
 
   return (
-    <main className="flex h-screen items-center justify-center">
-      <div className="flex h-[80%] w-1/3 p-8 shadow-xl border-2 border-gray-300 rounded-lg">
+    <main className="flex w-screen h-screen items-center justify-center">
+      <div className="flex h-[80%] w-[600px] p-8 shadow-xl border-2 border-gray-300 rounded-lg">
         <div className="w-full h-full space-y-10 flex flex-col items-center justify-center">
           <Image
             src={logo}
