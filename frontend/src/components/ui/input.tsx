@@ -13,7 +13,7 @@ function Input({ className, type, icon, ...props }: InputProps) {
   return (
     <>
       {icon && (
-        <span className="absolute right-4 top-1/3 text-muted-foreground">
+        <span className="absolute right-[365px] z-10 top-1/3 text-muted-foreground">
           {React.createElement(icon, { size: 16 })}
         </span>
       )}

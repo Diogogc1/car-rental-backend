@@ -5,11 +5,23 @@ class CarService {
   async getAllCars(
     name?: string,
     page: number = 1,
-    limit: number = 10
+    limit: number = 10,
+    dateReservation?: {
+      startDate?: string;
+      endDate?: string;
+    }
   ): Promise<{ data: IGetAllCarResponse[]; total: number }> {
     const params = new URLSearchParams();
     if (name) {
       params.append("name", name);
+    }
+    if (dateReservation) {
+      if (dateReservation.startDate) {
+        params.append("startDate", dateReservation.startDate);
+      }
+      if (dateReservation.endDate) {
+        params.append("endDate", dateReservation.endDate);
+      }
     }
     params.append("page", page.toString());
     params.append("limit", limit.toString());

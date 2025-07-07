@@ -18,6 +18,7 @@ interface DateRangePickerProps {
   onDateChange: (date: DateRange | undefined) => void;
   placeholder?: string;
   className?: string;
+  disabledRanges?: { from: Date; to: Date }[];
 }
 
 export function DateRangePicker({
@@ -25,6 +26,7 @@ export function DateRangePicker({
   onDateChange,
   placeholder = "Selecione o período",
   className,
+  disabledRanges = [],
 }: DateRangePickerProps) {
   return (
     <div className={cn("grid gap-2", className)}>
@@ -62,6 +64,7 @@ export function DateRangePicker({
             onSelect={onDateChange}
             numberOfMonths={2}
             locale={ptBR}
+            disabled={disabledRanges}
           />
         </PopoverContent>
       </Popover>

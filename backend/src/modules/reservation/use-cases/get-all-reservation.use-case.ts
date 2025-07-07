@@ -1,6 +1,6 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Result } from 'src/shared/utils';
-import { GetAllReservationResponse } from '../dtos/responses';
+import { GetManyReservationResponse } from '../dtos/responses';
 import { IGetAllReservationPayload } from '../interfaces/payloads';
 import { ReservationRepository } from '../repositories';
 
@@ -10,9 +10,9 @@ export class GetAllReservationUseCase {
 
   async execute(
     params: IGetAllReservationPayload,
-  ): Promise<Result<GetAllReservationResponse[]>> {
+  ): Promise<Result<GetManyReservationResponse[]>> {
     const { page, limit: pageSize } = params;
-    const reservations = await this.reservationRepository.findAll(
+    const reservations = await this.reservationRepository.findMany(
       page,
       pageSize,
     );
@@ -25,7 +25,7 @@ export class GetAllReservationUseCase {
     }
 
     const response = reservations.map((reservation) =>
-      GetAllReservationResponse.fromEntity(reservation),
+      GetManyReservationResponse.fromEntity(reservation),
     );
     return Result.success(response);
   }

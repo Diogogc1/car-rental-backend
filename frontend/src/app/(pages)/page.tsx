@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { CarCard } from "@/components/ui/carCard";
+import { DateRangePicker } from "@/components/ui/date-range-picker";
 import {
   Form,
   FormControl,
@@ -22,9 +22,9 @@ import { carService } from "@/services/car.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { SearchIcon } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { DateRange } from "react-day-picker";
 import { useForm } from "react-hook-form";
 import { useDebounce } from "use-debounce";
 import { z } from "zod";
@@ -39,6 +39,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
   const router = useRouter();
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const form = useForm<LoginFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,14 +49,23 @@ export default function Home() {
 
   const searchValue = form.watch("search");
   const [debouncedSearch] = useDebounce(searchValue, 500);
+  const [debouncedDateRange] = useDebounce(dateRange, 500);
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["cars", debouncedSearch, currentPage],
+    queryKey: ["cars", debouncedSearch, currentPage, debouncedDateRange],
     queryFn: async () => {
+      let dateReservation;
+      if (debouncedDateRange?.from && debouncedDateRange?.to) {
+        dateReservation = {
+          startDate: debouncedDateRange.from.toISOString(),
+          endDate: debouncedDateRange.to.toISOString(),
+        };
+      }
       return await carService.getAllCars(
         debouncedSearch,
         currentPage,
-        itemsPerPage
+        itemsPerPage,
+        dateReservation
       );
     },
     enabled: !!debouncedSearch || debouncedSearch === "",
@@ -64,10 +74,6 @@ export default function Home() {
   if (isLoading) {
     return <div>Carregando...</div>;
   }
-
-  const onSubmit = async (data: LoginFormData) => {
-    console.log("Search term:", data.search);
-  };
 
   const handleReserveCar = (carId: number) => {
     router.push(`/reserve/${carId}`);
@@ -88,19 +94,16 @@ export default function Home() {
         Sua mobilidade garantida com praticidade e segurança
       </h2>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-5 w-full xl:w-[500px] relative"
-        >
+        <form className="space-y-5 w-full relative">
           <FormField
             control={form.control}
             name="search"
             render={({ field }) => (
-              <FormItem>
-                <FormControl>
+              <FormItem className="w-full relative flex justify-center items-center">
+                <FormControl className="w-[600px]">
                   <Input
                     type="text"
-                    className="w-full p-4 border rounded-full bg-gray-300"
+                    className="p-4 border rounded-full bg-gray-300"
                     placeholder="Buscar pelo nome"
                     icon={SearchIcon}
                     {...field}
@@ -110,6 +113,14 @@ export default function Home() {
               </FormItem>
             )}
           ></FormField>
+
+          <div className="mt-2 flex-start">
+            <DateRangePicker
+              date={dateRange}
+              onDateChange={setDateRange}
+              placeholder="Filtrar por período de reserva"
+            />
+          </div>
         </form>
       </Form>
 
@@ -122,47 +133,7 @@ export default function Home() {
       <div className="flex flex-col xl:flex-row flex-wrap xl:gap-14 gap-8 mt-8 w-full xl:px-20 items-center justify-center">
         {data &&
           data.data.map((car) => (
-            <Card key={car.id} className="mt-4 w-[340px] border rounded-3xl">
-              <CardContent className="flex xl:flex-col flex-row items-center">
-                <div className="w-full xl:h-70 h-50 relative">
-                  <Image
-                    src={car.imageUrl}
-                    fill
-                    className="rounded-l-3xl xl:rounded-t-3xl xl:rounded-b-none"
-                    alt={`Imagem do carro ${car.name}`}
-                  />
-                </div>
-
-                <div className="flex flex-col items-center justify-between w-full gap-6 px-4 py-4">
-                  <div className="flex w-full justify-between items-center">
-                    <CardTitle className="xl:text-xl text-md font-semibold">
-                      {car.name}
-                    </CardTitle>
-
-                    <p className="text-gray-500 xl:text-xl text-md font-bold">
-                      R$ {car.price}
-                    </p>
-                  </div>
-                  <div className="flex w-full justify-between items-center">
-                    <div className="flex flex-col items-start w-full">
-                      <p className="text-gray-500 text-sm">
-                        Marca: {car.brand}
-                      </p>
-                      <p className="text-gray-500 text-sm">Ano: {car.year}</p>
-                      <p className="text-gray-500 text-sm">
-                        Placa: {car.plate}
-                      </p>
-                    </div>
-                  </div>
-                  <Button
-                    className="w-full"
-                    onClick={() => handleReserveCar(car.id)}
-                  >
-                    Reservar
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <CarCard key={car.id} props={{ car, handleReserveCar }}></CarCard>
           ))}
       </div>
 

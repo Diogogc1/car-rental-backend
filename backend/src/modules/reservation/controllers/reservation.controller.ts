@@ -25,7 +25,7 @@ import { CreateReservationPayload } from '../dtos/payload/create-reservation.pay
 import { GetAllReservationPayload } from '../dtos/payload/get-all-reservation.payload';
 import { UpdateReservationPayload } from '../dtos/payload/update-reservation.payload';
 import { CreateReservationResponse } from '../dtos/responses/create-reservation.response';
-import { GetAllReservationResponse } from '../dtos/responses/get-all-reservation.response';
+import { GetManyReservationResponse } from '../dtos/responses/get-many-reservation.response';
 import { GetReservationByIdResponse } from '../dtos/responses/get-reservation-by-id.response';
 import { UpdateReservationByIdResponse } from '../dtos/responses/update-reservation-by-id.response';
 import {
@@ -35,6 +35,8 @@ import {
   GetReservationByIdUseCase,
   UpdateReservationByIdUseCase,
 } from '../use-cases';
+import { GetReservationsByCarIdUseCase } from '../use-cases/get-reservation-by-car.use-case';
+import { GetReservationsByUserIdUseCase } from '../use-cases/get-reservation-by-user.use-case';
 
 @ApiTags('Reservation')
 @ApiBearerAuth()
@@ -44,6 +46,8 @@ export class ReservationController {
   constructor(
     private readonly createReservationUseCase: CreateReservationUseCase,
     private readonly getReservationByIdUseCase: GetReservationByIdUseCase,
+    private readonly getReservationsByUserIdUseCase: GetReservationsByUserIdUseCase,
+    private readonly getReservationsByCarIdUseCase: GetReservationsByCarIdUseCase,
     private readonly getAllReservationsUseCase: GetAllReservationUseCase,
     private readonly updateReservationByIdUseCase: UpdateReservationByIdUseCase,
     private readonly deleteReservationUseCase: DeleteReservationUseCase,
@@ -89,7 +93,7 @@ export class ReservationController {
   @ApiResponse({
     status: 200,
     description: 'Lista de reservas encontrada com sucesso.',
-    type: [GetAllReservationResponse],
+    type: [GetManyReservationResponse],
   })
   @ApiResponse({
     status: 404,
@@ -115,6 +119,38 @@ export class ReservationController {
   })
   async getById(@Param('id', ParseIntPipe) id: number) {
     return await this.getReservationByIdUseCase.execute(id);
+  }
+
+  @Get('/user/:id')
+  @ApiOperation({ summary: 'Buscar reservas do usuário por ID' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID do usuário' })
+  @ApiResponse({
+    status: 200,
+    description: 'Reservas do usuario encontradas com sucesso.',
+    type: [GetManyReservationResponse],
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Reservas do usuário não encontradas.',
+  })
+  async getByUserId(@Param('id', ParseIntPipe) id: number) {
+    return await this.getReservationsByUserIdUseCase.execute(id);
+  }
+
+  @Get('/car/:id')
+  @ApiOperation({ summary: 'Buscar reservas do carro por ID' })
+  @ApiParam({ name: 'id', type: Number, description: 'ID do carro' })
+  @ApiResponse({
+    status: 200,
+    description: 'Reservas do carro encontradas com sucesso.',
+    type: [GetReservationByIdResponse],
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Reservas do carro não encontradas.',
+  })
+  async getByCarId(@Param('id', ParseIntPipe) id: number) {
+    return await this.getReservationsByCarIdUseCase.execute(id);
   }
 
   @Put(':id')
