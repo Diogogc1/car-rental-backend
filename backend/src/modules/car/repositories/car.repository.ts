@@ -68,7 +68,8 @@ export class CarRepository implements ICarRepository {
   async findAll(
     params: IGetAllCarPayload,
   ): Promise<{ data: Car[]; total: number }> {
-    const { name, brand, year, price, page, limit } = params;
+    const { name, brand, year, price, dateReservation, plate, page, limit } =
+      params;
 
     const where: Prisma.CarPrismaWhereInput = {
       deletedAt: null,
@@ -94,6 +95,38 @@ export class CarRepository implements ICarRepository {
 
     if (price) {
       where.price = price;
+    }
+
+    if (plate) {
+      where.plate = {
+        contains: plate,
+        mode: 'insensitive',
+      };
+    }
+
+    if (dateReservation) {
+      where.reservations = {
+        every: {
+          OR: [
+            {
+              startDate: {
+                lt: dateReservation.startDate,
+              },
+              endDate: {
+                lt: dateReservation.startDate,
+              },
+            },
+            {
+              startDate: {
+                gt: dateReservation.endDate,
+              },
+              endDate: {
+                gt: dateReservation.endDate,
+              },
+            },
+          ],
+        },
+      };
     }
 
     const [total, carsPrisma] = await prisma.$transaction([

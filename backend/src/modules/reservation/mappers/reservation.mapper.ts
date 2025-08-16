@@ -1,9 +1,11 @@
-import { ReservationPrisma } from 'generated/prisma';
+import { CarPrisma, ReservationPrisma } from 'generated/prisma';
 import { Reservation } from '../entities';
 import { IReservation } from '../interfaces/entities';
 
 export class ReservationMapper {
-  static toEntity(reservationPersistence: ReservationPrisma): Reservation {
+  static toEntity(
+    reservationPersistence: ReservationPrisma & { car?: CarPrisma },
+  ): Reservation {
     const reservationProps: IReservation = {
       id: reservationPersistence.id,
       startDate: reservationPersistence.startDate,
@@ -11,8 +13,12 @@ export class ReservationMapper {
       carId: reservationPersistence.carId,
       userId: reservationPersistence.userId,
       totalPrice: reservationPersistence.totalPrice,
+      car: reservationPersistence.car ?? undefined,
     };
-    return new Reservation(reservationProps);
+
+    const reservation = new Reservation(reservationProps);
+
+    return reservation;
   }
 
   static toPersistence(reservation: IReservation): {

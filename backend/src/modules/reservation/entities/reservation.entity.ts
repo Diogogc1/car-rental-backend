@@ -1,4 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
+import { Car } from 'src/modules/car/entities';
+import { User } from 'src/modules/user/entities/user.entity';
 import { Result } from 'src/shared/utils';
 import { IReservation } from '../interfaces/entities';
 
@@ -9,6 +11,8 @@ export class Reservation implements IReservation {
   carId: number;
   userId: number;
   totalPrice: number;
+  car?: Car;
+  user?: User;
 
   constructor(reservation: IReservation) {
     this.id = reservation.id;
@@ -17,6 +21,7 @@ export class Reservation implements IReservation {
     this.carId = reservation.carId;
     this.userId = reservation.userId;
     this.totalPrice = reservation.totalPrice;
+    this.car = reservation.car ? new Car(reservation.car) : undefined;
   }
 
   static create(reservation: IReservation): Result<Reservation> {

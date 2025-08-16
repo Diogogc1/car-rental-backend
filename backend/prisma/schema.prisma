@@ -31,7 +31,7 @@ model CarPrisma {
   id           Int                 @id @default(autoincrement())
   plate        String              @unique
   name         String
-  brand        String              @map("mark")
+  brand        String
   year         Int
   price        Float
   imageUrl     String

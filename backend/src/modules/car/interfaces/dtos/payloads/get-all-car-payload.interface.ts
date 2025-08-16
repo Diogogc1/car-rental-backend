@@ -6,4 +6,8 @@ export interface IGetAllCarPayload extends IPaginationPayload {
   brand?: string;
   year?: number;
   price?: number;
+  dateReservation?: {
+    startDate?: Date;
+    endDate?: Date;
+  };
 }

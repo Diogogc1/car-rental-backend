@@ -28,12 +28,18 @@ export class Car implements ICar {
     const dataIsValid = endDate > startDate;
 
     if (!dataIsValid) {
-      throw new Error('End date must be after start date');
+      return false;
     }
 
-    const hasReservations = this.reservations && this.reservations.length > 0;
+    const noReservationHasConflicted = !!this.reservations?.every(
+      (reservation) => {
+        const reservationStart = new Date(reservation.startDate);
+        const reservationEnd = new Date(reservation.endDate);
+        return startDate > reservationEnd || endDate < reservationStart;
+      },
+    );
 
-    return !hasReservations && dataIsValid;
+    return noReservationHasConflicted;
   }
 
   update({ name, plate, brand, year, price, imageUrl }: Partial<ICar>): void {

@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsNotEmpty, IsNumber } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, IsNotEmpty, IsNumber } from 'class-validator';
 import { ICreateReservationPayload } from '../../interfaces/payloads';
 
 export class CreateReservationPayload implements ICreateReservationPayload {
@@ -7,16 +8,18 @@ export class CreateReservationPayload implements ICreateReservationPayload {
     description: 'Data de início da reserva.',
     example: '2025-06-15T10:00:00.000Z',
   })
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
+  @Type(() => Date)
   startDate: Date;
 
   @ApiProperty({
     description: 'Data de fim da reserva.',
     example: '2025-06-20T10:00:00.000Z',
   })
-  @IsDateString()
+  @IsDate()
   @IsNotEmpty()
+  @Type(() => Date)
   endDate: Date;
 
   @ApiProperty({

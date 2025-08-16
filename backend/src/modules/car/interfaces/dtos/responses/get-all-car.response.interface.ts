@@ -1,4 +1,4 @@
-import { IGetAllReservationResponse } from 'src/modules/reservation/interfaces/responses';
+import { IGetManyReservationResponse } from 'src/modules/reservation/interfaces/responses';
 
 export interface IGetAllCarResponse {
   id: number;
@@ -8,5 +8,5 @@ export interface IGetAllCarResponse {
   year: number;
   price: number;
   imageUrl: string;
-  reservations?: IGetAllReservationResponse[];
+  reservations?: IGetManyReservationResponse[];
 }

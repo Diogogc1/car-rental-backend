@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsNumber, IsOptional } from 'class-validator';
+import { IsDate, IsNumber, IsOptional } from 'class-validator';
 import { IUpdateReservationByIdPayload } from '../../interfaces/payloads';
 
 export class UpdateReservationPayload implements IUpdateReservationByIdPayload {
@@ -8,7 +8,7 @@ export class UpdateReservationPayload implements IUpdateReservationByIdPayload {
     example: '2025-06-16T10:00:00.000Z',
   })
   @IsOptional()
-  @IsDateString()
+  @IsDate()
   startDate?: Date;
 
   @ApiPropertyOptional({
@@ -16,7 +16,7 @@ export class UpdateReservationPayload implements IUpdateReservationByIdPayload {
     example: '2025-06-21T10:00:00.000Z',
   })
   @IsOptional()
-  @IsDateString()
+  @IsDate()
   endDate?: Date;
 
   @ApiPropertyOptional({

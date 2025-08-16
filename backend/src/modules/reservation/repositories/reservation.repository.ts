@@ -30,7 +30,7 @@ export class ReservationRepository implements IReservationRepository {
     return ReservationMapper.toEntity(reservationPrisma);
   }
 
-  async findAll(page?: number, pageSize?: number): Promise<Reservation[]> {
+  async findMany(page?: number, pageSize?: number): Promise<Reservation[]> {
     const skip = page && pageSize ? (page - 1) * pageSize : undefined;
     const take = pageSize;
 
@@ -45,9 +45,35 @@ export class ReservationRepository implements IReservationRepository {
     );
   }
 
+  async findByUserId(userId: number): Promise<Reservation[]> {
+    const reservationsPrisma = await prisma.reservationPrisma.findMany({
+      where: { userId, deletedAt: null, car: { deletedAt: null } },
+      include: {
+        car: true,
+      },
+    });
+
+    return reservationsPrisma.map((reservationPrisma) =>
+      ReservationMapper.toEntity(reservationPrisma),
+    );
+  }
+
+  async findByCarId(carId: number): Promise<Reservation[]> {
+    const reservationsPrisma = await prisma.reservationPrisma.findMany({
+      where: { carId, deletedAt: null },
+      include: {
+        car: true,
+      },
+    });
+
+    return reservationsPrisma.map((reservationPrisma) =>
+      ReservationMapper.toEntity(reservationPrisma),
+    );
+  }
+
   async update(
     id: number,
-    dataUpdate: Partial<Omit<IReservation, 'id'>>,
+    dataUpdate: Partial<Omit<IReservation, 'id' | 'car' | 'user'>>,
   ): Promise<Reservation> {
     const reservationPrisma = await prisma.reservationPrisma.update({
       where: { id: id },

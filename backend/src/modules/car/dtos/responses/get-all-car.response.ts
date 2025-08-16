@@ -1,4 +1,4 @@
-import { GetAllReservationResponse } from '../../../reservation/dtos/responses/get-all-reservation.response';
+import { GetManyReservationResponse } from '../../../reservation/dtos/responses/get-many-reservation.response';
 import { Car } from '../../entities';
 import { IGetAllCarResponse } from '../../interfaces/dtos/responses';
 
@@ -10,7 +10,7 @@ export class GetAllCarResponse implements IGetAllCarResponse {
   year: number;
   price: number;
   imageUrl: string;
-  reservations?: GetAllReservationResponse[];
+  reservations?: GetManyReservationResponse[];
 
   constructor(props: IGetAllCarResponse) {
     this.id = props.id;
@@ -33,7 +33,7 @@ export class GetAllCarResponse implements IGetAllCarResponse {
       price: car.price,
       imageUrl: car.imageUrl,
       reservations: car.reservations?.map((reservation) =>
-        GetAllReservationResponse.fromEntity(reservation),
+        GetManyReservationResponse.fromEntity(reservation),
       ),
     });
   }

@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
+  IsDate,
   IsNumber,
   IsOptional,
   IsString,
@@ -10,6 +11,24 @@ import {
 } from 'class-validator';
 import { PaginationPayload } from 'src/shared/dtos/payloads';
 import { IGetAllCarPayload } from '../../interfaces/dtos/payloads';
+
+class DateReservationDto {
+  @ApiPropertyOptional({
+    description: 'Data de início da reserva.',
+    example: '2025-06-16T10:00:00.000Z',
+  })
+  @IsOptional()
+  @IsDate()
+  startDate?: Date;
+
+  @ApiPropertyOptional({
+    description: 'Data de fim da reserva.',
+    example: '2025-06-21T10:00:00.000Z',
+  })
+  @IsOptional()
+  @IsDate()
+  endDate?: Date;
+}
 
 export class GetAllCarPayload
   extends PaginationPayload
@@ -56,11 +75,10 @@ export class GetAllCarPayload
   year?: number;
 
   @ApiPropertyOptional({
-    description: 'Preço do carro (busca exata).',
-    example: 150,
+    description: 'Período de reserva do carro.',
+    type: DateReservationDto,
   })
   @IsOptional()
-  @Type(() => Number)
-  @IsNumber()
-  price?: number;
+  @Type(() => DateReservationDto)
+  dateReservation?: DateReservationDto;
 }
