@@ -95,7 +95,6 @@ export class CarController {
     description: 'Nenhum carro encontrado.',
   })
   async getAll(@Query() getAllCarPayload: GetAllCarPayload) {
-    console.log(getAllCarPayload);
     return await this.getAllCarsUseCase.execute(getAllCarPayload);
   }
 
